@@ -18,6 +18,19 @@ namespace DocXPlusTests
             Setup(TempDirectory);
         }
 
+        protected string LoremIpsum
+        {
+            get
+            {
+                return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et scelerisque eros, at posuere nisl. Maecenas pretium porta tellus sit amet pulvinar. Quisque arcu elit, consequat sit amet finibus non, sodales rutrum risus. Nulla sagittis nunc nec auctor rhoncus. Maecenas dictum nunc vel lobortis auctor. Quisque mattis imperdiet mattis. Vivamus lacinia maximus diam sed posuere. Quisque ullamcorper mi quis ipsum condimentum finibus. Nullam mollis sit amet ex ullamcorper venenatis. Pellentesque lacinia porta leo, eget imperdiet mauris.";
+            }
+        }
+
+        protected void Launch(string filename)
+        {
+            System.Diagnostics.Process.Start(filename);
+        }
+
         protected void ValidateWordDocument(string filepath)
         {
             using (WordprocessingDocument wordprocessingDocument =
@@ -63,11 +76,6 @@ namespace DocXPlusTests
             {
                 Directory.CreateDirectory(path);
             }
-        }
-
-        protected void Launch(string filename)
-        {
-            System.Diagnostics.Process.Start(filename);
         }
     }
 }

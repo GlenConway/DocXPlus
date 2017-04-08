@@ -33,6 +33,38 @@ namespace DocXPlusTests
 
             Launch(filename);
         }
+        
+        [TestMethod]
+        public void ParagraphAlignment()
+        {
+            var filename = Path.Combine(TempDirectory, "ParagraphAlignment.docx");
+
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+
+            doc.AddParagraph().AppendBold("Default (Left)");
+
+            doc.AddParagraph().Append(LoremIpsum);
+
+            doc.AddParagraph().AppendBold("Right");
+
+            doc.AddParagraph().Append(LoremIpsum).Alignment(JustificationValues.Right);
+
+            doc.AddParagraph().AppendBold("Center");
+
+            var paragraph = doc.AddParagraph();
+            paragraph.Alignment(JustificationValues.Center);
+            paragraph.Append(LoremIpsum);
+
+            doc.AddParagraph().AppendBold("Both");
+
+            doc.AddParagraph().Append(LoremIpsum).Alignment(JustificationValues.Both);
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
 
         [TestMethod]
         public void ItalicParagraphs()

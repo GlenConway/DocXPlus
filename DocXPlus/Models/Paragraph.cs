@@ -22,6 +22,15 @@ namespace DocXPlus.Models
             }
         }
 
+        public Paragraph Alignment(JustificationValues value)
+        {
+            var paragraphProperties = paragraph.GetOrCreate<ParagraphProperties>(true);
+            var justification = paragraphProperties.GetOrCreate<Justification>();
+            justification.Val = value;
+
+            return this;
+        }
+
         public Paragraph Append(string text)
         {
             var run = paragraph.AppendChild(NewRun());
@@ -137,11 +146,6 @@ namespace DocXPlus.Models
             }
 
             return result;
-        }
-
-        private ParagraphProperties ParagraphProperties()
-        {
-            return paragraph.GetOrCreate<ParagraphProperties>(true);
         }
     }
 }
