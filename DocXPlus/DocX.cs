@@ -9,9 +9,17 @@ namespace DocXPlus
     {
         private WordprocessingDocument document;
 
+        internal Body Body
+        {
+            get
+            {
+                return document.MainDocumentPart.Document.Body;
+            }
+        }
+
         public static DocX Create(string path, WordprocessingDocumentType type)
         {
-            return DocX.Create(path, type, false);
+            return Create(path, type, false);
         }
 
         public static DocX Create(string path, WordprocessingDocumentType type, bool autoSave)
@@ -30,15 +38,33 @@ namespace DocXPlus
             return docX;
         }
 
+        public Models.Paragraph AddParagraph()
+        {
+            var paragraph = Body.AppendChild(new Paragraph());
+            return new Models.Paragraph(paragraph);
+        }
+
+        public void Close()
+        {
+            document.MainDocumentPart.Document.Save();
+            document.Close();
+        }
+
+        public void Save()
+        {
+            document.MainDocumentPart.Document.Save();
+            document.Save();
+        }
+
         internal void Create(WordprocessingDocument doc)
         {
-            document = doc;
+            this.document = doc;
 
-            // Add a main document part. 
-            MainDocumentPart mainPart = document.AddMainDocumentPart();
+            // Add a main document part.
+            MainDocumentPart mainPart = doc.AddMainDocumentPart();
 
-            // Create the document structure
             mainPart.Document = new Document();
+            mainPart.Document.AppendChild(new Body());
         }
     }
 }
