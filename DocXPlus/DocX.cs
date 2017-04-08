@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 
@@ -25,6 +26,23 @@ namespace DocXPlus
             set
             {
                 SetOrientation(value);
+            }
+        }
+
+        public IEnumerable<Models.Paragraph> Paragraphs
+        {
+            get
+            {
+                var paragraphs = Body.Descendants<Paragraph>();
+
+                var result = new List<Models.Paragraph>();
+
+                foreach (var paragraph in paragraphs)
+                {
+                    result.Add(new Models.Paragraph(paragraph));
+                }
+
+                return result;
             }
         }
 
@@ -141,7 +159,8 @@ namespace DocXPlus
 
         public Models.Paragraph AddParagraph()
         {
-            var paragraph = Body.AppendChild(new Paragraph());
+            var sectionProperties = Body.GetOrCreate<SectionProperties>();
+            var paragraph = sectionProperties.InsertBeforeSelf(new Paragraph());
             return new Models.Paragraph(paragraph);
         }
 
@@ -150,6 +169,20 @@ namespace DocXPlus
             Save();
 
             document.Close();
+        }
+
+        public void InsertSectionPageBreak()
+        {
+            var paragraph = Body.Descendants<Paragraph>().LastOrDefault();
+            var sectionProperties = Body.GetOrCreate<SectionProperties>();
+
+            if (paragraph == null)
+            {
+                paragraph = sectionProperties.InsertBeforeSelf(new Paragraph());
+            }
+
+            var paragraphProperties = paragraph.GetOrCreate<ParagraphProperties>(true);
+            paragraphProperties.AppendChild(sectionProperties.CloneNode(true));
         }
 
         public void Save()
@@ -178,7 +211,7 @@ namespace DocXPlus
             MainDocumentPart.Document = new Document();
             MainDocumentPart.Document.AppendChild(new Body());
 
-            PostCreate();
+            PostCreate(Body);
         }
 
         internal void GenerateFooterPartContent(FooterPart part)
@@ -227,9 +260,9 @@ namespace DocXPlus
             part.Header = header;
         }
 
-        internal void PostCreate()
+        internal void PostCreate(OpenXmlCompositeElement element)
         {
-            var sectionProperty = Body.GetOrCreate<SectionProperties>();
+            var sectionProperty = element.GetOrCreate<SectionProperties>();
 
             var pageSize = sectionProperty.GetOrCreate<PageSize>();
             pageSize.Height = 15840;

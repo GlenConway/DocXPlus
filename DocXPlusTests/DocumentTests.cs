@@ -34,5 +34,25 @@ namespace DocXPlusTests
 
             Launch(filename);
         }
+
+        [TestMethod]
+        public void SectionPageBreak()
+        {
+            var filename = Path.Combine(TempDirectory, "SectionPageBreak.docx");
+
+            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+
+            doc.AddParagraph().Append("Page 1");
+
+            doc.InsertSectionPageBreak();
+
+            doc.AddParagraph().Append("Page 2");
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
     }
 }
