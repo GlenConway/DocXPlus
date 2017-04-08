@@ -13,6 +13,21 @@ namespace DocXPlus
         private Models.Footer footer;
         private Models.Header header;
 
+        public PageOrientationValues Orientation
+        {
+            get
+            {
+                var sectionProperty = Body.GetOrCreate<SectionProperties>();
+                PageSize pageSize = sectionProperty.GetOrCreate<PageSize>();
+
+                return pageSize.Orient ?? PageOrientationValues.Portrait;
+            }
+            set
+            {
+                SetOrientation(value);
+            }
+        }
+
         internal static Int32Value Inch
         {
             get
@@ -154,85 +169,6 @@ namespace DocXPlus
             document.Save();
         }
 
-        public DocX SetOrientation(PageOrientationValues value)
-        {
-            bool documentChanged = false;
-
-            var sectionProperty = Body.GetOrCreate<SectionProperties>();
-
-            bool pageOrientationChanged = false;
-
-            PageSize pageSize = sectionProperty.Descendants<PageSize>().FirstOrDefault();
-
-            if (pageSize != null)
-            {
-                // No Orient property? Create it now. Otherwise, just
-                // set its value. Assume that the default orientation
-                // is Portrait.
-                if (pageSize.Orient == null)
-                {
-                    // Need to create the attribute. You do not need to
-                    // create the Orient property if the property does not
-                    // already exist, and you are setting it to Portrait.
-                    // That is the default value.
-                    if (value != PageOrientationValues.Portrait)
-                    {
-                        pageOrientationChanged = true;
-                        documentChanged = true;
-                        pageSize.Orient = new EnumValue<PageOrientationValues>(value);
-                    }
-                }
-                else
-                {
-                    // The Orient property exists, but its value
-                    // is different than the new value.
-                    if (pageSize.Orient.Value != value)
-                    {
-                        pageSize.Orient.Value = value;
-                        pageOrientationChanged = true;
-                        documentChanged = true;
-                    }
-                }
-
-                if (pageOrientationChanged)
-                {
-                    // Changing the orientation is not enough. You must also
-                    // change the page size.
-                    var width = pageSize.Width;
-                    var height = pageSize.Height;
-                    pageSize.Width = height;
-                    pageSize.Height = width;
-
-                    PageMargin pageMargin = sectionProperty.Descendants<PageMargin>().FirstOrDefault();
-
-                    if (pageMargin != null)
-                    {
-                        // Rotate margins. Printer settings control how far you
-                        // rotate when switching to landscape mode. Not having those
-                        // settings, this code rotates 90 degrees. You could easily
-                        // modify this behavior, or make it a parameter for the
-                        // procedure.
-                        var top = pageMargin.Top.Value;
-                        var bottom = pageMargin.Bottom.Value;
-                        var left = pageMargin.Left.Value;
-                        var right = pageMargin.Right.Value;
-
-                        pageMargin.Top = new Int32Value((int)left);
-                        pageMargin.Bottom = new Int32Value((int)right);
-                        pageMargin.Left = new UInt32Value((uint)System.Math.Max(0, bottom));
-                        pageMargin.Right = new UInt32Value((uint)System.Math.Max(0, top));
-                    }
-                }
-            }
-
-            if (documentChanged)
-            {
-                MainDocumentPart.Document.Save();
-            }
-
-            return this;
-        }
-
         internal void Create(WordprocessingDocument doc)
         {
             document = doc;
@@ -308,6 +244,82 @@ namespace DocXPlus
             pageMargins.Header = UHalfInch;
             pageMargins.Footer = UHalfInch;
             pageMargins.Gutter = UZero;
+        }
+
+        internal DocX SetOrientation(PageOrientationValues value)
+        {
+            bool documentChanged = false;
+
+            var sectionProperty = Body.GetOrCreate<SectionProperties>();
+
+            bool pageOrientationChanged = false;
+
+            PageSize pageSize = sectionProperty.GetOrCreate<PageSize>();
+
+            // No Orient property? Create it now. Otherwise, just
+            // set its value. Assume that the default orientation
+            // is Portrait.
+            if (pageSize.Orient == null)
+            {
+                // Need to create the attribute. You do not need to
+                // create the Orient property if the property does not
+                // already exist, and you are setting it to Portrait.
+                // That is the default value.
+                if (value != PageOrientationValues.Portrait)
+                {
+                    pageOrientationChanged = true;
+                    documentChanged = true;
+                    pageSize.Orient = new EnumValue<PageOrientationValues>(value);
+                }
+            }
+            else
+            {
+                // The Orient property exists, but its value
+                // is different than the new value.
+                if (pageSize.Orient.Value != value)
+                {
+                    pageSize.Orient.Value = value;
+                    pageOrientationChanged = true;
+                    documentChanged = true;
+                }
+            }
+
+            if (pageOrientationChanged)
+            {
+                // Changing the orientation is not enough. You must also
+                // change the page size.
+                var width = pageSize.Width;
+                var height = pageSize.Height;
+                pageSize.Width = height;
+                pageSize.Height = width;
+
+                PageMargin pageMargin = sectionProperty.Descendants<PageMargin>().FirstOrDefault();
+
+                if (pageMargin != null)
+                {
+                    // Rotate margins. Printer settings control how far you
+                    // rotate when switching to landscape mode. Not having those
+                    // settings, this code rotates 90 degrees. You could easily
+                    // modify this behavior, or make it a parameter for the
+                    // procedure.
+                    var top = pageMargin.Top.Value;
+                    var bottom = pageMargin.Bottom.Value;
+                    var left = pageMargin.Left.Value;
+                    var right = pageMargin.Right.Value;
+
+                    pageMargin.Top = new Int32Value((int)left);
+                    pageMargin.Bottom = new Int32Value((int)right);
+                    pageMargin.Left = new UInt32Value((uint)System.Math.Max(0, bottom));
+                    pageMargin.Right = new UInt32Value((uint)System.Math.Max(0, top));
+                }
+            }
+
+            if (documentChanged)
+            {
+                MainDocumentPart.Document.Save();
+            }
+
+            return this;
         }
     }
 }

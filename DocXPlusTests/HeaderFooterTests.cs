@@ -66,7 +66,7 @@ namespace DocXPlusTests
             var filename = Path.Combine(TempDirectory, "AddHeaderAndFooterLandscape.docx");
 
             var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
-            doc.SetOrientation(DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Landscape);
+            doc.Orientation = DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Landscape;
 
             var header = doc.AddHeader();
             header.AddParagraph()
