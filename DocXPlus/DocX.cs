@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System.IO;
+using System.Linq;
 
 namespace DocXPlus
 {
@@ -11,6 +12,38 @@ namespace DocXPlus
 
         private Models.Footer footer;
         private Models.Header header;
+
+        internal static Int32Value Inch
+        {
+            get
+            {
+                return new Int32Value(1440);
+            }
+        }
+
+        internal static UInt32Value UHalfInch
+        {
+            get
+            {
+                return new UInt32Value((uint)720);
+            }
+        }
+
+        internal static UInt32Value UInch
+        {
+            get
+            {
+                return new UInt32Value((uint)1440);
+            }
+        }
+
+        internal static UInt32Value UZero
+        {
+            get
+            {
+                return new UInt32Value((uint)0);
+            }
+        }
 
         internal Body Body
         {
@@ -121,15 +154,95 @@ namespace DocXPlus
             document.Save();
         }
 
+        public DocX SetOrientation(PageOrientationValues value)
+        {
+            bool documentChanged = false;
+
+            var sectionProperty = Body.GetOrCreate<SectionProperties>();
+
+            bool pageOrientationChanged = false;
+
+            PageSize pageSize = sectionProperty.Descendants<PageSize>().FirstOrDefault();
+
+            if (pageSize != null)
+            {
+                // No Orient property? Create it now. Otherwise, just
+                // set its value. Assume that the default orientation
+                // is Portrait.
+                if (pageSize.Orient == null)
+                {
+                    // Need to create the attribute. You do not need to
+                    // create the Orient property if the property does not
+                    // already exist, and you are setting it to Portrait.
+                    // That is the default value.
+                    if (value != PageOrientationValues.Portrait)
+                    {
+                        pageOrientationChanged = true;
+                        documentChanged = true;
+                        pageSize.Orient = new EnumValue<PageOrientationValues>(value);
+                    }
+                }
+                else
+                {
+                    // The Orient property exists, but its value
+                    // is different than the new value.
+                    if (pageSize.Orient.Value != value)
+                    {
+                        pageSize.Orient.Value = value;
+                        pageOrientationChanged = true;
+                        documentChanged = true;
+                    }
+                }
+
+                if (pageOrientationChanged)
+                {
+                    // Changing the orientation is not enough. You must also
+                    // change the page size.
+                    var width = pageSize.Width;
+                    var height = pageSize.Height;
+                    pageSize.Width = height;
+                    pageSize.Height = width;
+
+                    PageMargin pageMargin = sectionProperty.Descendants<PageMargin>().FirstOrDefault();
+
+                    if (pageMargin != null)
+                    {
+                        // Rotate margins. Printer settings control how far you
+                        // rotate when switching to landscape mode. Not having those
+                        // settings, this code rotates 90 degrees. You could easily
+                        // modify this behavior, or make it a parameter for the
+                        // procedure.
+                        var top = pageMargin.Top.Value;
+                        var bottom = pageMargin.Bottom.Value;
+                        var left = pageMargin.Left.Value;
+                        var right = pageMargin.Right.Value;
+
+                        pageMargin.Top = new Int32Value((int)left);
+                        pageMargin.Bottom = new Int32Value((int)right);
+                        pageMargin.Left = new UInt32Value((uint)System.Math.Max(0, bottom));
+                        pageMargin.Right = new UInt32Value((uint)System.Math.Max(0, top));
+                    }
+                }
+            }
+
+            if (documentChanged)
+            {
+                MainDocumentPart.Document.Save();
+            }
+
+            return this;
+        }
+
         internal void Create(WordprocessingDocument doc)
         {
-            this.document = doc;
+            document = doc;
 
-            // Add a main document part.
-            MainDocumentPart mainPart = doc.AddMainDocumentPart();
+            doc.AddMainDocumentPart();
 
-            mainPart.Document = new Document();
-            mainPart.Document.AppendChild(new Body());
+            MainDocumentPart.Document = new Document();
+            MainDocumentPart.Document.AppendChild(new Body());
+
+            PostCreate();
         }
 
         internal void GenerateFooterPartContent(FooterPart part)
@@ -176,6 +289,25 @@ namespace DocXPlus
             header.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
 
             part.Header = header;
+        }
+
+        internal void PostCreate()
+        {
+            var sectionProperty = Body.GetOrCreate<SectionProperties>();
+
+            var pageSize = sectionProperty.GetOrCreate<PageSize>();
+            pageSize.Height = 15840;
+            pageSize.Width = 12240;
+
+            // w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="720" w:footer="720" w:gutter="0"
+            var pageMargins = sectionProperty.GetOrCreate<PageMargin>();
+            pageMargins.Top = Inch;
+            pageMargins.Right = UInch;
+            pageMargins.Bottom = Inch;
+            pageMargins.Left = UInch;
+            pageMargins.Header = UHalfInch;
+            pageMargins.Footer = UHalfInch;
+            pageMargins.Gutter = UZero;
         }
     }
 }

@@ -59,5 +59,30 @@ namespace DocXPlusTests
 
             Launch(filename);
         }
+
+        [TestMethod]
+        public void AddHeaderAndFooterLandscape()
+        {
+            var filename = Path.Combine(TempDirectory, "AddHeaderAndFooterLandscape.docx");
+
+            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            doc.SetOrientation(DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Landscape);
+
+            var header = doc.AddHeader();
+            header.AddParagraph()
+                .SetAlignment(DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Right)
+                .Append(LoremIpsum);
+
+            var footer = doc.AddFooter();
+            footer.AddParagraph()
+                .SetAlignment(DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Center)
+                .Append(LoremIpsum);
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
     }
 }

@@ -12,7 +12,22 @@ namespace DocXPlusTests
             var filename = Path.Combine(TempDirectory, "CreateUsingFile.docx");
 
             var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
-            
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
+        public void Landscape()
+        {
+            var filename = Path.Combine(TempDirectory, "Landscape.docx");
+
+            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            doc.SetOrientation(DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Landscape);
+
             doc.Close();
 
             ValidateWordDocument(filename);
