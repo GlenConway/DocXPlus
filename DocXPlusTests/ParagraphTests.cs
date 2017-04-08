@@ -33,7 +33,33 @@ namespace DocXPlusTests
 
             Launch(filename);
         }
-        
+
+        [TestMethod]
+        public void ItalicParagraphs()
+        {
+            var filename = Path.Combine(TempDirectory, "ItalicParagraphs.docx");
+
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+
+            doc.AddParagraph().Append("Append normal paragraph");
+
+            doc.AddParagraph().Append("Append then set Italic").Italic();
+
+            doc.AddParagraph().AppendItalic("Append Italic paragraph");
+
+            var paragraph = doc.AddParagraph();
+            paragraph.Italic();
+            paragraph.Append("Add paragraph, set Italic then append text.");
+
+            doc.AddParagraph().Append("Append normal paragraph").AppendItalic("Then append Italic paragraph");
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
         [TestMethod]
         public void ParagraphAlignment()
         {
@@ -58,32 +84,6 @@ namespace DocXPlusTests
             doc.AddParagraph().AppendBold("Both");
 
             doc.AddParagraph().Append(LoremIpsum).Alignment(JustificationValues.Both);
-
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
-        }
-
-        [TestMethod]
-        public void ItalicParagraphs()
-        {
-            var filename = Path.Combine(TempDirectory, "ItalicParagraphs.docx");
-
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
-
-            doc.AddParagraph().Append("Append normal paragraph");
-
-            doc.AddParagraph().Append("Append then set Italic").Italic();
-
-            doc.AddParagraph().AppendItalic("Append Italic paragraph");
-
-            var paragraph = doc.AddParagraph();
-            paragraph.Italic();
-            paragraph.Append("Add paragraph, set Italic then append text.");
-
-            doc.AddParagraph().Append("Append normal paragraph").AppendItalic("Then append Italic paragraph");
 
             doc.Close();
 
