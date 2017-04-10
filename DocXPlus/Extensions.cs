@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System;
 using System.Linq;
 
 namespace DocXPlus
@@ -45,6 +46,33 @@ namespace DocXPlus
             RunProperties runProperties = run.GetOrCreate<RunProperties>(true);
             Italic prop = runProperties.GetOrCreate<Italic>();
             prop.Val = OnOffValue.FromBoolean(true);
+        }
+
+        internal static void RemoveAllChildren<T>(this OpenXmlElement value, string localName, string namespaceUri, string match) where T : OpenXmlElement
+        {
+            if (!value.HasChildren)
+                return;
+
+            OpenXmlElement element = value.FirstChild;
+            OpenXmlElement next;
+
+            while (element != null)
+            {
+                next = element.NextSibling();
+
+                if (element is T)
+                {
+                    if (!element.HasAttributes)
+                        continue;
+
+                    var attribute = element.GetAttribute(localName, namespaceUri);
+
+                    if (attribute.Value.Equals(match, StringComparison.OrdinalIgnoreCase))
+                        value.RemoveChild(element);
+                }
+
+                element = next;
+            }
         }
 
         internal static void Underline(this Run run, UnderlineValues value)
