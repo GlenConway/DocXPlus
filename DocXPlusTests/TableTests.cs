@@ -1,4 +1,5 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using DocXPlus;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Linq;
 
@@ -12,7 +13,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "ThreeByThreeTable.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
 
             var table = doc.AddTable(3);
 
@@ -23,11 +24,11 @@ namespace DocXPlusTests
             row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Center);
             row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Right);
 
-            row.Cells[0].Borders.TopBorder.Color = "auto";
-            row.Cells[0].Borders.TopBorder.Size = 4;
-            row.Cells[0].Borders.TopBorder.Val = DocumentFormat.OpenXml.Wordprocessing.BorderValues.Single;
-            
+            row.Cells[0].Borders.Set(Units.HalfPt, DocumentFormat.OpenXml.Wordprocessing.BorderValues.Single);
+                        
             row = table.AddRow();
+
+            row.SetBorders(Units.HalfPt, DocumentFormat.OpenXml.Wordprocessing.BorderValues.Single);
 
             row.Cells[0].Paragraphs[0].Append("Cell 1");
             row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Center);
@@ -45,7 +46,7 @@ namespace DocXPlusTests
             {
                 row = rows[i];
 
-                row.Height = DocXPlus.Units.UHalfInch;
+                row.Height = Units.UHalfInch;
                 row.CantSplit = true;
 
                 for (int j = 0; j < row.Cells.Count(); j++)

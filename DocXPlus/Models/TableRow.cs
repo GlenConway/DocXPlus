@@ -66,6 +66,20 @@ namespace DocXPlus.Models
             }
         }
 
+        /// <summary>
+        /// Sets the Top, Bottom, Left and Right borders for every cell in the row.
+        /// </summary>
+        /// <param name="size"></param>
+        /// <param name="value"></param>
+        /// <param name="color"></param>
+        public void SetBorders(UInt32Value size, BorderValues value, string color = "auto")
+        {
+            foreach (var cell in Cells)
+            {
+                cell.Borders.Set(size, value, color);
+            }
+        }
+
         internal CantSplit GetCantSplit()
         {
             return GetTableRowProperties().GetOrCreate<CantSplit>();

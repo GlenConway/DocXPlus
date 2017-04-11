@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace DocXPlus.Models
 {
@@ -15,7 +16,7 @@ namespace DocXPlus.Models
         {
             get
             {
-                var item = parent.GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.BottomBorder>();
+                var item = parent.GetOrCreate<BottomBorder>();
                 return new Border(item);
             }
         }
@@ -24,7 +25,7 @@ namespace DocXPlus.Models
         {
             get
             {
-                var item = parent.GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.EndBorder>();
+                var item = parent.GetOrCreate<EndBorder>();
                 return new Border(item);
             }
         }
@@ -33,7 +34,7 @@ namespace DocXPlus.Models
         {
             get
             {
-                var item = parent.GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.InsideHorizontalBorder>();
+                var item = parent.GetOrCreate<InsideHorizontalBorder>();
                 return new Border(item);
             }
         }
@@ -42,7 +43,7 @@ namespace DocXPlus.Models
         {
             get
             {
-                var item = parent.GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.InsideVerticalBorder>();
+                var item = parent.GetOrCreate<InsideVerticalBorder>();
                 return new Border(item);
             }
         }
@@ -51,7 +52,7 @@ namespace DocXPlus.Models
         {
             get
             {
-                var item = parent.GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.LeftBorder>();
+                var item = parent.GetOrCreate<LeftBorder>();
                 return new Border(item);
             }
         }
@@ -60,7 +61,7 @@ namespace DocXPlus.Models
         {
             get
             {
-                var item = parent.GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.RightBorder>();
+                var item = parent.GetOrCreate<RightBorder>();
                 return new Border(item);
             }
         }
@@ -69,7 +70,7 @@ namespace DocXPlus.Models
         {
             get
             {
-                var item = parent.GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.StartBorder>();
+                var item = parent.GetOrCreate<StartBorder>();
                 return new Border(item);
             }
         }
@@ -78,7 +79,7 @@ namespace DocXPlus.Models
         {
             get
             {
-                var item = parent.GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.TopBorder>();
+                var item = parent.GetOrCreate<TopBorder>();
                 return new Border(item);
             }
         }
@@ -87,7 +88,7 @@ namespace DocXPlus.Models
         {
             get
             {
-                var item = parent.GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.TopLeftToBottomRightCellBorder>();
+                var item = parent.GetOrCreate<TopLeftToBottomRightCellBorder>();
                 return new Border(item);
             }
         }
@@ -96,9 +97,23 @@ namespace DocXPlus.Models
         {
             get
             {
-                var item = parent.GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.TopRightToBottomLeftCellBorder>();
+                var item = parent.GetOrCreate<TopRightToBottomLeftCellBorder>();
                 return new Border(item);
             }
+        }
+
+        /// <summary>
+        /// Sets the Top, Bottom, Left and Right borders.
+        /// </summary>
+        /// <param name="size"></param>
+        /// <param name="value"></param>
+        /// <param name="color"></param>
+        public void Set(UInt32Value size, BorderValues value, string color = "auto")
+        {
+            TopBorder.Set(size, value, color);
+            BottomBorder.Set(size, value, color);
+            LeftBorder.Set(size, value, color);
+            RightBorder.Set(size, value, color);
         }
     }
 }

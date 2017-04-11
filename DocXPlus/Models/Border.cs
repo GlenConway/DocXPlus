@@ -108,7 +108,7 @@ namespace DocXPlus.Models
             }
         }
 
-        public BorderValues Val
+        public BorderValues Value
         {
             get
             {
@@ -118,6 +118,13 @@ namespace DocXPlus.Models
             {
                 parent.Val = value;
             }
+        }
+
+        public void Set(UInt32Value size, BorderValues value, string color = "auto")
+        {
+            Size = size;
+            Value = value;
+            Color = color;
         }
     }
 }
