@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace DocXPlus.Models
 {
@@ -17,6 +18,32 @@ namespace DocXPlus.Models
             AddCells();
         }
 
+        public TableCell[] Cells => cells;
+
+        public bool HeaderRow
+        {
+            get
+            {
+                return GetTableHeader().Val == OnOffOnlyValues.On;
+            }
+            set
+            {
+                GetTableHeader().Val = (value ? OnOffOnlyValues.On : OnOffOnlyValues.Off);
+            }
+        }
+
+        public UInt32Value Height
+        {
+            get
+            {
+                return GetTableRowHeights().Val;
+            }
+            set
+            {
+                GetTableRowHeights().Val = value;
+            }
+        }
+
         public Table Table => table;
 
         public TableCell this[int index]
@@ -27,6 +54,21 @@ namespace DocXPlus.Models
             }
         }
 
+        internal TableHeader GetTableHeader()
+        {
+            return GetTableRowProperties().GetOrCreate<TableHeader>();
+        }
+
+        internal TableRowHeight GetTableRowHeights()
+        {
+            return GetTableRowProperties().GetOrCreate<TableRowHeight>();
+        }
+
+        internal TableRowProperties GetTableRowProperties()
+        {
+            return tableRow.GetOrCreate<TableRowProperties>();
+        }
+
         private void AddCells()
         {
             cells = new TableCell[table.NumberOfColumns];
@@ -35,9 +77,9 @@ namespace DocXPlus.Models
             {
                 var tableCell = tableRow.AppendChild(new DocumentFormat.OpenXml.Wordprocessing.TableCell());
 
-                var tableCellWidth = tableCell.GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.TableCellWidth>();
+                var tableCellWidth = tableCell.GetOrCreate<TableCellWidth>();
                 tableCellWidth.Width = table.ColumnWidths[i];
-                tableCellWidth.Type = DocumentFormat.OpenXml.Wordprocessing.TableWidthUnitValues.Dxa;
+                tableCellWidth.Type = TableWidthUnitValues.Dxa;
 
                 var cell = new TableCell(this, tableCell);
                 cell.AddParagraph();

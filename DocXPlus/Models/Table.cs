@@ -1,4 +1,5 @@
 ﻿using DocumentFormat.OpenXml.Wordprocessing;
+using System.Collections.Generic;
 
 namespace DocXPlus.Models
 {
@@ -7,6 +8,7 @@ namespace DocXPlus.Models
         private string[] columnWidths;
         private DocX document;
         private int numberOfColumns;
+        private IList<TableRow> rows;
         private DocumentFormat.OpenXml.Wordprocessing.Table table;
         private TableLook tableLook;
 
@@ -20,6 +22,8 @@ namespace DocXPlus.Models
         }
 
         public int NumberOfColumns => numberOfColumns;
+
+        public IEnumerable<TableRow> Rows => rows;
 
         public TableLook TableLook
         {
@@ -79,12 +83,25 @@ namespace DocXPlus.Models
         internal string[] ColumnWidths => columnWidths;
         internal TableProperties TableProperties => table.GetOrCreate<TableProperties>();
 
+        /// <summary>
+        /// Adds a row to the table. The row will consist of the same number of cells as the number of columns. Each cell will have an empty paragraph.
+        /// </summary>
+        /// <returns></returns>
         public TableRow AddRow()
         {
             var tableRow = table.AppendChild(new DocumentFormat.OpenXml.Wordprocessing.TableRow());
-            var tableRowProperties = tableRow.GetOrCreate<TableRowProperties>();
-
+            
             var result = new TableRow(this, tableRow);
+
+            result.HeaderRow = false;
+
+            if (rows == null)
+            {
+                rows = new List<TableRow>();
+            }
+
+            rows.Add(result);
+
             return result;
         }
 

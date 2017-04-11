@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using System.Linq;
 
 namespace DocXPlus.Models
 {
@@ -14,6 +15,23 @@ namespace DocXPlus.Models
             this.tableCell = tableCell;
         }
 
+        public Paragraph[] Paragraphs
+        {
+            get
+            {
+                var paragraphs = tableCell.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>().ToList();
+
+                var result = new Paragraph[paragraphs.Count()];
+
+                for (int i = 0; i < paragraphs.Count(); i++)
+                {
+                    result[i] = new Paragraph(paragraphs[i]);
+                }
+
+                return result;
+            }
+        }
+
         /// <summary>
         /// Adds a paragraph to the table cell
         /// </summary>
@@ -24,21 +42,17 @@ namespace DocXPlus.Models
             return new Paragraph(paragraph);
         }
 
-        public IEnumerable<Paragraph> Paragraphs
+        public TableCell SetVerticalAlignment(TableVerticalAlignmentValues value)
         {
-            get
-            {
-                var paragraphs = tableCell.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>();
+            var tableCellVerticalAlignment = GetTableCellProperties().GetOrCreate<TableCellVerticalAlignment>();
+            tableCellVerticalAlignment.Val = value;
 
-                var result = new List<Paragraph>();
+            return this;
+        }
 
-                foreach (var paragraph in paragraphs)
-                {
-                    result.Add(new Paragraph(paragraph));
-                }
-
-                return result;
-            }
+        internal TableCellProperties GetTableCellProperties()
+        {
+            return tableCell.GetOrCreate<TableCellProperties>();
         }
     }
 }

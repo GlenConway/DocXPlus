@@ -4,7 +4,7 @@ namespace DocXPlus
 {
     public static class Units
     {
-        internal static Int32Value Inch
+        public static Int32Value Inch
         {
             get
             {
@@ -12,7 +12,7 @@ namespace DocXPlus
             }
         }
 
-        internal static UInt32Value UHalfInch
+        public static UInt32Value UHalfInch
         {
             get
             {
@@ -20,7 +20,7 @@ namespace DocXPlus
             }
         }
 
-        internal static UInt32Value UInch
+        public static UInt32Value UInch
         {
             get
             {
@@ -28,7 +28,7 @@ namespace DocXPlus
             }
         }
 
-        internal static UInt32Value UZero
+        public static UInt32Value UZero
         {
             get
             {
