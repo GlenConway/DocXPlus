@@ -9,6 +9,10 @@
             this.header = header;
         }
 
+        /// <summary>
+        /// Adds a paragraph to the header
+        /// </summary>
+        /// <returns></returns>
         public Paragraph AddParagraph()
         {
             var paragraph = header.AppendChild(new DocumentFormat.OpenXml.Wordprocessing.Paragraph());

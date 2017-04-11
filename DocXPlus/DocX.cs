@@ -9,8 +9,7 @@ namespace DocXPlus
 {
     public class DocX
     {
-        internal const string w = "http://schemas.openxmlformats.org/wordprocessingml/2006/main";
-
+        internal static MarkupCompatibilityAttributes MarkupCompatibilityAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se wp14" };
         private WordprocessingDocument document;
 
         private IList<Models.Footer> footers;
@@ -20,14 +19,35 @@ namespace DocXPlus
         {
             get
             {
-                var sectionProperty = Body.GetOrCreate<SectionProperties>();
-                PageSize pageSize = sectionProperty.GetOrCreate<PageSize>();
-
-                return pageSize.Orient ?? PageOrientationValues.Portrait;
+                return GetPageSize().Orient ?? PageOrientationValues.Portrait;
             }
             set
             {
                 SetOrientation(value);
+            }
+        }
+
+        public UInt32Value PageHeight
+        {
+            get
+            {
+                return GetPageSize().Height;
+            }
+            set
+            {
+                GetPageSize().Height = value;
+            }
+        }
+
+        public UInt32Value PageWidth
+        {
+            get
+            {
+                return GetPageSize().Width;
+            }
+            set
+            {
+                GetPageSize().Width = value;
             }
         }
 
@@ -48,35 +68,17 @@ namespace DocXPlus
             }
         }
 
-        internal static Int32Value Inch
-        {
-            get
+        Models.PageMargins pageMargins;
+        public Models.PageMargins PageMargins { get
             {
-                return new Int32Value(1440);
-            }
-        }
+                if (pageMargins == null)
+                {
+                    pageMargins = new Models.PageMargins(this);
 
-        internal static UInt32Value UHalfInch
-        {
-            get
-            {
-                return new UInt32Value((uint)720);
-            }
-        }
+                    
+                }
 
-        internal static UInt32Value UInch
-        {
-            get
-            {
-                return new UInt32Value((uint)1440);
-            }
-        }
-
-        internal static UInt32Value UZero
-        {
-            get
-            {
-                return new UInt32Value((uint)0);
+                return pageMargins;
             }
         }
 
@@ -118,28 +120,50 @@ namespace DocXPlus
         }
 
         public Models.Footer AddFooter(HeaderFooterValues type)
-        { // get the section property for the body
+        {
+            // get the section property for the body
             // which will contain any existing footer references
-            var sectionProperty = Body.GetOrCreate<SectionProperties>();
-
-            return AddFooter(type, sectionProperty);
+            return AddFooter(type, GetBodySectionProperty());
         }
 
         public Models.Header AddHeader(HeaderFooterValues type)
         {
             // get the section property for the body
             // which will contain any existing header references
-            var sectionProperty = Body.GetOrCreate<SectionProperties>();
-
-            return AddHeader(type, sectionProperty);
+            return AddHeader(type, GetBodySectionProperty());
         }
 
+        /// <summary>
+        /// Adds a paragraph to the document just before the body section properties
+        /// </summary>
+        /// <returns></returns>
         public Models.Paragraph AddParagraph()
         {
-            var sectionProperties = Body.GetOrCreate<SectionProperties>();
-            var paragraph = sectionProperties.InsertBeforeSelf(new Paragraph());
+            var paragraph = GetBodySectionProperty().InsertBeforeSelf(new Paragraph());
 
             return new Models.Paragraph(paragraph);
+        }
+
+        public Models.Table AddTable(int numberOfColumns)
+        {
+            var table = GetBodySectionProperty().InsertBeforeSelf(new Table());
+
+            var result = new Models.Table(table, numberOfColumns, this)
+            {
+                TableStyle = "TableGrid",
+                Width = "0",
+                WidthType = TableWidthUnitValues.Auto
+            };
+
+            result.TableLook.Value = "04A0";
+            result.TableLook.FirstRow = true;
+            result.TableLook.LastRow = false;
+            result.TableLook.FirstColumn = true;
+            result.TableLook.LastColumn = false;
+            result.TableLook.NoHorizontalBand = false;
+            result.TableLook.NoVerticalBand = true;
+
+            return result;
         }
 
         public void Close()
@@ -155,8 +179,7 @@ namespace DocXPlus
 
             if (paragraph == null)
             {
-                var sectionProperties = Body.GetOrCreate<SectionProperties>();
-                paragraph = sectionProperties.InsertBeforeSelf(new Paragraph());
+                paragraph = GetBodySectionProperty().InsertBeforeSelf(new Paragraph());
             }
 
             paragraph.AppendChild(new Run(new Break() { Type = BreakValues.Page }));
@@ -168,7 +191,7 @@ namespace DocXPlus
         {
             // get or create the body section properties
             // we will clone this to create the new section properties
-            var bodySectionProperties = Body.GetOrCreate<SectionProperties>();
+            var bodySectionProperties = GetBodySectionProperty();
 
             // get the last paragraph
             var paragraph = Body.Descendants<Paragraph>().LastOrDefault();
@@ -233,46 +256,18 @@ namespace DocXPlus
 
         internal static void GenerateFooterPartContent(FooterPart part)
         {
-            var footer = new Footer() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 wp14" } };
+            var footer = new Footer() { MCAttributes = MarkupCompatibilityAttributes };
 
-            footer.AddNamespaceDeclaration("wpc", "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas");
-            footer.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
-            footer.AddNamespaceDeclaration("o", "urn:schemas-microsoft-com:office:office");
-            footer.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-            footer.AddNamespaceDeclaration("m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
-            footer.AddNamespaceDeclaration("v", "urn:schemas-microsoft-com:vml");
-            footer.AddNamespaceDeclaration("wp14", "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing");
-            footer.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
-            footer.AddNamespaceDeclaration("w10", "urn:schemas-microsoft-com:office:word");
-            footer.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
-            footer.AddNamespaceDeclaration("w14", "http://schemas.microsoft.com/office/word/2010/wordml");
-            footer.AddNamespaceDeclaration("wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup");
-            footer.AddNamespaceDeclaration("wpi", "http://schemas.microsoft.com/office/word/2010/wordprocessingInk");
-            footer.AddNamespaceDeclaration("wne", "http://schemas.microsoft.com/office/word/2006/wordml");
-            footer.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
+            Schemas.AddNamespaceDeclarations(footer);
 
             part.Footer = footer;
         }
 
         internal static void GenerateHeaderPartContent(HeaderPart part)
         {
-            var header = new Header() { MCAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 wp14" } };
+            var header = new Header() { MCAttributes = MarkupCompatibilityAttributes };
 
-            header.AddNamespaceDeclaration("wpc", "http://schemas.microsoft.com/office/word/2010/wordprocessingCanvas");
-            header.AddNamespaceDeclaration("mc", "http://schemas.openxmlformats.org/markup-compatibility/2006");
-            header.AddNamespaceDeclaration("o", "urn:schemas-microsoft-com:office:office");
-            header.AddNamespaceDeclaration("r", "http://schemas.openxmlformats.org/officeDocument/2006/relationships");
-            header.AddNamespaceDeclaration("m", "http://schemas.openxmlformats.org/officeDocument/2006/math");
-            header.AddNamespaceDeclaration("v", "urn:schemas-microsoft-com:vml");
-            header.AddNamespaceDeclaration("wp14", "http://schemas.microsoft.com/office/word/2010/wordprocessingDrawing");
-            header.AddNamespaceDeclaration("wp", "http://schemas.openxmlformats.org/drawingml/2006/wordprocessingDrawing");
-            header.AddNamespaceDeclaration("w10", "urn:schemas-microsoft-com:office:word");
-            header.AddNamespaceDeclaration("w", "http://schemas.openxmlformats.org/wordprocessingml/2006/main");
-            header.AddNamespaceDeclaration("w14", "http://schemas.microsoft.com/office/word/2010/wordml");
-            header.AddNamespaceDeclaration("wpg", "http://schemas.microsoft.com/office/word/2010/wordprocessingGroup");
-            header.AddNamespaceDeclaration("wpi", "http://schemas.microsoft.com/office/word/2010/wordprocessingInk");
-            header.AddNamespaceDeclaration("wne", "http://schemas.microsoft.com/office/word/2006/wordml");
-            header.AddNamespaceDeclaration("wps", "http://schemas.microsoft.com/office/word/2010/wordprocessingShape");
+            Schemas.AddNamespaceDeclarations(header);
 
             part.Header = header;
         }
@@ -294,7 +289,7 @@ namespace DocXPlus
 
                 GenerateFooterPartContent(part);
 
-                sectionProperty.RemoveAllChildren<FooterReference>("type", w, type.ToString());
+                sectionProperty.RemoveAllChildren<FooterReference>("type", Schemas.w, type.ToString());
 
                 footerReference = sectionProperty.PrependChild(new FooterReference() { Id = id, Type = type });
 
@@ -326,7 +321,7 @@ namespace DocXPlus
 
                 MainDocumentPart.DeletePart(part);
 
-                sectionProperty.RemoveAllChildren<HeaderReference>("type", w, type.ToString());
+                sectionProperty.RemoveAllChildren<HeaderReference>("type", Schemas.w, type.ToString());
 
                 headerReference = null;
             }
@@ -339,7 +334,7 @@ namespace DocXPlus
 
                 GenerateHeaderPartContent(part);
 
-                sectionProperty.RemoveAllChildren<HeaderReference>("type", w, type.ToString());
+                sectionProperty.RemoveAllChildren<HeaderReference>("type", Schemas.w, type.ToString());
 
                 headerReference = sectionProperty.PrependChild(new HeaderReference() { Id = id, Type = type });
 
@@ -368,23 +363,26 @@ namespace DocXPlus
             PostCreate();
         }
 
+        internal PageSize GetPageSize()
+        {
+            return GetBodySectionProperty().GetOrCreate<PageSize>();
+        }
+
         internal void PostCreate()
         {
-            var sectionProperty = Body.GetOrCreate<SectionProperties>();
+            var sectionProperty = GetBodySectionProperty();
 
-            var pageSize = sectionProperty.GetOrCreate<PageSize>();
-            pageSize.Height = 15840;
-            pageSize.Width = 12240;
+            // Letter - 8.5" x 11"
+            PageHeight = 15840;
+            PageWidth = 12240;
 
             // w:top="1440" w:right="1440" w:bottom="1440" w:left="1440" w:header="720" w:footer="720" w:gutter="0"
-            var pageMargins = sectionProperty.GetOrCreate<PageMargin>();
-            pageMargins.Top = Inch;
-            pageMargins.Right = UInch;
-            pageMargins.Bottom = Inch;
-            pageMargins.Left = UInch;
-            pageMargins.Header = UHalfInch;
-            pageMargins.Footer = UHalfInch;
-            pageMargins.Gutter = UZero;
+            PageMargins.TopAndBottom = Units.Inch;
+            PageMargins.RightAndLeft = Units.UInch;
+
+            PageMargins.Header = Units.UHalfInch;
+            PageMargins.Footer = Units.UHalfInch;
+            PageMargins.Gutter = Units.UZero;
 
             var titlePage = sectionProperty.GetOrCreate<TitlePage>();
         }
@@ -393,7 +391,7 @@ namespace DocXPlus
         {
             bool documentChanged = false;
 
-            var sectionProperty = Body.GetOrCreate<SectionProperties>();
+            var sectionProperty = GetBodySectionProperty();
 
             bool pageOrientationChanged = false;
 
@@ -463,6 +461,11 @@ namespace DocXPlus
             }
 
             return this;
+        }
+
+        internal SectionProperties GetBodySectionProperty()
+        {
+            return Body.GetOrCreate<SectionProperties>();
         }
     }
 }

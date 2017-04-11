@@ -55,6 +55,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TableTests.cs" />
     <Compile Include="SectionTests.cs" />
     <Compile Include="HeaderFooterTests.cs" />
     <Compile Include="TestBase.cs" />
