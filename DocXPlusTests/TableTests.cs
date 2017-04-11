@@ -23,6 +23,10 @@ namespace DocXPlusTests
             row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Center);
             row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Right);
 
+            row.Cells[0].Borders.TopBorder.Color = "auto";
+            row.Cells[0].Borders.TopBorder.Size = 4;
+            row.Cells[0].Borders.TopBorder.Val = DocumentFormat.OpenXml.Wordprocessing.BorderValues.Single;
+            
             row = table.AddRow();
 
             row.Cells[0].Paragraphs[0].Append("Cell 1");

@@ -15,6 +15,14 @@ namespace DocXPlus.Models
             this.tableCell = tableCell;
         }
 
+        public Borders Borders
+        {
+            get
+            {
+                return new Borders(GetTableCellBorders());
+            }
+        }
+
         public Paragraph[] Paragraphs
         {
             get
@@ -48,6 +56,11 @@ namespace DocXPlus.Models
             tableCellVerticalAlignment.Val = value;
 
             return this;
+        }
+
+        internal TableCellBorders GetTableCellBorders()
+        {
+            return GetTableCellProperties().GetOrCreate<TableCellBorders>();
         }
 
         internal TableCellProperties GetTableCellProperties()
