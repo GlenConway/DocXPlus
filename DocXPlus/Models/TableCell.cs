@@ -40,6 +40,14 @@ namespace DocXPlus.Models
             }
         }
 
+        public Shading Shading
+        {
+            get
+            {
+                return new Shading(GetTableCellShading());
+            }
+        }
+
         /// <summary>
         /// Adds a paragraph to the table cell
         /// </summary>
@@ -66,6 +74,11 @@ namespace DocXPlus.Models
         internal TableCellProperties GetTableCellProperties()
         {
             return tableCell.GetOrCreate<TableCellProperties>();
+        }
+
+        internal DocumentFormat.OpenXml.Wordprocessing.Shading GetTableCellShading()
+        {
+            return GetTableCellProperties().GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.Shading>();
         }
     }
 }

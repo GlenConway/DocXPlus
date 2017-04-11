@@ -144,6 +144,11 @@ namespace DocXPlus
             return new Models.Paragraph(paragraph);
         }
 
+        /// <summary>
+        /// Adds a Table to the document with the specified number of columns
+        /// </summary>
+        /// <param name="numberOfColumns"></param>
+        /// <returns></returns>
         public Models.Table AddTable(int numberOfColumns)
         {
             var table = GetBodySectionProperty().InsertBeforeSelf(new Table());

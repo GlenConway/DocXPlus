@@ -1,4 +1,5 @@
-﻿using DocXPlus;
+﻿using DocumentFormat.OpenXml.Wordprocessing;
+using DocXPlus;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 using System.Linq;
@@ -8,6 +9,40 @@ namespace DocXPlusTests
     [TestClass]
     public class TableTests : TestBase
     {
+        [TestMethod]
+        public void TableWithHeaderRow()
+        {
+            var filename = Path.Combine(TempDirectory, "TableWithHeaderRow.docx");
+
+            var doc = DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+
+            var table = doc.AddTable(5);
+
+            for (int i = 0; i < 50; i++)
+            {
+                var row = table.AddRow();
+                row.SetBorders(Units.HalfPt, BorderValues.Single);
+
+                if (i == 0)
+                {
+                    row.SetShading(ShadingPatternValues.Clear, "E7E6E6");
+
+                    row.HeaderRow = true;
+                }
+
+                for (int j = 0; j < 5; j++)
+                {
+                    row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
+                }
+            }
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
         [TestMethod]
         public void ThreeByThreeTable()
         {
@@ -21,24 +56,29 @@ namespace DocXPlusTests
             row.HeaderRow = true;
 
             row.Cells[0].Paragraphs[0].Append("Cell 1");
-            row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Center);
-            row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Right);
+            row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(JustificationValues.Center);
+            row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(JustificationValues.Right);
 
-            row.Cells[0].Borders.Set(Units.HalfPt, DocumentFormat.OpenXml.Wordprocessing.BorderValues.Single);
-                        
-            row = table.AddRow();
+            row.Cells[0].Borders.Set(Units.HalfPt, BorderValues.Single);
 
-            row.SetBorders(Units.HalfPt, DocumentFormat.OpenXml.Wordprocessing.BorderValues.Single);
-
-            row.Cells[0].Paragraphs[0].Append("Cell 1");
-            row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Center);
-            row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Right);
+            row.SetShading(ShadingPatternValues.Clear, "E7E6E6");
 
             row = table.AddRow();
 
+            row.SetBorders(Units.HalfPt, BorderValues.Single);
+
             row.Cells[0].Paragraphs[0].Append("Cell 1");
-            row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Center);
-            row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Right);
+            row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(JustificationValues.Center);
+            row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(JustificationValues.Right);
+
+            row = table.AddRow();
+
+            row.Cells[0].Paragraphs[0].Append("Cell 1");
+            row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(JustificationValues.Center);
+            row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(JustificationValues.Right);
+
+            row.Cells[1].Shading.Set(ShadingPatternValues.Clear, "F2F2F2");
+            row.Cells[2].Shading.Set(ShadingPatternValues.Clear, "auto");
 
             var rows = table.Rows.ToList();
 
@@ -53,7 +93,7 @@ namespace DocXPlusTests
                 {
                     var cell = row.Cells[j];
 
-                    cell.SetVerticalAlignment(DocumentFormat.OpenXml.Wordprocessing.TableVerticalAlignmentValues.Center);
+                    cell.SetVerticalAlignment(TableVerticalAlignmentValues.Center);
                 }
             }
 

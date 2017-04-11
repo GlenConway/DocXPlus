@@ -80,6 +80,14 @@ namespace DocXPlus.Models
             }
         }
 
+        public void SetShading(ShadingPatternValues value, string fill, string color = "auto")
+        {
+            foreach (var cell in Cells)
+            {
+                cell.Shading.Set(value, fill, color);
+            }
+        }
+
         internal CantSplit GetCantSplit()
         {
             return GetTableRowProperties().GetOrCreate<CantSplit>();

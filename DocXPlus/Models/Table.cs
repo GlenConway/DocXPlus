@@ -84,7 +84,8 @@ namespace DocXPlus.Models
         internal TableProperties TableProperties => table.GetOrCreate<TableProperties>();
 
         /// <summary>
-        /// Adds a row to the table. The row will consist of the same number of cells as the number of columns. Each cell will have an empty paragraph.
+        /// Adds a row to the table. The row will have the same number of cells as the number of columns in the table.  
+        /// Each cell will have an empty paragraph
         /// </summary>
         /// <returns></returns>
         public TableRow AddRow()
