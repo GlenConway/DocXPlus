@@ -18,6 +18,18 @@ namespace DocXPlus.Models
             AddCells();
         }
 
+        public bool CantSplit
+        {
+            get
+            {
+                return GetCantSplit().Val == OnOffOnlyValues.On;
+            }
+            set
+            {
+                GetCantSplit().Val = (value ? OnOffOnlyValues.On : OnOffOnlyValues.Off);
+            }
+        }
+
         public TableCell[] Cells => cells;
 
         public bool HeaderRow
@@ -52,6 +64,11 @@ namespace DocXPlus.Models
             {
                 return cells[index];
             }
+        }
+
+        internal CantSplit GetCantSplit()
+        {
+            return GetTableRowProperties().GetOrCreate<CantSplit>();
         }
 
         internal TableHeader GetTableHeader()

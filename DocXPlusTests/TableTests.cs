@@ -42,6 +42,7 @@ namespace DocXPlusTests
                 row = rows[i];
 
                 row.Height = DocXPlus.Units.UHalfInch;
+                row.CantSplit = true;
 
                 for (int j = 0; j < row.Cells.Count(); j++)
                 {
