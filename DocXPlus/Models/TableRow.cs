@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System;
 using System.Linq;
 
 namespace DocXPlus.Models
@@ -109,13 +110,32 @@ namespace DocXPlus.Models
             return tableRow.GetOrCreate<TableRowProperties>();
         }
 
-        internal void MergeCells(TableCell tableCell, int value)
+        internal void MergeDown(TableCell tableCell, int value)
         {
             var index = Cells.ToList().IndexOf(tableCell);
 
-            for (int i = 1; i < value; i++)
+            table.MergeDown(this, index, value);
+        }
+
+        internal void MergeRight(TableCell tableCell, int value)
+        {
+            if (value == 0)
             {
-                Cells[i].IsMerged = true;
+                throw new ArgumentException("Value must be greater than zero. Cannot merge a cell with itself.");
+            }
+
+            if (value >= Cells.Count())
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"Value {value} must be less than {Cells.Count()}");
+            }
+
+            var index = Cells.ToList().IndexOf(tableCell);
+
+            if (value + index >= Cells.Count())
+                throw new ArgumentOutOfRangeException(nameof(value), $"Value {value} must be less than {Cells.Count() - index}");
+
+            for (int i = 1; i <= value; i++)
+            {
                 Cells[i].RemoveFromRow();
             }
         }

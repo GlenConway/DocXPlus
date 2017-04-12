@@ -15,6 +15,8 @@ namespace DocXPlus
         private IList<Models.Footer> footers;
         private IList<Models.Header> headers;
 
+        private Models.PageMargins pageMargins;
+
         public PageOrientationValues Orientation
         {
             get
@@ -36,6 +38,19 @@ namespace DocXPlus
             set
             {
                 GetPageSize().Height = value;
+            }
+        }
+
+        public Models.PageMargins PageMargins
+        {
+            get
+            {
+                if (pageMargins == null)
+                {
+                    pageMargins = new Models.PageMargins(this);
+                }
+
+                return pageMargins;
             }
         }
 
@@ -65,20 +80,6 @@ namespace DocXPlus
                 }
 
                 return result;
-            }
-        }
-
-        Models.PageMargins pageMargins;
-        public Models.PageMargins PageMargins { get
-            {
-                if (pageMargins == null)
-                {
-                    pageMargins = new Models.PageMargins(this);
-
-                    
-                }
-
-                return pageMargins;
             }
         }
 
@@ -368,6 +369,11 @@ namespace DocXPlus
             PostCreate();
         }
 
+        internal SectionProperties GetBodySectionProperty()
+        {
+            return Body.GetOrCreate<SectionProperties>();
+        }
+
         internal PageSize GetPageSize()
         {
             return GetBodySectionProperty().GetOrCreate<PageSize>();
@@ -466,11 +472,6 @@ namespace DocXPlus
             }
 
             return this;
-        }
-
-        internal SectionProperties GetBodySectionProperty()
-        {
-            return Body.GetOrCreate<SectionProperties>();
         }
     }
 }

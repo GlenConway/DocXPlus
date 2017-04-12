@@ -1,5 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Wordprocessing;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace DocXPlus.Models
 {
@@ -81,10 +83,11 @@ namespace DocXPlus.Models
         }
 
         internal string[] ColumnWidths => columnWidths;
+
         internal TableProperties TableProperties => table.GetOrCreate<TableProperties>();
 
         /// <summary>
-        /// Adds a row to the table. The row will have the same number of cells as the number of columns in the table.  
+        /// Adds a row to the table. The row will have the same number of cells as the number of columns in the table.
         /// Each cell will have an empty paragraph
         /// </summary>
         /// <returns></returns>
@@ -105,6 +108,27 @@ namespace DocXPlus.Models
             rows.Add(result);
 
             return result;
+        }
+
+        internal void MergeDown(TableRow tableRow, int cellIndex, int value)
+        {
+            if (value == 0)
+            {
+                throw new ArgumentException("Value must be greater than zero. Cannot merge a cell with itself.");
+            }
+
+            if (value >= Rows.Count())
+            {
+                throw new ArgumentOutOfRangeException(nameof(value), $"Value {value} must be less than {Rows.Count()}");
+            }
+
+            var rows = Rows.ToList();
+            var rowIndex = rows.IndexOf(tableRow);
+
+            for (int i = 1; i <= value; i++)
+            {
+                rows[i].Cells[cellIndex].GetVerticalMerge().Val = MergedCellValues.Continue;
+            }
         }
 
         private void AddGrid()

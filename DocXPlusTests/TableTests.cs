@@ -42,6 +42,53 @@ namespace DocXPlusTests
 
             Launch(filename);
         }
+
+        [TestMethod]
+        public void TableWithMergeDown()
+        {
+            var filename = Path.Combine(TempDirectory, "TableWithMergeDown.docx");
+
+            var doc = DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+
+            var table = doc.AddTable(5);
+
+            for (int i = 0; i < 5; i++)
+            {
+                var row = table.AddRow();
+                row.SetBorders(Units.HalfPt, BorderValues.Single);
+
+                if (i == 0)
+                {
+                    row.SetShading(ShadingPatternValues.Clear, "E7E6E6");
+
+                    row.HeaderRow = true;
+                }
+
+                for (int j = 0; j < 5; j++)
+                {
+                    row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
+                }
+            }
+
+            var rows = table.Rows.ToList();
+
+            var firstRow = rows[0];
+
+            for (int i = 0; i < 5; i++)
+            {
+                if (i > 0)
+                {
+                    firstRow.Cells[i].MergeDown = i;
+                }
+            }
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
         [TestMethod]
         public void TableWithMergeRight()
         {
@@ -67,11 +114,10 @@ namespace DocXPlusTests
                 {
                     row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
                 }
-            }
 
-            var firstRow = table.Rows.First();
-            firstRow.Cells[0].MergeRight = 3;
-            firstRow.Cells[1].AddParagraph().Append("Should not display.");
+                if (i > 0)
+                    row.Cells[0].MergeRight = i;
+            }
 
             doc.Close();
 
@@ -79,6 +125,53 @@ namespace DocXPlusTests
 
             Launch(filename);
         }
+
+        [TestMethod]
+        public void TableWithMergeRightAndDown()
+        {
+            var filename = Path.Combine(TempDirectory, "TableWithMergeRightAndDown.docx");
+
+            var doc = DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+
+            var table = doc.AddTable(5);
+
+            for (int i = 0; i < 5; i++)
+            {
+                var row = table.AddRow();
+                row.SetBorders(Units.HalfPt, BorderValues.Single);
+
+                if (i == 0)
+                {
+                    row.SetShading(ShadingPatternValues.Clear, "E7E6E6");
+
+                    row.HeaderRow = true;
+                }
+
+                for (int j = 0; j < 5; j++)
+                {
+                    row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
+                }
+            }
+
+            var rows = table.Rows.ToList();
+
+            var firstRow = rows[0];
+            firstRow.Cells[0].MergeRight = 3;
+            firstRow.Cells[1].AddParagraph().Append("Should not display.");
+
+            var secondRow = rows[1];
+            secondRow.Cells[1].MergeDown = 3;
+
+            var thirdRow = rows[2];
+            thirdRow.Cells[1].AddParagraph().Append("Should not display.");
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
         [TestMethod]
         public void ThreeByThreeTable()
         {
