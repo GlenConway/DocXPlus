@@ -91,10 +91,11 @@ namespace DocXPlus.Models
         public TableRow AddRow()
         {
             var tableRow = table.AppendChild(new DocumentFormat.OpenXml.Wordprocessing.TableRow());
-            
-            var result = new TableRow(this, tableRow);
 
-            result.HeaderRow = false;
+            var result = new TableRow(this, tableRow)
+            {
+                HeaderRow = false
+            };
 
             if (rows == null)
             {

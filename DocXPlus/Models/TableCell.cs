@@ -5,6 +5,7 @@ namespace DocXPlus.Models
 {
     public class TableCell
     {
+        private int mergeRight;
         private DocumentFormat.OpenXml.Wordprocessing.TableCell tableCell;
 
         private TableRow tableRow;
@@ -20,6 +21,28 @@ namespace DocXPlus.Models
             get
             {
                 return new Borders(GetTableCellBorders());
+            }
+        }
+
+        /// <summary>
+        /// Merges this cell with the cells to the right. Does not merge the cell contents.
+        /// </summary>
+        public int MergeRight
+        {
+            get
+            {
+                return mergeRight;
+            }
+            set
+            {
+                if (mergeRight != value)
+                {
+                    mergeRight = value;
+
+                    tableRow.MergeCells(this, value);
+
+                    GetGridSpan().Val = value;
+                }
             }
         }
 
@@ -48,6 +71,8 @@ namespace DocXPlus.Models
             }
         }
 
+        internal bool IsMerged { get; set; }
+
         /// <summary>
         /// Adds a paragraph to the table cell
         /// </summary>
@@ -66,6 +91,11 @@ namespace DocXPlus.Models
             return this;
         }
 
+        internal GridSpan GetGridSpan()
+        {
+            return GetTableCellProperties().GetOrCreate<GridSpan>();
+        }
+
         internal TableCellBorders GetTableCellBorders()
         {
             return GetTableCellProperties().GetOrCreate<TableCellBorders>();
@@ -79,6 +109,11 @@ namespace DocXPlus.Models
         internal DocumentFormat.OpenXml.Wordprocessing.Shading GetTableCellShading()
         {
             return GetTableCellProperties().GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.Shading>();
+        }
+
+        internal void RemoveFromRow()
+        {
+            tableCell.Remove();
         }
     }
 }

@@ -42,7 +42,43 @@ namespace DocXPlusTests
 
             Launch(filename);
         }
+        [TestMethod]
+        public void TableWithMergeRight()
+        {
+            var filename = Path.Combine(TempDirectory, "TableWithMergeRight.docx");
 
+            var doc = DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+
+            var table = doc.AddTable(5);
+
+            for (int i = 0; i < 5; i++)
+            {
+                var row = table.AddRow();
+                row.SetBorders(Units.HalfPt, BorderValues.Single);
+
+                if (i == 0)
+                {
+                    row.SetShading(ShadingPatternValues.Clear, "E7E6E6");
+
+                    row.HeaderRow = true;
+                }
+
+                for (int j = 0; j < 5; j++)
+                {
+                    row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
+                }
+            }
+
+            var firstRow = table.Rows.First();
+            firstRow.Cells[0].MergeRight = 3;
+            firstRow.Cells[1].AddParagraph().Append("Should not display.");
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
         [TestMethod]
         public void ThreeByThreeTable()
         {
@@ -87,7 +123,7 @@ namespace DocXPlusTests
                 row = rows[i];
 
                 row.Height = Units.UHalfInch;
-                row.CantSplit = true;
+                row.BreakAcrossPages = true;
 
                 for (int j = 0; j < row.Cells.Count(); j++)
                 {

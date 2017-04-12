@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System.Linq;
 
 namespace DocXPlus.Models
 {
@@ -18,15 +19,15 @@ namespace DocXPlus.Models
             AddCells();
         }
 
-        public bool CantSplit
+        public bool BreakAcrossPages
         {
             get
             {
-                return GetCantSplit().Val == OnOffOnlyValues.On;
+                return GetCantSplit().Val == OnOffOnlyValues.Off;
             }
             set
             {
-                GetCantSplit().Val = (value ? OnOffOnlyValues.On : OnOffOnlyValues.Off);
+                GetCantSplit().Val = (value ? OnOffOnlyValues.Off : OnOffOnlyValues.On);
             }
         }
 
@@ -106,6 +107,17 @@ namespace DocXPlus.Models
         internal TableRowProperties GetTableRowProperties()
         {
             return tableRow.GetOrCreate<TableRowProperties>();
+        }
+
+        internal void MergeCells(TableCell tableCell, int value)
+        {
+            var index = Cells.ToList().IndexOf(tableCell);
+
+            for (int i = 1; i < value; i++)
+            {
+                Cells[i].IsMerged = true;
+                Cells[i].RemoveFromRow();
+            }
         }
 
         private void AddCells()
