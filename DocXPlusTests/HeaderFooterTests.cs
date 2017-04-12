@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
 namespace DocXPlusTests
@@ -11,9 +13,9 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddFooter.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
 
-            var Footer = doc.AddFooter(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default);
+            var Footer = doc.AddFooter(HeaderFooterValues.Default);
             Footer.AddParagraph().Append("Footer Paragraph");
 
             doc.Close();
@@ -28,17 +30,17 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddFooters.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
 
-            doc.AddFooter(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default)
+            doc.AddFooter(HeaderFooterValues.Default)
                 .AddParagraph()
                 .Append("Default (Odd) Footer");
 
-            doc.AddFooter(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Even)
+            doc.AddFooter(HeaderFooterValues.Even)
                 .AddParagraph()
                 .Append("Even Footer");
 
-            doc.AddFooter(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.First)
+            doc.AddFooter(HeaderFooterValues.First)
                 .AddParagraph()
                 .Append("First Footer");
 
@@ -68,9 +70,9 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddHeader.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
 
-            var header = doc.AddHeader(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default);
+            var header = doc.AddHeader(HeaderFooterValues.Default);
             header.AddParagraph().Append("Header Paragraph");
 
             doc.Close();
@@ -85,12 +87,12 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddHeaderAndFooter.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
 
-            var header = doc.AddHeader(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default);
+            var header = doc.AddHeader(HeaderFooterValues.Default);
             header.AddParagraph().Append("Header Paragraph");
 
-            var footer = doc.AddFooter(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default);
+            var footer = doc.AddFooter(HeaderFooterValues.Default);
             footer.AddParagraph().Append("Footer Paragraph");
 
             doc.Close();
@@ -105,19 +107,19 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddHeaderAndFooterLandscape.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
-            doc.Orientation = DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Landscape;
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            doc.Orientation = PageOrientationValues.Landscape;
 
-            var header = doc.AddHeader(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default);
+            var header = doc.AddHeader(HeaderFooterValues.Default);
 
             header.AddParagraph()
-                .SetAlignment(DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Right)
+                .SetAlignment(JustificationValues.Right)
                 .Append(LoremIpsum);
 
-            var footer = doc.AddFooter(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default);
+            var footer = doc.AddFooter(HeaderFooterValues.Default);
 
             footer.AddParagraph()
-                .SetAlignment(DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Center)
+                .SetAlignment(JustificationValues.Center)
                 .Append(LoremIpsum);
 
             doc.Close();
@@ -132,17 +134,17 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddHeaders.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
 
-            doc.AddHeader(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default)
+            doc.AddHeader(HeaderFooterValues.Default)
                 .AddParagraph()
                 .Append("Default (Odd) Header");
 
-            doc.AddHeader(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Even)
+            doc.AddHeader(HeaderFooterValues.Even)
                 .AddParagraph()
                 .Append("Even Header");
 
-            doc.AddHeader(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.First)
+            doc.AddHeader(HeaderFooterValues.First)
                 .AddParagraph()
                 .Append("First Header");
 
@@ -172,17 +174,17 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddSectionFooter.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
 
-            doc.AddFooter(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default).AddParagraph().Append("Footer 1");
-
-            doc.InsertSectionPageBreak();
-
-            doc.AddFooter(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default).AddParagraph().Append("Footer 2");
+            doc.AddFooter(HeaderFooterValues.Default).AddParagraph().Append("Footer 1");
 
             doc.InsertSectionPageBreak();
 
-            doc.AddFooter(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default).AddParagraph().Append("Footer 3");
+            doc.AddFooter(HeaderFooterValues.Default).AddParagraph().Append("Footer 2");
+
+            doc.InsertSectionPageBreak();
+
+            doc.AddFooter(HeaderFooterValues.Default).AddParagraph().Append("Footer 3");
 
             doc.Close();
 
@@ -196,17 +198,17 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddSectionHeader.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
 
-            doc.AddHeader(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default).AddParagraph().Append("Header 1");
-
-            doc.InsertSectionPageBreak();
-
-            doc.AddHeader(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default).AddParagraph().Append("Header 2");
+            doc.AddHeader(HeaderFooterValues.Default).AddParagraph().Append("Header 1");
 
             doc.InsertSectionPageBreak();
 
-            doc.AddHeader(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default).AddParagraph().Append("Header 3");
+            doc.AddHeader(HeaderFooterValues.Default).AddParagraph().Append("Header 2");
+
+            doc.InsertSectionPageBreak();
+
+            doc.AddHeader(HeaderFooterValues.Default).AddParagraph().Append("Header 3");
 
             doc.Close();
 
@@ -220,20 +222,20 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddSectionHeaderFooter.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
 
-            doc.AddHeader(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default).AddParagraph().Append("Header 1");
-            doc.AddFooter(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default).AddParagraph().Append("Footer 1");
-
-            doc.InsertSectionPageBreak();
-
-            doc.AddHeader(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default).AddParagraph().Append("Header 2");
-            doc.AddFooter(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default).AddParagraph().Append("Footer 2");
+            doc.AddHeader(HeaderFooterValues.Default).AddParagraph().Append("Header 1");
+            doc.AddFooter(HeaderFooterValues.Default).AddParagraph().Append("Footer 1");
 
             doc.InsertSectionPageBreak();
 
-            doc.AddHeader(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default).AddParagraph().Append("Header 3");
-            doc.AddFooter(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default).AddParagraph().Append("Footer 3");
+            doc.AddHeader(HeaderFooterValues.Default).AddParagraph().Append("Header 2");
+            doc.AddFooter(HeaderFooterValues.Default).AddParagraph().Append("Footer 2");
+
+            doc.InsertSectionPageBreak();
+
+            doc.AddHeader(HeaderFooterValues.Default).AddParagraph().Append("Header 3");
+            doc.AddFooter(HeaderFooterValues.Default).AddParagraph().Append("Footer 3");
 
             doc.Close();
 
@@ -247,9 +249,9 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddSectionPageBreakSameHeader.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
 
-            var header = doc.AddHeader(DocumentFormat.OpenXml.Wordprocessing.HeaderFooterValues.Default);
+            var header = doc.AddHeader(HeaderFooterValues.Default);
             header.AddParagraph().Append("Header 1");
 
             doc.InsertSectionPageBreak();

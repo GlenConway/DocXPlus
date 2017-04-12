@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Wordprocessing;
 using DocXPlus;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
@@ -14,7 +15,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "TableWithHeaderRow.docx");
 
-            var doc = DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             var table = doc.AddTable(5);
 
@@ -48,7 +49,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "TableWithMergeDown.docx");
 
-            var doc = DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             var table = doc.AddTable(5);
 
@@ -94,17 +95,20 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "TableWithMergeRight.docx");
 
-            var doc = DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
+            // 5 columns
             var table = doc.AddTable(5);
 
             for (int i = 0; i < 5; i++)
             {
                 var row = table.AddRow();
+
                 row.SetBorders(Units.HalfPt, BorderValues.Single);
 
                 if (i == 0)
                 {
+                    // shade the first row and set as a header
                     row.SetShading(ShadingPatternValues.Clear, "E7E6E6");
 
                     row.HeaderRow = true;
@@ -116,7 +120,9 @@ namespace DocXPlusTests
                 }
 
                 if (i > 0)
+                {
                     row.Cells[0].MergeRight = i;
+                }
             }
 
             doc.Close();
@@ -131,7 +137,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "TableWithMergeRightAndDown.docx");
 
-            var doc = DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             var table = doc.AddTable(5);
 
@@ -177,7 +183,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "ThreeByThreeTable.docx");
 
-            var doc = DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             var table = doc.AddTable(3);
 

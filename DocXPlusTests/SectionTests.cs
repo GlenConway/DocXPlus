@@ -1,4 +1,6 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Wordprocessing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
 namespace DocXPlusTests
@@ -11,7 +13,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "SectionPageBreak.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddParagraph().Append("Page 1");
 
@@ -35,15 +37,15 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "SectionPageBreakLandscapePortrait.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
 
-            doc.Orientation = DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Landscape;
+            doc.Orientation = PageOrientationValues.Landscape;
 
             doc.AddParagraph().Append("Landscape");
 
             doc.InsertSectionPageBreak();
 
-            doc.Orientation = DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Portrait;
+            doc.Orientation = PageOrientationValues.Portrait;
 
             doc.AddParagraph().Append("Portrait");
 
@@ -59,21 +61,18 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "SectionPageBreakLandscapePortraitLandscape.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
-
-            doc.Orientation = DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Landscape;
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            doc.Orientation = PageOrientationValues.Landscape;
 
             doc.AddParagraph().Append("Landscape");
 
             doc.InsertSectionPageBreak();
-
-            doc.Orientation = DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Portrait;
+            doc.Orientation = PageOrientationValues.Portrait;
 
             doc.AddParagraph().Append("Portrait");
 
             doc.InsertSectionPageBreak();
-
-            doc.Orientation = DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Landscape;
+            doc.Orientation = PageOrientationValues.Landscape;
 
             doc.AddParagraph().Append("Landscape");
 
@@ -89,13 +88,13 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "SectionPageBreakPortraitLandscape.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddParagraph().Append("Portrait");
 
             doc.InsertSectionPageBreak();
 
-            doc.Orientation = DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Landscape;
+            doc.Orientation = PageOrientationValues.Landscape;
 
             doc.AddParagraph().Append("Landscape");
 
@@ -111,19 +110,19 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "SectionPageBreakPortraitLandscapePortrait.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddParagraph().Append("Portrait");
 
             doc.InsertSectionPageBreak();
 
-            doc.Orientation = DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Landscape;
+            doc.Orientation = PageOrientationValues.Landscape;
 
             doc.AddParagraph().Append("Landscape");
 
             doc.InsertSectionPageBreak();
 
-            doc.Orientation = DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Portrait;
+            doc.Orientation = PageOrientationValues.Portrait;
 
             doc.AddParagraph().Append("Portrait");
 
