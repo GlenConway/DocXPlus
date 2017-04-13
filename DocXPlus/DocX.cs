@@ -12,10 +12,76 @@ namespace DocXPlus
         internal static MarkupCompatibilityAttributes MarkupCompatibilityAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se wp14" };
         private WordprocessingDocument document;
 
-        private IList<Models.Footer> footers;
-        private IList<Models.Header> headers;
+        private IEnumerable<Models.Footer> footers;
+        private IEnumerable<Models.Header> headers;
 
         private Models.PageMargins pageMargins;
+        public Models.Footer DefaultFooter => footers.Where(p => p.Type == HeaderFooterValues.Default).First();
+        public Models.Header DefaultHeader => headers.Where(p => p.Type == HeaderFooterValues.Default).First();
+
+        public bool DifferentFirstPage
+        {
+            get
+            {
+                if (!GetBodySectionProperty().Has<TitlePage>())
+                {
+                    return false;
+                }
+
+                var titlePage = GetBodySectionProperty().GetOrCreate<TitlePage>();
+
+                return titlePage.Val;
+            }
+            set
+            {
+                if (value)
+                {
+                    var titlePage = GetBodySectionProperty().GetOrCreate<TitlePage>();
+                    titlePage.Val = value;
+                }
+                else
+                {
+                    GetBodySectionProperty().RemoveAllChildren<TitlePage>();
+                }
+            }
+        }
+
+        public bool EvenAndOddHeaders
+        {
+            get
+            {
+                var settings = Settings;
+
+                if (!settings.Has<EvenAndOddHeaders>())
+                {
+                    return false;
+                }
+
+                var evenAndOddHeaders = settings.GetOrCreate<EvenAndOddHeaders>();
+
+                return evenAndOddHeaders.Val;
+            }
+            set
+            {
+                var settings = Settings;
+
+                if (value)
+                {
+                    var evenAndOddHeaders = settings.GetOrCreate<EvenAndOddHeaders>();
+
+                    evenAndOddHeaders.Val = value;
+                }
+                else
+                {
+                    settings.RemoveAllChildren<EvenAndOddHeaders>();
+                }
+            }
+        }
+
+        public Models.Footer EvenFooter => footers.Where(p => p.Type == HeaderFooterValues.Even).First();
+        public Models.Header EvenHeader => headers.Where(p => p.Type == HeaderFooterValues.Even).First();
+        public Models.Footer FirstFooter => footers.Where(p => p.Type == HeaderFooterValues.First).First();
+        public Models.Header FirstHeader => headers.Where(p => p.Type == HeaderFooterValues.First).First();
 
         public PageOrientationValues Orientation
         {
@@ -99,6 +165,33 @@ namespace DocXPlus
             }
         }
 
+        internal Settings Settings
+        {
+            get
+            {
+                var part = document.MainDocumentPart.DocumentSettingsPart;
+
+                if (part == null)
+                {
+                    part = document.MainDocumentPart.AddNewPart<DocumentSettingsPart>();
+
+                    GenerateDocumentSettingsPartContent(part);
+
+                    part.Settings.Save();
+                }
+
+                if (part.Settings == null)
+                {
+                    part.Settings = new Settings() { MCAttributes = MarkupCompatibilityAttributes };
+                    Schemas.AddNamespaceDeclarations(part.Settings);
+
+                    part.Settings.Save();
+                }
+
+                return part.Settings;
+            }
+        }
+
         public static DocX Create(string path, WordprocessingDocumentType type)
         {
             return Create(path, type, false);
@@ -120,18 +213,50 @@ namespace DocXPlus
             return docX;
         }
 
-        public Models.Footer AddFooter(HeaderFooterValues type)
+        public void AddFooters()
         {
-            // get the section property for the body
-            // which will contain any existing footer references
-            return AddFooter(type, GetBodySectionProperty());
+            var sectionProperty = GetBodySectionProperty();
+
+            var references = sectionProperty.Descendants<FooterReference>();
+
+            foreach (var reference in references)
+            {
+                var part = MainDocumentPart.GetPartById(reference.Id);
+
+                MainDocumentPart.DeletePart(reference.Id);
+            }
+
+            sectionProperty.RemoveAllChildren<FooterReference>();
+
+            footers = new List<Models.Footer>
+            {
+                AddFooter(HeaderFooterValues.Default),
+                AddFooter(HeaderFooterValues.Even),
+                AddFooter(HeaderFooterValues.First)
+            };
         }
 
-        public Models.Header AddHeader(HeaderFooterValues type)
+        public void AddHeaders()
         {
-            // get the section property for the body
-            // which will contain any existing header references
-            return AddHeader(type, GetBodySectionProperty());
+            var sectionProperty = GetBodySectionProperty();
+
+            var references = sectionProperty.Descendants<HeaderReference>();
+
+            foreach (var reference in references)
+            {
+                var part = MainDocumentPart.GetPartById(reference.Id);
+
+                MainDocumentPart.DeletePart(reference.Id);
+            }
+
+            sectionProperty.RemoveAllChildren<HeaderReference>();
+
+            headers = new List<Models.Header>
+            {
+                AddHeader(HeaderFooterValues.Default),
+                AddHeader(HeaderFooterValues.Even),
+                AddHeader(HeaderFooterValues.First)
+            };
         }
 
         /// <summary>
@@ -154,22 +279,7 @@ namespace DocXPlus
         {
             var table = GetBodySectionProperty().InsertBeforeSelf(new Table());
 
-            var result = new Models.Table(table, numberOfColumns, this)
-            {
-                TableStyle = "TableGrid",
-                Width = "0",
-                WidthType = TableWidthUnitValues.Auto
-            };
-
-            result.TableLook.Value = "04A0";
-            result.TableLook.FirstRow = true;
-            result.TableLook.LastRow = false;
-            result.TableLook.FirstColumn = true;
-            result.TableLook.LastColumn = false;
-            result.TableLook.NoHorizontalBand = false;
-            result.TableLook.NoVerticalBand = true;
-
-            return result;
+            return AddTable(numberOfColumns, table);
         }
 
         public void Close()
@@ -195,6 +305,11 @@ namespace DocXPlus
 
         public void InsertSectionPageBreak()
         {
+            // first save any header or footer content because after
+            // this, there will be a new set of headers and footers
+            SaveHeaders();
+            SaveFooters();
+
             // get or create the body section properties
             // we will clone this to create the new section properties
             var bodySectionProperties = GetBodySectionProperty();
@@ -220,9 +335,6 @@ namespace DocXPlus
             // get the paragraph's properties
             var paragraphProperties = paragraph.GetOrCreate<ParagraphProperties>(true);
 
-            // remove title page before the clone
-            bodySectionProperties.RemoveAllChildren<TitlePage>();
-
             // clone the document section properties
             // to get the page size, orientation etc
             var newSectionProperties = (SectionProperties)bodySectionProperties.CloneNode(true);
@@ -239,23 +351,12 @@ namespace DocXPlus
 
         public void Save()
         {
-            document.MainDocumentPart.Document.Save();
+            Settings.Save();
 
-            if (headers != null)
-            {
-                foreach (var header in headers)
-                {
-                    header.Save();
-                }
-            }
+            MainDocumentPart.Document.Save();
 
-            if (footers != null)
-            {
-                foreach (var footer in footers)
-                {
-                    footer.Save();
-                }
-            }
+            SaveHeaders();
+            SaveFooters();
 
             document.Save();
         }
@@ -278,83 +379,24 @@ namespace DocXPlus
             part.Header = header;
         }
 
-        internal Models.Footer AddFooter(HeaderFooterValues type, SectionProperties sectionProperty)
+        internal Models.Table AddTable(int numberOfColumns, Table table)
         {
-            var footerReferences = sectionProperty.Descendants<FooterReference>();
-
-            // footer reference exists for this type?
-            var footerReference = footerReferences.FirstOrDefault(p => p.Type == type);
-
-            Models.Footer footer = null;
-
-            if (footerReference == null)
+            var result = new Models.Table(table, numberOfColumns, this)
             {
-                var part = MainDocumentPart.AddNewPart<FooterPart>();
+                TableStyle = "TableGrid",
+                Width = "0",
+                WidthType = TableWidthUnitValues.Auto
+            };
 
-                var id = MainDocumentPart.GetIdOfPart(part);
+            result.TableLook.Value = "04A0";
+            result.TableLook.FirstRow = true;
+            result.TableLook.LastRow = false;
+            result.TableLook.FirstColumn = true;
+            result.TableLook.LastColumn = false;
+            result.TableLook.NoHorizontalBand = false;
+            result.TableLook.NoVerticalBand = true;
 
-                GenerateFooterPartContent(part);
-
-                sectionProperty.RemoveAllChildren<FooterReference>("type", Schemas.w, type.ToString());
-
-                footerReference = sectionProperty.PrependChild(new FooterReference() { Id = id, Type = type });
-
-                footer = new Models.Footer(part.Footer);
-            }
-
-            if (footers == null)
-            {
-                footers = new List<Models.Footer>();
-            }
-
-            footers.Add(footer);
-
-            return footer;
-        }
-
-        internal Models.Header AddHeader(HeaderFooterValues type, SectionProperties sectionProperty)
-        {
-            var headerReferences = sectionProperty.Descendants<HeaderReference>();
-
-            // header reference exists for this type?
-            var headerReference = headerReferences.FirstOrDefault(p => p.Type == type);
-
-            Models.Header header = null;
-
-            if (headerReference != null)
-            {
-                var part = MainDocumentPart.GetPartById(headerReference.Id);
-
-                MainDocumentPart.DeletePart(part);
-
-                sectionProperty.RemoveAllChildren<HeaderReference>("type", Schemas.w, type.ToString());
-
-                headerReference = null;
-            }
-
-            if (headerReference == null)
-            {
-                var part = MainDocumentPart.AddNewPart<HeaderPart>();
-
-                var id = MainDocumentPart.GetIdOfPart(part);
-
-                GenerateHeaderPartContent(part);
-
-                sectionProperty.RemoveAllChildren<HeaderReference>("type", Schemas.w, type.ToString());
-
-                headerReference = sectionProperty.PrependChild(new HeaderReference() { Id = id, Type = type });
-
-                header = new Models.Header(part.Header);
-            }
-
-            if (headers == null)
-            {
-                headers = new List<Models.Header>();
-            }
-
-            headers.Add(header);
-
-            return header;
+            return result;
         }
 
         internal void Create(WordprocessingDocument doc)
@@ -395,7 +437,7 @@ namespace DocXPlus
             PageMargins.Footer = Units.UHalfInch;
             PageMargins.Gutter = Units.UZero;
 
-            var titlePage = sectionProperty.GetOrCreate<TitlePage>();
+            var documentSettingsPart = MainDocumentPart.AddNewPart<DocumentSettingsPart>();
         }
 
         internal DocX SetOrientation(PageOrientationValues value)
@@ -472,6 +514,66 @@ namespace DocXPlus
             }
 
             return this;
+        }
+
+        private static void GenerateDocumentSettingsPartContent(DocumentSettingsPart documentSettingsPart)
+        {
+            Settings settings = new Settings() { MCAttributes = MarkupCompatibilityAttributes };
+            Schemas.AddNamespaceDeclarations(settings);
+
+            documentSettingsPart.Settings = settings;
+        }
+
+        private Models.Footer AddFooter(HeaderFooterValues type)
+        {
+            var part = MainDocumentPart.AddNewPart<FooterPart>();
+
+            var id = MainDocumentPart.GetIdOfPart(part);
+
+            GenerateFooterPartContent(part);
+
+            GetBodySectionProperty().PrependChild(new FooterReference() { Id = id, Type = type });
+
+            return new Models.Footer(part.Footer, this, type);
+        }
+
+        private Models.Header AddHeader(HeaderFooterValues type)
+        {
+            var part = MainDocumentPart.AddNewPart<HeaderPart>();
+
+            var id = MainDocumentPart.GetIdOfPart(part);
+
+            GenerateHeaderPartContent(part);
+
+            GetBodySectionProperty().PrependChild(new HeaderReference() { Id = id, Type = type });
+
+            return new Models.Header(part.Header, this, type);
+        }
+
+        private void SaveFooters()
+        {
+            if (footers == null)
+            {
+                return;
+            }
+
+            foreach (var footer in footers)
+            {
+                footer.Save();
+            }
+        }
+
+        private void SaveHeaders()
+        {
+            if (headers == null)
+            {
+                return;
+            }
+
+            foreach (var header in headers)
+            {
+                header.Save();
+            }
         }
     }
 }

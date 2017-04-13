@@ -40,18 +40,27 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
 
-doc.AddHeader(HeaderFooterValues.Default).AddParagraph().Append("Header 1");
-doc.AddFooter(HeaderFooterValues.Default).AddParagraph().Append("Footer 1");
+doc.AddHeaders();
+doc.AddFooters();
+
+doc.DefaultHeader.AddParagraph().Append("Header 1");
+doc.DefaultFooter.AddParagraph().Append("Footer 1");
 
 doc.InsertSectionPageBreak();
 
-doc.AddHeader(HeaderFooterValues.Default).AddParagraph().Append("Header 2");
-doc.AddFooter(HeaderFooterValues.Default).AddParagraph().Append("Footer 2");
+doc.AddHeaders();
+doc.AddFooters();
+
+doc.DefaultHeader.AddParagraph().Append("Header 2");
+doc.DefaultFooter.AddParagraph().Append("Footer 2");
 
 doc.InsertSectionPageBreak();
 
-doc.AddHeader(HeaderFooterValues.Default).AddParagraph().Append("Header 3");
-doc.AddFooter(HeaderFooterValues.Default).AddParagraph().Append("Footer 3");
+doc.AddHeaders();
+doc.AddFooters();
+
+doc.DefaultHeader.AddParagraph().Append("Header 3");
+doc.DefaultFooter.AddParagraph().Append("Footer 3");
 
 doc.Close();
 ```

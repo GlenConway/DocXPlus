@@ -11,6 +11,42 @@ namespace DocXPlusTests
     public class TableTests : TestBase
     {
         [TestMethod]
+        public void TableInHeader()
+        {
+            var filename = Path.Combine(TempDirectory, "TableInHeader.docx");
+
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+
+            doc.AddHeaders();
+            
+            var table = doc.DefaultHeader.AddTable(3);
+
+            for (int i = 0; i < 3; i++)
+            {
+                var row = table.AddRow();
+                row.SetBorders(Units.HalfPt, BorderValues.Single);
+
+                if (i == 0)
+                {
+                    row.SetShading(ShadingPatternValues.Clear, "E7E6E6");
+
+                    row.HeaderRow = true;
+                }
+
+                for (int j = 0; j < 3; j++)
+                {
+                    row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
+                }
+            }
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
         public void TableWithHeaderRow()
         {
             var filename = Path.Combine(TempDirectory, "TableWithHeaderRow.docx");
