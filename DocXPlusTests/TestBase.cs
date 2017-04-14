@@ -4,6 +4,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 
 namespace DocXPlusTests
 {
@@ -24,6 +25,20 @@ namespace DocXPlusTests
             {
                 return "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et scelerisque eros, at posuere nisl. Maecenas pretium porta tellus sit amet pulvinar. Quisque arcu elit, consequat sit amet finibus non, sodales rutrum risus. Nulla sagittis nunc nec auctor rhoncus. Maecenas dictum nunc vel lobortis auctor. Quisque mattis imperdiet mattis. Vivamus lacinia maximus diam sed posuere. Quisque ullamcorper mi quis ipsum condimentum finibus. Nullam mollis sit amet ex ullamcorper venenatis. Pellentesque lacinia porta leo, eget imperdiet mauris.";
             }
+        }
+
+        protected Stream GetEmbeddedResourceStream(string name)
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+
+            var resourceName = string.Format("DocXPlusTests.Resources.{0}", name);
+
+            var resourceNames = assembly.GetManifestResourceNames();
+
+            if (!resourceNames.Contains(resourceName))
+                throw new InvalidOperationException("Assembly does not contain a resource named '" + resourceName + "'.");
+
+            return assembly.GetManifestResourceStream(resourceName);
         }
 
         protected void Launch(string filename)

@@ -22,6 +22,13 @@ namespace DocXPlus
             }
         }
 
+        public Paragraph Append(Drawing drawing)
+        {
+            paragraph.AppendChild(new Run(drawing));
+
+            return this;
+        }
+
         public Paragraph Append(string text)
         {
             var run = paragraph.AppendChild(NewRun());

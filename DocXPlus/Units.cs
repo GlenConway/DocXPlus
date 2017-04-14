@@ -121,6 +121,26 @@ namespace DocXPlus
         }
 
         /// <summary>
+        /// Converts CM to an English Metric Unit (EMU)
+        /// </summary>
+        /// <param name="inches"></param>
+        /// <returns></returns>
+        public static Int64Value CMToEMU(double inches)
+        {
+            return System.Convert.ToInt64(inches * 360000);
+        }
+
+        /// <summary>
+        /// Converts an inch to an English Metric Unit (EMU)
+        /// </summary>
+        /// <param name="inches"></param>
+        /// <returns></returns>
+        public static Int64Value InchToEMU(double inches)
+        {
+            return System.Convert.ToInt64(inches * 914400);
+        }
+
+        /// <summary>
         /// Converts an inch value such as 1.25 into Twips
         /// </summary>
         /// <param name="inches"></param>

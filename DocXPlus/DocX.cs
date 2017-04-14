@@ -4,6 +4,9 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using A = DocumentFormat.OpenXml.Drawing;
+using DW = DocumentFormat.OpenXml.Drawing.Wordprocessing;
+using PIC = DocumentFormat.OpenXml.Drawing.Pictures;
 
 namespace DocXPlus
 {
@@ -79,8 +82,11 @@ namespace DocXPlus
         }
 
         public Footer EvenFooter => footers.Where(p => p.Type == HeaderFooterValues.Even).First();
+
         public Header EvenHeader => headers.Where(p => p.Type == HeaderFooterValues.Even).First();
+
         public Footer FirstFooter => footers.Where(p => p.Type == HeaderFooterValues.First).First();
+
         public Header FirstHeader => headers.Where(p => p.Type == HeaderFooterValues.First).First();
 
         public PageOrientationValues Orientation
@@ -260,6 +266,37 @@ namespace DocXPlus
         }
 
         /// <summary>
+        /// Adds an image to the drawing which can then be added to a paragraph
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="x">The width of the image in English Metric Units (EMU)</param>
+        /// <param name="y">The height of the image in English Metric Units (EMU)</param>
+        /// <returns></returns>
+        public Drawing AddImage(string fileName, Int64Value x, Int64Value y)
+        {
+            using (FileStream stream = new FileStream(fileName, FileMode.Open))
+            {
+                return AddImage(stream, FileNameContentType(fileName), x, y);
+            }
+        }
+
+        /// <summary>
+        /// Adds an image to the drawing which can then be added to a paragraph
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="contentType"></param>
+        /// <param name="width">The width of the image in English Metric Units (EMU)</param>
+        /// <param name="height">The height of the image in English Metric Units (EMU)</param>
+        /// <returns></returns>
+        public Drawing AddImage(Stream stream, string contentType, Int64Value width, Int64Value height)
+        {
+            ImagePart imagePart = MainDocumentPart.AddImagePart(contentType);
+            imagePart.FeedData(stream);
+
+            return CreateDrawing(MainDocumentPart.GetIdOfPart(imagePart), width, height);
+        }
+
+        /// <summary>
         /// Adds a paragraph to the document just before the body section properties
         /// </summary>
         /// <returns></returns>
@@ -359,6 +396,28 @@ namespace DocXPlus
             SaveFooters();
 
             document.Save();
+        }
+
+        internal static string FileNameContentType(string fileName)
+        {
+            switch (Path.GetExtension(fileName))
+            {
+                case ".tif":
+                case ".tiff":
+                    return "image/tif";
+
+                case ".bmp":
+                case ".png":
+                    return "image/png";
+
+                case ".gif":
+                    return "image/gif";
+
+                case ".jpeg":
+                    return "image/jpeg";
+            }
+
+            return "image/jpg";
         }
 
         internal static void GenerateFooterPartContent(FooterPart part)
@@ -548,6 +607,75 @@ namespace DocXPlus
             GetBodySectionProperty().PrependChild(new HeaderReference() { Id = id, Type = type });
 
             return new Header(part.Header, this, type);
+        }
+
+        private Drawing CreateDrawing(string id, Int64Value width, Int64Value height)
+        {
+            // Define the reference of the image.
+            var element =
+                 new Drawing(
+                     new DW.Inline(
+                         new DW.Extent() { Cx = width, Cy = height },
+                         new DW.EffectExtent()
+                         {
+                             LeftEdge = 0L,
+                             TopEdge = 0L,
+                             RightEdge = 0L,
+                             BottomEdge = 0L
+                         },
+                         new DW.DocProperties()
+                         {
+                             Id = 1U,
+                             Name = "Picture 1"
+                         },
+                         new DW.NonVisualGraphicFrameDrawingProperties(
+                             new A.GraphicFrameLocks() { NoChangeAspect = true }),
+                         new A.Graphic(
+                             new A.GraphicData(
+                                 new PIC.Picture(
+                                     new PIC.NonVisualPictureProperties(
+                                         new PIC.NonVisualDrawingProperties()
+                                         {
+                                             Id = 0U,
+                                             Name = "New Bitmap Image.jpg"
+                                         },
+                                         new PIC.NonVisualPictureDrawingProperties()),
+                                     new PIC.BlipFill(
+                                         new A.Blip(
+                                             new A.BlipExtensionList(
+                                                 new A.BlipExtension()
+                                                 {
+                                                     Uri =
+                                                        "{28A0092B-C50C-407E-A947-70E740481C1C}"
+                                                 })
+                                         )
+                                         {
+                                             Embed = id,
+                                             CompressionState =
+                                             A.BlipCompressionValues.Print
+                                         },
+                                         new A.Stretch(
+                                             new A.FillRectangle())),
+                                     new PIC.ShapeProperties(
+                                         new A.Transform2D(
+                                             new A.Offset() { X = 0L, Y = 0L },
+                                             new A.Extents() { Cx = width, Cy = height }),
+                                         new A.PresetGeometry(
+                                             new A.AdjustValueList()
+                                         )
+                                         { Preset = A.ShapeTypeValues.Rectangle }))
+                             )
+                             { Uri = "http://schemas.openxmlformats.org/drawingml/2006/picture" })
+                     )
+                     {
+                         DistanceFromTop = (UInt32Value)0U,
+                         DistanceFromBottom = (UInt32Value)0U,
+                         DistanceFromLeft = (UInt32Value)0U,
+                         DistanceFromRight = (UInt32Value)0U,
+                         EditId = "50D07946"
+                     });
+
+            return element;
         }
 
         private void SaveFooters()
