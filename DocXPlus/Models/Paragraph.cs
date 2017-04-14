@@ -3,7 +3,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DocXPlus.Models
+namespace DocXPlus
 {
     public class Paragraph
     {

@@ -1,6 +1,6 @@
 ﻿using DocumentFormat.OpenXml.Wordprocessing;
 
-namespace DocXPlus.Models
+namespace DocXPlus
 {
     public class Shading
     {

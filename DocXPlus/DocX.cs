@@ -12,12 +12,12 @@ namespace DocXPlus
         internal static MarkupCompatibilityAttributes MarkupCompatibilityAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se wp14" };
         private WordprocessingDocument document;
 
-        private IEnumerable<Models.Footer> footers;
-        private IEnumerable<Models.Header> headers;
+        private IEnumerable<Footer> footers;
+        private IEnumerable<Header> headers;
 
-        private Models.PageMargins pageMargins;
-        public Models.Footer DefaultFooter => footers.Where(p => p.Type == HeaderFooterValues.Default).First();
-        public Models.Header DefaultHeader => headers.Where(p => p.Type == HeaderFooterValues.Default).First();
+        private PageMargins pageMargins;
+        public Footer DefaultFooter => footers.Where(p => p.Type == HeaderFooterValues.Default).First();
+        public Header DefaultHeader => headers.Where(p => p.Type == HeaderFooterValues.Default).First();
 
         public bool DifferentFirstPage
         {
@@ -78,10 +78,10 @@ namespace DocXPlus
             }
         }
 
-        public Models.Footer EvenFooter => footers.Where(p => p.Type == HeaderFooterValues.Even).First();
-        public Models.Header EvenHeader => headers.Where(p => p.Type == HeaderFooterValues.Even).First();
-        public Models.Footer FirstFooter => footers.Where(p => p.Type == HeaderFooterValues.First).First();
-        public Models.Header FirstHeader => headers.Where(p => p.Type == HeaderFooterValues.First).First();
+        public Footer EvenFooter => footers.Where(p => p.Type == HeaderFooterValues.Even).First();
+        public Header EvenHeader => headers.Where(p => p.Type == HeaderFooterValues.Even).First();
+        public Footer FirstFooter => footers.Where(p => p.Type == HeaderFooterValues.First).First();
+        public Header FirstHeader => headers.Where(p => p.Type == HeaderFooterValues.First).First();
 
         public PageOrientationValues Orientation
         {
@@ -107,13 +107,13 @@ namespace DocXPlus
             }
         }
 
-        public Models.PageMargins PageMargins
+        public PageMargins PageMargins
         {
             get
             {
                 if (pageMargins == null)
                 {
-                    pageMargins = new Models.PageMargins(this);
+                    pageMargins = new PageMargins(this);
                 }
 
                 return pageMargins;
@@ -132,17 +132,17 @@ namespace DocXPlus
             }
         }
 
-        public IEnumerable<Models.Paragraph> Paragraphs
+        public IEnumerable<Paragraph> Paragraphs
         {
             get
             {
-                var paragraphs = Body.Descendants<Paragraph>();
+                var paragraphs = Body.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>();
 
-                var result = new List<Models.Paragraph>();
+                var result = new List<Paragraph>();
 
                 foreach (var paragraph in paragraphs)
                 {
-                    result.Add(new Models.Paragraph(paragraph));
+                    result.Add(new Paragraph(paragraph));
                 }
 
                 return result;
@@ -228,7 +228,7 @@ namespace DocXPlus
 
             sectionProperty.RemoveAllChildren<FooterReference>();
 
-            footers = new List<Models.Footer>
+            footers = new List<Footer>
             {
                 AddFooter(HeaderFooterValues.Default),
                 AddFooter(HeaderFooterValues.Even),
@@ -251,7 +251,7 @@ namespace DocXPlus
 
             sectionProperty.RemoveAllChildren<HeaderReference>();
 
-            headers = new List<Models.Header>
+            headers = new List<Header>
             {
                 AddHeader(HeaderFooterValues.Default),
                 AddHeader(HeaderFooterValues.Even),
@@ -263,11 +263,11 @@ namespace DocXPlus
         /// Adds a paragraph to the document just before the body section properties
         /// </summary>
         /// <returns></returns>
-        public Models.Paragraph AddParagraph()
+        public Paragraph AddParagraph()
         {
-            var paragraph = GetBodySectionProperty().InsertBeforeSelf(new Paragraph());
+            var paragraph = GetBodySectionProperty().InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Paragraph());
 
-            return new Models.Paragraph(paragraph);
+            return new Paragraph(paragraph);
         }
 
         /// <summary>
@@ -275,9 +275,9 @@ namespace DocXPlus
         /// </summary>
         /// <param name="numberOfColumns"></param>
         /// <returns></returns>
-        public Models.Table AddTable(int numberOfColumns)
+        public Table AddTable(int numberOfColumns)
         {
-            var table = GetBodySectionProperty().InsertBeforeSelf(new Table());
+            var table = GetBodySectionProperty().InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Table());
 
             return AddTable(numberOfColumns, table);
         }
@@ -289,18 +289,18 @@ namespace DocXPlus
             document.Close();
         }
 
-        public Models.Paragraph InsertPageBreak()
+        public Paragraph InsertPageBreak()
         {
-            var paragraph = Body.Descendants<Paragraph>().LastOrDefault();
+            var paragraph = Body.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>().LastOrDefault();
 
             if (paragraph == null)
             {
-                paragraph = GetBodySectionProperty().InsertBeforeSelf(new Paragraph());
+                paragraph = GetBodySectionProperty().InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Paragraph());
             }
 
             paragraph.AppendChild(new Run(new Break() { Type = BreakValues.Page }));
 
-            return new Models.Paragraph(paragraph);
+            return new Paragraph(paragraph);
         }
 
         public void InsertSectionPageBreak()
@@ -315,7 +315,7 @@ namespace DocXPlus
             var bodySectionProperties = GetBodySectionProperty();
 
             // get the last paragraph
-            var paragraph = Body.Descendants<Paragraph>().LastOrDefault();
+            var paragraph = Body.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>().LastOrDefault();
 
             var addParagraph = paragraph == null;
 
@@ -329,7 +329,7 @@ namespace DocXPlus
 
             if (addParagraph)
             {// no paragraphs or the last paragraph already has a section property
-                paragraph = bodySectionProperties.InsertBeforeSelf(new Paragraph());
+                paragraph = bodySectionProperties.InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Paragraph());
             }
 
             // get the paragraph's properties
@@ -363,7 +363,7 @@ namespace DocXPlus
 
         internal static void GenerateFooterPartContent(FooterPart part)
         {
-            var footer = new Footer() { MCAttributes = MarkupCompatibilityAttributes };
+            var footer = new DocumentFormat.OpenXml.Wordprocessing.Footer() { MCAttributes = MarkupCompatibilityAttributes };
 
             Schemas.AddNamespaceDeclarations(footer);
 
@@ -372,16 +372,16 @@ namespace DocXPlus
 
         internal static void GenerateHeaderPartContent(HeaderPart part)
         {
-            var header = new Header() { MCAttributes = MarkupCompatibilityAttributes };
+            var header = new DocumentFormat.OpenXml.Wordprocessing.Header() { MCAttributes = MarkupCompatibilityAttributes };
 
             Schemas.AddNamespaceDeclarations(header);
 
             part.Header = header;
         }
 
-        internal Models.Table AddTable(int numberOfColumns, Table table)
+        internal Table AddTable(int numberOfColumns, DocumentFormat.OpenXml.Wordprocessing.Table table)
         {
-            var result = new Models.Table(table, numberOfColumns, this)
+            var result = new Table(table, numberOfColumns, this)
             {
                 TableStyle = "TableGrid",
                 Width = "0",
@@ -524,7 +524,7 @@ namespace DocXPlus
             documentSettingsPart.Settings = settings;
         }
 
-        private Models.Footer AddFooter(HeaderFooterValues type)
+        private Footer AddFooter(HeaderFooterValues type)
         {
             var part = MainDocumentPart.AddNewPart<FooterPart>();
 
@@ -534,10 +534,10 @@ namespace DocXPlus
 
             GetBodySectionProperty().PrependChild(new FooterReference() { Id = id, Type = type });
 
-            return new Models.Footer(part.Footer, this, type);
+            return new Footer(part.Footer, this, type);
         }
 
-        private Models.Header AddHeader(HeaderFooterValues type)
+        private Header AddHeader(HeaderFooterValues type)
         {
             var part = MainDocumentPart.AddNewPart<HeaderPart>();
 
@@ -547,7 +547,7 @@ namespace DocXPlus
 
             GetBodySectionProperty().PrependChild(new HeaderReference() { Id = id, Type = type });
 
-            return new Models.Header(part.Header, this, type);
+            return new Header(part.Header, this, type);
         }
 
         private void SaveFooters()

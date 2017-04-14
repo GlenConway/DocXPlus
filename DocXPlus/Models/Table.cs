@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace DocXPlus.Models
+namespace DocXPlus
 {
     public class Table
     {

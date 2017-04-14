@@ -1,7 +1,7 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
 
-namespace DocXPlus.Models
+namespace DocXPlus
 {
     public class PageMargins
     {

@@ -1,7 +1,7 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
 
-namespace DocXPlus.Models
+namespace DocXPlus
 {
     public class Borders
     {
@@ -105,7 +105,7 @@ namespace DocXPlus.Models
         /// <summary>
         /// Sets the Top, Bottom, Left and Right borders.
         /// </summary>
-        /// <param name="size"></param>
+        /// <param name="size">The size of the border in Twips</param>
         /// <param name="value"></param>
         /// <param name="color"></param>
         public void Set(UInt32Value size, BorderValues value, string color = "auto")

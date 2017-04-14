@@ -20,11 +20,14 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// One Inch as Twips
+        /// </summary>
         public static Int32Value Inch
         {
             get
             {
-                return new Int32Value(1440);
+                return new Int32Value(InchToTwips(1));
             }
         }
 
@@ -84,28 +87,67 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Half Inch as Twips
+        /// </summary>
         public static UInt32Value UHalfInch
         {
             get
             {
-                return new UInt32Value((uint)720);
+                return UInchToTwips(.5);
             }
         }
 
+        /// <summary>
+        /// One Inch as Twips
+        /// </summary>
         public static UInt32Value UInch
         {
             get
             {
-                return new UInt32Value((uint)1440);
+                return UInchToTwips(1);
             }
         }
 
+        /// <summary>
+        /// Zero Twips
+        /// </summary>
         public static UInt32Value UZero
         {
             get
             {
                 return new UInt32Value((uint)0);
             }
+        }
+
+        /// <summary>
+        /// Converts an inch value such as 1.25 into Twips
+        /// </summary>
+        /// <param name="inches"></param>
+        /// <returns></returns>
+        public static Int32Value InchToTwips(double inches)
+        {
+            return System.Convert.ToInt32(inches * 1440);
+        }
+
+        /// <summary>
+        /// Converts a points value such as 14 into Twips
+        /// </summary>
+        /// <param name="points"></param>
+        /// <returns></returns>
+        public static Int32Value PointsToTwips(int points)
+        {
+            return points * 20;
+        }
+
+        public static UInt32Value UInchToTwips(double inches)
+        {
+            return System.Convert.ToUInt32(inches * 1440);
+        }
+
+        public static UInt32Value UPointsToTwips(int points)
+        {
+            return System.Convert.ToUInt32(points * 20);
         }
     }
 }

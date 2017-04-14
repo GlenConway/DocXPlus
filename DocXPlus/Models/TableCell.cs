@@ -1,7 +1,7 @@
 ﻿using DocumentFormat.OpenXml.Wordprocessing;
 using System.Linq;
 
-namespace DocXPlus.Models
+namespace DocXPlus
 {
     public class TableCell
     {

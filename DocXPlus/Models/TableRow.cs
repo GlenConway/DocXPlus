@@ -3,7 +3,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using System;
 using System.Linq;
 
-namespace DocXPlus.Models
+namespace DocXPlus
 {
     public class TableRow
     {
@@ -46,6 +46,9 @@ namespace DocXPlus.Models
             }
         }
 
+        /// <summary>
+        /// Height of the row in Twips
+        /// </summary>
         public UInt32Value Height
         {
             get
@@ -58,6 +61,18 @@ namespace DocXPlus.Models
             }
         }
 
+        public HeightRuleValues HeightType
+        {
+            get
+            {
+                return GetTableRowHeights().HeightType;
+            }
+            set
+            {
+                GetTableRowHeights().HeightType = value;
+            }
+        }
+       
         public Table Table => table;
 
         public TableCell this[int index]
@@ -71,7 +86,7 @@ namespace DocXPlus.Models
         /// <summary>
         /// Sets the Top, Bottom, Left and Right borders for every cell in the row.
         /// </summary>
-        /// <param name="size"></param>
+        /// <param name="size">The size of the border in Twips</param>
         /// <param name="value"></param>
         /// <param name="color"></param>
         public void SetBorders(UInt32Value size, BorderValues value, string color = "auto")
@@ -81,7 +96,7 @@ namespace DocXPlus.Models
                 cell.Borders.Set(size, value, color);
             }
         }
-
+        
         public void SetShading(ShadingPatternValues value, string fill, string color = "auto")
         {
             foreach (var cell in Cells)
