@@ -11,7 +11,7 @@ namespace DocXPlus
         {
             RunProperties runProperties = run.GetOrCreate<RunProperties>(true);
             Bold prop = runProperties.GetOrCreate<Bold>();
-            prop.Val = OnOffValue.FromBoolean(true);
+            prop.Val = true;
         }
 
         internal static T GetOrCreate<T>(this OpenXmlCompositeElement element) where T : OpenXmlElement, new()

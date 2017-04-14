@@ -22,6 +22,43 @@ namespace DocXPlus
             }
         }
 
+        public Paragraph AddPageNumber(PageNumberFormat format)
+        {
+            var run = paragraph.AppendChild(new Run());
+            var fieldChar = run.GetOrCreate<FieldChar>();
+            fieldChar.FieldCharType = FieldCharValues.Begin;
+
+            run = paragraph.AppendChild(new Run());
+            var fieldCode = run.GetOrCreate<FieldCode>();
+            fieldCode.Space = SpaceProcessingModeValues.Preserve;
+
+            if (format == PageNumberFormat.Normal)
+            {
+                fieldCode.Text = @" PAGE   \* MERGEFORMAT ";
+            }
+            else
+            {
+                fieldCode.Text = @" PAGE  \* ROMAN  \* MERGEFORMAT ";
+            }
+
+            run = paragraph.AppendChild(new Run());
+            fieldChar = run.GetOrCreate<FieldChar>();
+            fieldChar.FieldCharType = FieldCharValues.Separate;
+
+            run = paragraph.AppendChild(new Run());
+            var runProperties = run.GetOrCreate<RunProperties>();
+            var noProof = runProperties.GetOrCreate<NoProof>();
+            run.AppendChild(new Text("1"));
+
+            run = paragraph.AppendChild(new Run());
+            runProperties = run.GetOrCreate<RunProperties>();
+            noProof = runProperties.GetOrCreate<NoProof>();
+            fieldChar = run.GetOrCreate<FieldChar>();
+            fieldChar.FieldCharType = FieldCharValues.End;
+
+            return this;
+        }
+
         public Paragraph Append(Drawing drawing)
         {
             paragraph.AppendChild(new Run(drawing));
@@ -31,35 +68,31 @@ namespace DocXPlus
 
         public Paragraph Append(string text)
         {
-            var run = paragraph.AppendChild(NewRun());
-            run.AppendChild(new Text(text));
+            GetRun(text);
 
             return this;
         }
 
         public Paragraph AppendBold(string text)
         {
-            var run = paragraph.AppendChild(NewRun());
+            var run = GetRun(text);
             run.Bold();
-            run.AppendChild(new Text(text));
 
             return this;
         }
 
         public Paragraph AppendItalic(string text)
         {
-            var run = paragraph.AppendChild(NewRun());
+            var run = GetRun(text);
             run.Italic();
-            run.AppendChild(new Text(text));
 
             return this;
         }
 
         public Paragraph AppendUnderline(string text, UnderlineValues value)
         {
-            var run = paragraph.AppendChild(NewRun());
+            var run = GetRun(text);
             run.Underline(value);
-            run.AppendChild(new Text(text));
 
             return this;
         }
@@ -72,7 +105,7 @@ namespace DocXPlus
                 var paragraphMarkRunProperties = paragraphProperties.GetOrCreate<ParagraphMarkRunProperties>();
 
                 Bold bold = paragraphMarkRunProperties.GetOrCreate<Bold>();
-                bold.Val = OnOffValue.FromBoolean(true);
+                bold.Val = true;
             }
             else
             {
@@ -153,6 +186,20 @@ namespace DocXPlus
             }
 
             return result;
+        }
+
+        private Run GetRun(string text)
+        {
+            var run = paragraph.AppendChild(NewRun());
+
+            var t = new Text(text)
+            {
+                Space = SpaceProcessingModeValues.Preserve
+            };
+
+            run.AppendChild(t);
+
+            return run;
         }
     }
 }

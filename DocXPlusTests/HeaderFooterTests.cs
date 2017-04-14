@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
+using DocXPlus;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
@@ -13,7 +14,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddFooter.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddFooters();
             doc.DefaultFooter.AddParagraph().Append("Footer Paragraph");
@@ -30,7 +31,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddFooters.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddFooters();
 
@@ -71,11 +72,32 @@ namespace DocXPlusTests
         }
 
         [TestMethod]
+        public void AddFooterWithNormalPageNumbers()
+        {
+            var filename = Path.Combine(TempDirectory, "AddFooterWithNormalPageNumbers.docx");
+
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+
+            doc.AddFooters();
+            doc.DefaultFooter
+                .AddParagraph()
+                .Append("Page: ")
+                .AddPageNumber(PageNumberFormat.Normal)
+                .Bold();
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
         public void AddHeader()
         {
             var filename = Path.Combine(TempDirectory, "AddHeader.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddHeaders();
             doc.DefaultHeader.AddParagraph().Append("Header Paragraph");
@@ -92,7 +114,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddHeaderAndFooter.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddHeaders();
             doc.AddFooters();
@@ -112,7 +134,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddHeaderAndFooterLandscape.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
             doc.Orientation = PageOrientationValues.Landscape;
 
             doc.AddHeaders();
@@ -140,7 +162,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddHeaders.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddHeaders();
             doc.DifferentFirstPage = true;
@@ -184,7 +206,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddSectionFooter.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddFooters();
 
@@ -214,7 +236,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddSectionHeader.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddHeaders();
 
@@ -244,7 +266,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddSectionHeaderFooter.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddHeaders();
             doc.AddFooters();
@@ -280,7 +302,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddSectionPageBreakSameHeader.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddHeaders();
 
