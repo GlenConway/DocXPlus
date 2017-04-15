@@ -11,6 +11,9 @@ using PIC = DocumentFormat.OpenXml.Drawing.Pictures;
 
 namespace DocXPlus
 {
+    /// <summary>
+    /// Wrapper around an OpenXml SDK Wordprocessing Document
+    /// </summary>
     public class DocX : IDisposable
     {
         internal static MarkupCompatibilityAttributes MarkupCompatibilityAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se wp14" };
@@ -27,15 +30,27 @@ namespace DocXPlus
 
         private Stream stream;
 
+        /// <summary>
+        /// Default destructor
+        /// </summary>
         ~DocX()
         {
             Dispose(false);
         }
 
+        /// <summary>
+        /// The default (odd) footer.
+        /// </summary>
         public Footer DefaultFooter => footers.Where(p => p.Type == HeaderFooterValues.Default).First();
 
+        /// <summary>
+        /// The default (odd) header.
+        /// </summary>
         public Header DefaultHeader => headers.Where(p => p.Type == HeaderFooterValues.Default).First();
 
+        /// <summary>
+        /// Specify whether the first page has a different header than the rest of the document
+        /// </summary>
         public bool DifferentFirstPage
         {
             get
@@ -63,6 +78,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Specify if even and odd pages use different headers / footers.
+        /// </summary>
         public bool EvenAndOddHeaders
         {
             get
@@ -95,14 +113,29 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Even page footer
+        /// </summary>
         public Footer EvenFooter => footers.Where(p => p.Type == HeaderFooterValues.Even).First();
 
+        /// <summary>
+        /// Even page header
+        /// </summary>
         public Header EvenHeader => headers.Where(p => p.Type == HeaderFooterValues.Even).First();
 
+        /// <summary>
+        /// First page footer
+        /// </summary>
         public Footer FirstFooter => footers.Where(p => p.Type == HeaderFooterValues.First).First();
 
+        /// <summary>
+        /// First page header
+        /// </summary>
         public Header FirstHeader => headers.Where(p => p.Type == HeaderFooterValues.First).First();
 
+        /// <summary>
+        /// Orientation of the document or current section
+        /// </summary>
         public PageOrientationValues Orientation
         {
             get
@@ -115,6 +148,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Height of the page in Twips
+        /// </summary>
         public UInt32Value PageHeight
         {
             get
@@ -127,6 +163,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Specifies the page margins
+        /// </summary>
         public PageMargins PageMargins
         {
             get
@@ -140,6 +179,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Width of the page in Twips
+        /// </summary>
         public UInt32Value PageWidth
         {
             get
@@ -152,6 +194,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// All of the paragraphs in the document
+        /// </summary>
         public IEnumerable<Paragraph> Paragraphs
         {
             get
@@ -217,11 +262,24 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Creates a new document using the supplied path and type
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static DocX Create(string path, WordprocessingDocumentType type)
         {
             return Create(path, type, false);
         }
 
+        /// <summary>
+        /// Creates a new document using the supplied path, type and autosave value
+        /// </summary>
+        /// <param name="path"></param>
+        /// <param name="type"></param>
+        /// <param name="autoSave"></param>
+        /// <returns></returns>
         public static DocX Create(string path, WordprocessingDocumentType type, bool autoSave)
         {
             var docX = new DocX();
@@ -230,11 +288,24 @@ namespace DocXPlus
             return docX;
         }
 
+        /// <summary>
+        /// Creates a new document using the supplied stream and type
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="type"></param>
+        /// <returns></returns>
         public static DocX Create(Stream stream, WordprocessingDocumentType type)
         {
             return Create(stream, type, false);
         }
 
+        /// <summary>
+        /// Creates a new document using the supplied stream, type and autosave value
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="type"></param>
+        /// <param name="autoSave"></param>
+        /// <returns></returns>
         public static DocX Create(Stream stream, WordprocessingDocumentType type, bool autoSave)
         {
             var docX = new DocX();
@@ -243,6 +314,9 @@ namespace DocXPlus
             return docX;
         }
 
+        /// <summary>
+        /// Adds three footers to the document (default, even and first).
+        /// </summary>
         public void AddFooters()
         {
             var sectionProperty = GetBodySectionProperty();
@@ -266,6 +340,9 @@ namespace DocXPlus
             };
         }
 
+        /// <summary>
+        /// Adds three headers to the document (default, even and first).
+        /// </summary>
         public void AddHeaders()
         {
             var sectionProperty = GetBodySectionProperty();
@@ -332,6 +409,16 @@ namespace DocXPlus
         }
 
         /// <summary>
+        /// Adds a paragraph with the supplied text to the document.
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public Paragraph AddParagraph(string text)
+        {
+            return AddParagraph().Append(text);
+        }
+
+        /// <summary>
         /// Adds a Table to the document with the specified number of columns
         /// </summary>
         /// <param name="numberOfColumns"></param>
@@ -343,6 +430,9 @@ namespace DocXPlus
             return AddTable(numberOfColumns, table);
         }
 
+        /// <summary>
+        /// Saves and closes the document.
+        /// </summary>
         public void Close()
         {
             Save();
@@ -373,6 +463,9 @@ namespace DocXPlus
             Create(WordprocessingDocument.Create(stream, WordprocessingDocumentType.Document, false));
         }
 
+        /// <summary>
+        /// Disposes the document
+        /// </summary>
         public void Dispose()
         {
             Dispose(true);
@@ -447,6 +540,9 @@ namespace DocXPlus
             paragraphProperties.AppendChild(newSectionProperties);
         }
 
+        /// <summary>
+        /// Saves the document to the underlying stream. Does not write out the document to the file system until Close() is called.
+        /// </summary>
         public void Save()
         {
             Settings.Save();
@@ -647,6 +743,10 @@ namespace DocXPlus
             return this;
         }
 
+        /// <summary>
+        /// Disposing
+        /// </summary>
+        /// <param name="disposing"></param>
         protected virtual void Dispose(bool disposing)
         {
             if (!disposed)
