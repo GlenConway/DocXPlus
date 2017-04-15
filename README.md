@@ -11,6 +11,21 @@ Version 2.7 of the [Open XML SDK](https://github.com/OfficeDev/Open-XML-SDK) is 
 Stay tuned, under development
 
 ## Some Code
+**Create Using Default Stream**
+``` c#
+using (var doc = new DocX())
+{
+    doc.Create();
+
+    doc.AddParagraph().Append(LoremIpsum);
+
+    using (var stream = new FileStream(filename, FileMode.Create))
+    {
+        doc.SaveAs(stream);
+    }
+}
+```
+
 **Different Page Orientation After Section Break**
 ``` c#
 using DocumentFormat.OpenXml;
@@ -63,6 +78,17 @@ doc.DefaultHeader.AddParagraph().Append("Header 3");
 doc.DefaultFooter.AddParagraph().Append("Footer 3");
 
 doc.Close();
+```
+You can also add page numbers to the footer
+```c#
+doc.DefaultFooter
+    .AddParagraph()
+    .Append("Page: ")
+    .AppendPageNumber(PageNumberFormat.Normal)
+    .Append(" of ")
+    .AppendPageCount(PageNumberFormat.Normal)
+    .Bold()
+    .Alignment = JustificationValues.Center;
 ```
 **Tables**
 ```c#

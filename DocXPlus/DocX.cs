@@ -459,6 +459,10 @@ namespace DocXPlus
             document.Save();
         }
 
+        /// <summary>
+        /// Saves the document to the supplied stream
+        /// </summary>
+        /// <param name="stream"></param>
         public void SaveAs(Stream stream)
         {
             Save();
