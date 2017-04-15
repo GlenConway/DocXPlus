@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
+using DocXPlus;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
@@ -13,7 +14,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "BoldParagraphs.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddParagraph().Append("Append normal paragraph");
 
@@ -39,7 +40,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "ItalicParagraphs.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddParagraph().Append("Append normal paragraph");
 
@@ -65,7 +66,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "ParagraphAlignment.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddParagraph().AppendBold("Default (Left)");
 
@@ -93,11 +94,37 @@ namespace DocXPlusTests
         }
 
         [TestMethod]
+        public void ParagraphIndentation()
+        {
+            var filename = Path.Combine(TempDirectory, "ParagraphIndentation.docx");
+
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+
+            doc.AddParagraph().AppendBold("1\" IndentationBefore");
+
+            doc.AddParagraph().Append(LoremIpsum).IndentationBefore = Units.InchToTwips(1);
+
+            doc.AddParagraph().AppendBold("1\" IndentationFirstLine");
+
+            doc.AddParagraph().Append(LoremIpsum).IndentationFirstLine = Units.InchToTwips(1);
+
+            doc.AddParagraph().AppendBold("1\" IndentationHanging");
+
+            doc.AddParagraph().Append(LoremIpsum).IndentationHanging = Units.InchToTwips(1);
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
         public void Paragraphs()
         {
             var filename = Path.Combine(TempDirectory, "Paragraphs.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddParagraph().Append("Append paragraph");
 
@@ -115,7 +142,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "UnderlineParagraphs.docx");
 
-            var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddParagraph().Append("Append normal paragraph");
 
