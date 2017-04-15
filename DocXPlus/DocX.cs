@@ -1,6 +1,7 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,16 +11,29 @@ using PIC = DocumentFormat.OpenXml.Drawing.Pictures;
 
 namespace DocXPlus
 {
-    public class DocX
+    public class DocX : IDisposable
     {
         internal static MarkupCompatibilityAttributes MarkupCompatibilityAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se wp14" };
+
+        private bool disposed = false;
+
         private WordprocessingDocument document;
 
         private IEnumerable<Footer> footers;
+
         private IEnumerable<Header> headers;
 
         private PageMargins pageMargins;
+
+        private Stream stream;
+
+        ~DocX()
+        {
+            Dispose(false);
+        }
+
         public Footer DefaultFooter => footers.Where(p => p.Type == HeaderFooterValues.Default).First();
+
         public Header DefaultHeader => headers.Where(p => p.Type == HeaderFooterValues.Default).First();
 
         public bool DifferentFirstPage
@@ -167,6 +181,11 @@ namespace DocXPlus
         {
             get
             {
+                if (document == null)
+                {
+                    throw new InvalidOperationException("You must call Create before accessing the Main Document Part.");
+                }
+
                 return document.MainDocumentPart;
             }
         }
@@ -331,6 +350,39 @@ namespace DocXPlus
             document.Close();
         }
 
+        /// <summary>
+        /// Creates a new document of the supplied type using a stream
+        /// </summary>
+        /// <param name="type"></param>
+        /// <returns></returns>
+        public DocX Create(WordprocessingDocumentType type)
+        {
+            stream = new MemoryStream();
+
+            return Create(stream, type, false);
+        }
+
+        /// <summary>
+        /// Creates a new document of type Document using a stream
+        /// </summary>
+        /// <returns></returns>
+        public void Create()
+        {
+            stream = new MemoryStream();
+
+            Create(WordprocessingDocument.Create(stream, WordprocessingDocumentType.Document, false));
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        /// <summary>
+        /// Inserts a Page Break
+        /// </summary>
+        /// <returns></returns>
         public Paragraph InsertPageBreak()
         {
             var paragraph = Body.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>().LastOrDefault();
@@ -345,6 +397,9 @@ namespace DocXPlus
             return new Paragraph(paragraph);
         }
 
+        /// <summary>
+        /// Inserts a Section Page Break
+        /// </summary>
         public void InsertSectionPageBreak()
         {
             // first save any header or footer content because after
@@ -370,7 +425,8 @@ namespace DocXPlus
             }
 
             if (addParagraph)
-            {// no paragraphs or the last paragraph already has a section property
+            {
+                // no paragraphs or the last paragraph already has a section property
                 paragraph = bodySectionProperties.InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Paragraph());
             }
 
@@ -401,6 +457,13 @@ namespace DocXPlus
             SaveFooters();
 
             document.Save();
+        }
+
+        public void SaveAs(Stream stream)
+        {
+            Save();
+
+            document.Clone(stream);
         }
 
         internal static string FileNameContentType(string fileName)
@@ -578,6 +641,29 @@ namespace DocXPlus
             }
 
             return this;
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!disposed)
+            {
+                if (disposing)
+                {
+                    // Dispose managed resources.
+                    if (stream != null)
+                    {
+                        stream.Flush();
+                        stream.Dispose();
+
+                        stream = null;
+                    }
+                }
+
+                // There are no unmanaged resources to release, but
+                // if we add them, they need to be released here.
+            }
+
+            disposed = true;
         }
 
         private static void GenerateDocumentSettingsPartContent(DocumentSettingsPart documentSettingsPart)

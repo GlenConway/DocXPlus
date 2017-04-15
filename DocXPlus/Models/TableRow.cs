@@ -72,7 +72,7 @@ namespace DocXPlus
                 GetTableRowHeights().HeightType = value;
             }
         }
-       
+
         public Table Table => table;
 
         public TableCell this[int index]
@@ -96,7 +96,7 @@ namespace DocXPlus
                 cell.Borders.Set(size, value, color);
             }
         }
-        
+
         public void SetShading(ShadingPatternValues value, string fill, string color = "auto")
         {
             foreach (var cell in Cells)
