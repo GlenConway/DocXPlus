@@ -88,6 +88,40 @@ namespace DocXPlusTests
                 .Bold()
                 .Alignment = JustificationValues.Center;
 
+            for (int i = 0; i < 9; i++)
+            {
+                doc.InsertPageBreak();
+            }
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
+        public void AddFooterWithRomanPageNumbers()
+        {
+            var filename = Path.Combine(TempDirectory, "AddFooterWithRomanPageNumbers.docx");
+
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+
+            doc.AddFooters();
+            doc.DefaultFooter
+                .AddParagraph()
+                .Append("Page: ")
+                .AppendPageNumber(PageNumberFormat.Roman)
+                .Append(" of ")
+                .AppendPageCount(PageNumberFormat.Roman)
+                .Bold()
+                .Alignment = JustificationValues.Center;
+
+            for (int i = 0; i < 9; i++)
+            {
+                doc.InsertPageBreak();
+            }
+
             doc.Close();
 
             ValidateWordDocument(filename);

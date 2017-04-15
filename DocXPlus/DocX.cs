@@ -211,6 +211,11 @@ namespace DocXPlus
             return docX;
         }
 
+        public static DocX Create(Stream stream, WordprocessingDocumentType type)
+        {
+            return Create(stream, type, false);
+        }
+
         public static DocX Create(Stream stream, WordprocessingDocumentType type, bool autoSave)
         {
             var docX = new DocX();
