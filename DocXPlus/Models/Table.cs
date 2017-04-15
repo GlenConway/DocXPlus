@@ -17,29 +17,30 @@ namespace DocXPlus
         private DocumentFormat.OpenXml.Wordprocessing.Table table;
         private TableLook tableLook;
 
-        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, DocX document)
+        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, DocX document)
         {
             this.table = table;
-            this.numberOfColumns = numberOfColumns;
+
             this.document = document;
+        }
+
+        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, DocX document) : this(table, document)
+        {
+            this.numberOfColumns = numberOfColumns;
 
             AddGrid();
         }
 
-        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, DocX document, params int[] percent)
+        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, DocX document, params int[] percent) : this(table, document)
         {
-            this.table = table;
             this.numberOfColumns = numberOfColumns;
-            this.document = document;
 
             AddGrid(percent);
         }
 
-        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, DocX document, params string[] widths)
+        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, DocX document, params string[] widths) : this(table, document)
         {
-            this.table = table;
             this.numberOfColumns = numberOfColumns;
-            this.document = document;
 
             AddGrid(widths);
         }
@@ -105,6 +106,21 @@ namespace DocXPlus
             }
         }
 
+        internal int ColumnCount
+        {
+            get
+            {
+                if (!table.Has<TableGrid>())
+                {
+                    return 0;
+                }
+
+                var tableGrid = table.GetOrCreate<TableGrid>();
+
+                return tableGrid.Descendants<GridColumn>().Count();
+            }
+        }
+
         internal string[] ColumnWidths => columnWidths;
 
         internal TableLook TableLook
@@ -165,6 +181,11 @@ namespace DocXPlus
             {
                 rows[i].Cells[cellIndex].GetVerticalMerge().Val = MergedCellValues.Continue;
             }
+        }
+
+        internal void UpdateColumnCount()
+        {
+            numberOfColumns = ColumnCount;
         }
 
         private void AddGrid()

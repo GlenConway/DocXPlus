@@ -109,6 +109,23 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Gets or sets the name of the style associated with the paragraph
+        /// </summary>
+        public string StyleName
+        {
+            get
+            {
+                var style = GetParagraphProperties().GetOrCreate<ParagraphStyleId>();
+                return style.Val;
+            }
+            set
+            {
+                var style = GetParagraphProperties().GetOrCreate<ParagraphStyleId>();
+                style.Val = value;
+            }
+        }
+
         private IEnumerable<Run> Runs
         {
             get

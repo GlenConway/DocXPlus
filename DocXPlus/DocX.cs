@@ -214,6 +214,29 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// All of the tables in the document
+        /// </summary>
+        public IEnumerable<Table> Tables
+        {
+            get
+            {
+                var tables = Body.Descendants<DocumentFormat.OpenXml.Wordprocessing.Table>();
+
+                var result = new List<Table>();
+
+                foreach (var table in tables)
+                {
+                    var t = new Table(table, this);
+                    t.UpdateColumnCount();
+
+                    result.Add(t);
+                }
+
+                return result;
+            }
+        }
+
         internal Body Body
         {
             get
