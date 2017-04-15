@@ -6,7 +6,7 @@ greatly reducing the amount of code you have to write and maintain.
 This initial phase is very much a minimum viable product, only implementing features as they are required. Currently there is no support for reading
 existing Word documents.
 
-Version 2.7 of the [Open XML SDK](https://github.com/OfficeDev/Open-XML-SDK) is required so follow the [instructions](https://github.com/OfficeDev/Open-XML-SDK#where-to-get-the-nuget-package) to add the MyGet feed.
+DocXPlus targets .NET Standard 1.3 so version 2.7 of the [Open XML SDK](https://github.com/OfficeDev/Open-XML-SDK) with .NET Standard support is required> Currently this is only available through MyGet so follow these [instructions](https://github.com/OfficeDev/Open-XML-SDK#where-to-get-the-nuget-package) to add the Open XML SDK MyGet feed.
 
 Stay tuned, under development
 
@@ -83,7 +83,7 @@ You can also add page numbers to the footer
 ```c#
 doc.DefaultFooter
     .AddParagraph()
-    .Append("Page: ")
+    .Append("Page ")
     .AppendPageNumber(PageNumberFormat.Normal)
     .Append(" of ")
     .AppendPageCount(PageNumberFormat.Normal)

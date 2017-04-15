@@ -81,7 +81,7 @@ namespace DocXPlusTests
             doc.AddFooters();
             doc.DefaultFooter
                 .AddParagraph()
-                .Append("Page: ")
+                .Append("Page ")
                 .AppendPageNumber(PageNumberFormat.Normal)
                 .Append(" of ")
                 .AppendPageCount(PageNumberFormat.Normal)
