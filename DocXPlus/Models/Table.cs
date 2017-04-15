@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace DocXPlus
 {
+    /// <summary>
+    /// Represents a table in the document
+    /// </summary>
     public class Table
     {
         private string[] columnWidths;
@@ -32,23 +35,28 @@ namespace DocXPlus
             AddGrid(percent);
         }
 
-        public int NumberOfColumns => numberOfColumns;
-
-        public IEnumerable<TableRow> Rows => rows;
-
-        public TableLook TableLook
+        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, DocX document, params string[] widths)
         {
-            get
-            {
-                if (tableLook == null)
-                {
-                    tableLook = new TableLook(TableProperties);
-                }
+            this.table = table;
+            this.numberOfColumns = numberOfColumns;
+            this.document = document;
 
-                return tableLook;
-            }
+            AddGrid(widths);
         }
 
+        /// <summary>
+        /// Gets the number of columns in the table
+        /// </summary>
+        public int NumberOfColumns => numberOfColumns;
+
+        /// <summary>
+        /// Gets the rows in the table
+        /// </summary>
+        public IEnumerable<TableRow> Rows => rows;
+
+        /// <summary>
+        /// Gets or sets the style of the table
+        /// </summary>
         public string TableStyle
         {
             get
@@ -63,6 +71,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Gets or sets the width of the table in Twips
+        /// </summary>
         public string Width
         {
             get
@@ -77,6 +88,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Gets or sets the width type for the table
+        /// </summary>
         public TableWidthUnitValues WidthType
         {
             get
@@ -92,6 +106,19 @@ namespace DocXPlus
         }
 
         internal string[] ColumnWidths => columnWidths;
+
+        internal TableLook TableLook
+        {
+            get
+            {
+                if (tableLook == null)
+                {
+                    tableLook = new TableLook(TableProperties);
+                }
+
+                return tableLook;
+            }
+        }
 
         internal TableProperties TableProperties => table.GetOrCreate<TableProperties>();
 
@@ -177,6 +204,29 @@ namespace DocXPlus
                 var columnWidth = ((double)percent[i] / 100);
 
                 columnWidths[i] = (width * columnWidth).ToString();
+            }
+
+            for (int i = 0; i < NumberOfColumns; i++)
+            {
+                var gridColumn = tableGrid.AppendChild(new GridColumn());
+                gridColumn.Width = columnWidths[i];
+            }
+        }
+
+        private void AddGrid(params string[] widths)
+        {
+            if (widths.Count() != NumberOfColumns)
+                throw new ArgumentException("Widths must equal the number of columns");
+
+            var tableGrid = table.AppendChild(new TableGrid());
+
+            var width = document.PageWidth.Value - document.PageMargins.RightAndLeft.Value;
+
+            columnWidths = new string[NumberOfColumns];
+
+            for (int i = 0; i < NumberOfColumns; i++)
+            {
+                columnWidths[i] = widths[i];
             }
 
             for (int i = 0; i < NumberOfColumns; i++)

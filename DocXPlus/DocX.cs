@@ -429,6 +429,7 @@ namespace DocXPlus
 
             return AddTable(numberOfColumns, table);
         }
+
         /// <summary>
         /// Adds a Table to the document with the specified number of columns using the percent widths
         /// </summary>
@@ -441,6 +442,20 @@ namespace DocXPlus
 
             return AddTable(numberOfColumns, table, percent);
         }
+
+        /// <summary>
+        /// Adds a Table to the document with the specified number of columns using the supplied widths
+        /// </summary>
+        /// <param name="numberOfColumns"></param>
+        /// <param name="widths">The widths of the columns in Twips</param>
+        /// <returns></returns>
+        public Table AddTable(int numberOfColumns, params string[] widths)
+        {
+            var table = GetBodySectionProperty().InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Table());
+
+            return AddTable(numberOfColumns, table, widths);
+        }
+
         /// <summary>
         /// Saves and closes the document.
         /// </summary>
@@ -631,20 +646,23 @@ namespace DocXPlus
             return result;
         }
 
-        private static void SetTableLook(Table result)
-        {
-            result.TableLook.Value = "04A0";
-            result.TableLook.FirstRow = true;
-            result.TableLook.LastRow = false;
-            result.TableLook.FirstColumn = true;
-            result.TableLook.LastColumn = false;
-            result.TableLook.NoHorizontalBand = false;
-            result.TableLook.NoVerticalBand = true;
-        }
-
         internal Table AddTable(int numberOfColumns, DocumentFormat.OpenXml.Wordprocessing.Table table, params int[] percent)
         {
             var result = new Table(table, numberOfColumns, this, percent)
+            {
+                TableStyle = "TableGrid",
+                Width = "0",
+                WidthType = TableWidthUnitValues.Auto
+            };
+
+            SetTableLook(result);
+
+            return result;
+        }
+
+        internal Table AddTable(int numberOfColumns, DocumentFormat.OpenXml.Wordprocessing.Table table, params string[] widths)
+        {
+            var result = new Table(table, numberOfColumns, this, widths)
             {
                 TableStyle = "TableGrid",
                 Width = "0",
@@ -806,6 +824,17 @@ namespace DocXPlus
             Schemas.AddNamespaceDeclarations(settings);
 
             documentSettingsPart.Settings = settings;
+        }
+
+        private static void SetTableLook(Table result)
+        {
+            result.TableLook.Value = "04A0";
+            result.TableLook.FirstRow = true;
+            result.TableLook.LastRow = false;
+            result.TableLook.FirstColumn = true;
+            result.TableLook.LastColumn = false;
+            result.TableLook.NoHorizontalBand = false;
+            result.TableLook.NoVerticalBand = true;
         }
 
         private Footer AddFooter(HeaderFooterValues type)
