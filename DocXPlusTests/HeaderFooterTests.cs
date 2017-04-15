@@ -82,8 +82,11 @@ namespace DocXPlusTests
             doc.DefaultFooter
                 .AddParagraph()
                 .Append("Page: ")
-                .AddPageNumber(PageNumberFormat.Normal)
-                .Bold();
+                .AppendPageNumber(PageNumberFormat.Normal)
+                .Append(" of ")
+                .AppendPageCount(PageNumberFormat.Normal)
+                .Bold()
+                .Alignment = JustificationValues.Center;
 
             doc.Close();
 

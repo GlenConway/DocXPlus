@@ -14,6 +14,20 @@ namespace DocXPlus
             this.paragraph = paragraph;
         }
 
+        public JustificationValues Alignment
+        {
+            get
+            {
+                var justification = GetParagraphProperties().GetOrCreate<Justification>();
+                return justification.Val;
+            }
+            set
+            {
+                var justification = GetParagraphProperties().GetOrCreate<Justification>();
+                justification.Val = value;
+            }
+        }
+
         private IEnumerable<Run> Runs
         {
             get
@@ -22,7 +36,74 @@ namespace DocXPlus
             }
         }
 
-        public Paragraph AddPageNumber(PageNumberFormat format)
+        public Paragraph Append(Drawing drawing)
+        {
+            paragraph.AppendChild(new Run(drawing));
+
+            return this;
+        }
+
+        public Paragraph Append(string text)
+        {
+            GetRun(text);
+
+            return this;
+        }
+
+        public Paragraph AppendBold(string text)
+        {
+            var run = GetRun(text);
+            run.Bold();
+
+            return this;
+        }
+
+        public Paragraph AppendItalic(string text)
+        {
+            var run = GetRun(text);
+            run.Italic();
+
+            return this;
+        }
+
+        public Paragraph AppendPageCount(PageNumberFormat format)
+        {
+            var run = paragraph.AppendChild(new Run());
+            var fieldChar = run.GetOrCreate<FieldChar>();
+            fieldChar.FieldCharType = FieldCharValues.Begin;
+
+            run = paragraph.AppendChild(new Run());
+            var fieldCode = run.GetOrCreate<FieldCode>();
+            fieldCode.Space = SpaceProcessingModeValues.Preserve;
+
+            if (format == PageNumberFormat.Normal)
+            {
+                fieldCode.Text = @" NUMPAGES   \* MERGEFORMAT ";
+            }
+            else
+            {
+                fieldCode.Text = @" NUMPAGES  \* ROMAN  \* MERGEFORMAT ";
+            }
+
+            run = paragraph.AppendChild(new Run());
+            fieldChar = run.GetOrCreate<FieldChar>();
+            fieldChar.FieldCharType = FieldCharValues.Separate;
+
+            run = paragraph.AppendChild(new Run());
+            var runProperties = run.GetOrCreate<RunProperties>();
+            var noProof = runProperties.GetOrCreate<NoProof>();
+            run.AppendChild(new Text("1"));
+
+            run = paragraph.AppendChild(new Run());
+            runProperties = run.GetOrCreate<RunProperties>();
+            noProof = runProperties.GetOrCreate<NoProof>();
+            fieldChar = run.GetOrCreate<FieldChar>();
+            fieldChar.FieldCharType = FieldCharValues.End;
+
+            return this;
+        }
+
+        public Paragraph AppendPageNumber(PageNumberFormat format)
         {
             var run = paragraph.AppendChild(new Run());
             var fieldChar = run.GetOrCreate<FieldChar>();
@@ -59,36 +140,6 @@ namespace DocXPlus
             return this;
         }
 
-        public Paragraph Append(Drawing drawing)
-        {
-            paragraph.AppendChild(new Run(drawing));
-
-            return this;
-        }
-
-        public Paragraph Append(string text)
-        {
-            GetRun(text);
-
-            return this;
-        }
-
-        public Paragraph AppendBold(string text)
-        {
-            var run = GetRun(text);
-            run.Bold();
-
-            return this;
-        }
-
-        public Paragraph AppendItalic(string text)
-        {
-            var run = GetRun(text);
-            run.Italic();
-
-            return this;
-        }
-
         public Paragraph AppendUnderline(string text, UnderlineValues value)
         {
             var run = GetRun(text);
@@ -118,6 +169,11 @@ namespace DocXPlus
             return this;
         }
 
+        public ParagraphProperties GetParagraphProperties()
+        {
+            return paragraph.GetOrCreate<ParagraphProperties>(true);
+        }
+
         public Paragraph Italic()
         {
             if (Runs.Count() == 0)
@@ -141,8 +197,7 @@ namespace DocXPlus
 
         public Paragraph SetAlignment(JustificationValues value)
         {
-            var paragraphProperties = paragraph.GetOrCreate<ParagraphProperties>(true);
-            var justification = paragraphProperties.GetOrCreate<Justification>();
+            var justification = GetParagraphProperties().GetOrCreate<Justification>();
             justification.Val = value;
 
             return this;
