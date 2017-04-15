@@ -3,6 +3,9 @@ using System.Linq;
 
 namespace DocXPlus
 {
+    /// <summary>
+    /// Represents a cell in a table
+    /// </summary>
     public class TableCell
     {
         private int mergeDown;
@@ -17,6 +20,9 @@ namespace DocXPlus
             this.tableCell = tableCell;
         }
 
+        /// <summary>
+        /// Cell borders
+        /// </summary>
         public Borders Borders
         {
             get
@@ -25,6 +31,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Merges this cell with the cells in the same column for the supplied number of rows. Does not merge the cell contents.
+        /// </summary>
         public int MergeDown
         {
             get
@@ -66,6 +75,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// All of the paragraphs in this cell.
+        /// </summary>
         public Paragraph[] Paragraphs
         {
             get
@@ -83,6 +95,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Cell shading
+        /// </summary>
         public Shading Shading
         {
             get
@@ -101,6 +116,21 @@ namespace DocXPlus
             return new Paragraph(paragraph);
         }
 
+        /// <summary>
+        /// Adds a paragraph with the supplied text to the table cell
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
+        public Paragraph AddParagraph(string text)
+        {
+            return AddParagraph().Append(text);
+        }
+
+        /// <summary>
+        /// Sets the vertical alignment of the cell
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public TableCell SetVerticalAlignment(TableVerticalAlignmentValues value)
         {
             var tableCellVerticalAlignment = GetTableCellProperties().GetOrCreate<TableCellVerticalAlignment>();
