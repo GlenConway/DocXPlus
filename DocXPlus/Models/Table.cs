@@ -23,6 +23,15 @@ namespace DocXPlus
             AddGrid();
         }
 
+        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, DocX document, params int[] percent)
+        {
+            this.table = table;
+            this.numberOfColumns = numberOfColumns;
+            this.document = document;
+
+            AddGrid(percent);
+        }
+
         public int NumberOfColumns => numberOfColumns;
 
         public IEnumerable<TableRow> Rows => rows;
@@ -146,6 +155,34 @@ namespace DocXPlus
                 gridColumn.Width = columnWidth.ToString();
 
                 columnWidths[i] = columnWidth.ToString();
+            }
+        }
+
+        private void AddGrid(params int[] percent)
+        {
+            if (percent.Sum() != 100)
+                throw new ArgumentException("Widths must add up to 100%");
+
+            if (percent.Count() != NumberOfColumns)
+                throw new ArgumentException("Widths must equal the number of columns");
+
+            var tableGrid = table.AppendChild(new TableGrid());
+
+            var width = document.PageWidth.Value - document.PageMargins.RightAndLeft.Value;
+
+            columnWidths = new string[NumberOfColumns];
+
+            for (int i = 0; i < NumberOfColumns; i++)
+            {
+                var columnWidth = ((double)percent[i] / 100);
+
+                columnWidths[i] = (width * columnWidth).ToString();
+            }
+
+            for (int i = 0; i < NumberOfColumns; i++)
+            {
+                var gridColumn = tableGrid.AppendChild(new GridColumn());
+                gridColumn.Width = columnWidths[i];
             }
         }
     }

@@ -40,6 +40,13 @@ namespace DocXPlus
             return document.AddTable(numberOfColumns, table);
         }
 
+        public Table AddTable(int numberOfColumns, params int[] percent)
+        {
+            var table = header.AppendChild(new DocumentFormat.OpenXml.Wordprocessing.Table());
+
+            return document.AddTable(numberOfColumns, table, percent);
+        }
+
         public void Save()
         {
             header.Save();

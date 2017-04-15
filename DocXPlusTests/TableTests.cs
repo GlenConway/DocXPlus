@@ -18,8 +18,42 @@ namespace DocXPlusTests
             var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
 
             doc.AddHeaders();
-            
+
             var table = doc.DefaultHeader.AddTable(3);
+
+            for (int i = 0; i < 3; i++)
+            {
+                var row = table.AddRow();
+                row.SetBorders(Units.HalfPt, BorderValues.Single);
+
+                if (i == 0)
+                {
+                    row.SetShading(ShadingPatternValues.Clear, "E7E6E6");
+
+                    row.HeaderRow = true;
+                }
+
+                for (int j = 0; j < 3; j++)
+                {
+                    row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
+                }
+            }
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
+        public void TablePercent()
+        {
+            var filename = Path.Combine(TempDirectory, "TablePercent.docx");
+
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+
+            var table = doc.AddTable(3, 60, 20, 20);
 
             for (int i = 0; i < 3; i++)
             {
