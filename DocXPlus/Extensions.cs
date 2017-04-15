@@ -14,6 +14,27 @@ namespace DocXPlus
             prop.Val = true;
         }
 
+        internal static void FontFamily(this Run run, string name)
+        {
+            RunProperties runProperties = run.GetOrCreate<RunProperties>(true);
+            RunFonts prop = runProperties.GetOrCreate<RunFonts>();
+            prop.Ascii = name;
+            prop.HighAnsi = name;
+            prop.ComplexScript = name;
+            prop.EastAsia = name;
+        }
+
+        internal static void FontSize(this Run run, double size)
+        {
+            RunProperties runProperties = run.GetOrCreate<RunProperties>(true);
+
+            FontSize fontSize = runProperties.GetOrCreate<FontSize>();
+            fontSize.Val = size.ToString();
+
+            FontSizeComplexScript fontSizeComplexScript = runProperties.GetOrCreate<FontSizeComplexScript>();
+            fontSizeComplexScript.Val = size.ToString();
+        }
+
         internal static T GetOrCreate<T>(this OpenXmlCompositeElement element) where T : OpenXmlElement, new()
         {
             return element.GetOrCreate<T>(false);

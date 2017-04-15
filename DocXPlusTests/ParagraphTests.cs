@@ -36,6 +36,28 @@ namespace DocXPlusTests
         }
 
         [TestMethod]
+        public void Fonts()
+        {
+            var filename = Path.Combine(TempDirectory, "Fonts.docx");
+
+            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+
+            doc.AddParagraph().Append("Append normal paragraph");
+
+            doc.AddParagraph().Append("Append Arial").FontFamily("Arial");
+
+            doc.AddParagraph().Append("Append 20 points").FontSize(40);
+
+            doc.AddParagraph().Append("Append 20 points").StyleName = "Heading1";
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
         public void ItalicParagraphs()
         {
             var filename = Path.Combine(TempDirectory, "ItalicParagraphs.docx");

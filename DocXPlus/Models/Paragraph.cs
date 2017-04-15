@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -301,6 +302,78 @@ namespace DocXPlus
                 foreach (var run in Runs)
                 {
                     run.Bold();
+                }
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Applies the supplied font family to the paragraph
+        /// </summary>
+        /// <param name="name"></param>
+        /// <returns></returns>
+        public Paragraph FontFamily(string name)
+        {
+            if (Runs.Count() == 0)
+            {
+                var paragraphProperties = paragraph.GetOrCreate<ParagraphProperties>();
+                var paragraphMarkRunProperties = paragraphProperties.GetOrCreate<ParagraphMarkRunProperties>();
+
+                RunFonts prop = paragraphMarkRunProperties.GetOrCreate<RunFonts>();
+                prop.Ascii = name;
+                prop.HighAnsi = name;
+                prop.ComplexScript = name;
+                prop.EastAsia = name;
+            }
+            else
+            {
+                foreach (var run in Runs)
+                {
+                    run.FontFamily(name);
+                }
+            }
+
+            return this;
+        }
+
+        /// <summary>
+        /// Applies the supplied font size to the paragraph
+        /// </summary>
+        /// <param name="size">Size is in half points e.g. 40 is 20pt</param>
+        /// <returns></returns>
+        public Paragraph FontSize(double size)
+        {
+            double temp = size * 2;
+
+            if (temp - (int)temp == 0)
+            {
+                if (!(size > 0 && size < 1639))
+                {
+                    throw new ArgumentOutOfRangeException(nameof(size), "Value must be in the range 0 - 1638");
+                }
+            }
+            else
+            {
+                throw new ArgumentException(nameof(size), "Value must be either a whole or half number, examples: 32, 32.5");
+            }
+
+            if (Runs.Count() == 0)
+            {
+                var paragraphProperties = paragraph.GetOrCreate<ParagraphProperties>();
+                var paragraphMarkRunProperties = paragraphProperties.GetOrCreate<ParagraphMarkRunProperties>();
+
+                FontSize fontSize = paragraphMarkRunProperties.GetOrCreate<FontSize>();
+                fontSize.Val = size.ToString();
+
+                FontSizeComplexScript fontSizeComplexScript = paragraphMarkRunProperties.GetOrCreate<FontSizeComplexScript>();
+                fontSizeComplexScript.Val = size.ToString();
+            }
+            else
+            {
+                foreach (var run in Runs)
+                {
+                    run.FontSize(size);
                 }
             }
 
