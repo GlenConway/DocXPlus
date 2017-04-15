@@ -127,6 +127,17 @@ namespace DocXPlus
         }
 
         /// <summary>
+        /// Adds a paragraph with the supplied text to the table cell and sets the alignment
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="alignment"></param>
+        /// <returns></returns>
+        public Paragraph AddParagraph(string text, JustificationValues alignment)
+        {
+            return AddParagraph().Append(text).SetAlignment(alignment);
+        }
+
+        /// <summary>
         /// Sets the vertical alignment of the cell
         /// </summary>
         /// <param name="value"></param>

@@ -5,15 +5,21 @@ using System.Linq;
 
 namespace DocXPlus
 {
+    /// <summary>
+    /// Represents a Word paragraph
+    /// </summary>
     public class Paragraph
     {
         private DocumentFormat.OpenXml.Wordprocessing.Paragraph paragraph;
 
-        public Paragraph(DocumentFormat.OpenXml.Wordprocessing.Paragraph paragraph)
+        internal Paragraph(DocumentFormat.OpenXml.Wordprocessing.Paragraph paragraph)
         {
             this.paragraph = paragraph;
         }
 
+        /// <summary>
+        /// Gets or sets the paragrapg alignment
+        /// </summary>
         public JustificationValues Alignment
         {
             get
@@ -28,6 +34,81 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Gets or sets the paragraph indentation in Twips
+        /// </summary>
+        public Int32Value IndentationBefore
+        {
+            get
+            {
+                if (!GetParagraphProperties().Has<Indentation>())
+                    return 0;
+
+                var indentation = GetParagraphProperties().GetOrCreate<Indentation>();
+
+                if (int.TryParse(indentation.Left, out int result))
+                    return result;
+
+                return 0;
+            }
+            set
+            {
+                var indentation = GetParagraphProperties().GetOrCreate<Indentation>();
+
+                indentation.Left = value.Value.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the paragraph first line indentation in Twips
+        /// </summary>
+        public Int32Value IndentationFirstLine
+        {
+            get
+            {
+                if (!GetParagraphProperties().Has<Indentation>())
+                    return 0;
+
+                var indentation = GetParagraphProperties().GetOrCreate<Indentation>();
+
+                if (int.TryParse(indentation.FirstLine, out int result))
+                    return result;
+
+                return 0;
+            }
+            set
+            {
+                var indentation = GetParagraphProperties().GetOrCreate<Indentation>();
+
+                indentation.FirstLine = value.Value.ToString();
+            }
+        }
+
+        /// <summary>
+        /// Gets or sets the paragraph hanging indentation in Twips
+        /// </summary>
+        public Int32Value IndentationHanging
+        {
+            get
+            {
+                if (!GetParagraphProperties().Has<Indentation>())
+                    return 0;
+
+                var indentation = GetParagraphProperties().GetOrCreate<Indentation>();
+
+                if (int.TryParse(indentation.Hanging, out int result))
+                    return result;
+
+                return 0;
+            }
+            set
+            {
+                var indentation = GetParagraphProperties().GetOrCreate<Indentation>();
+
+                indentation.Hanging = value.Value.ToString();
+            }
+        }
+
         private IEnumerable<Run> Runs
         {
             get
@@ -36,6 +117,11 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Appends a Drawing object to the paragraph
+        /// </summary>
+        /// <param name="drawing"></param>
+        /// <returns></returns>
         public Paragraph Append(Drawing drawing)
         {
             paragraph.AppendChild(new Run(drawing));
@@ -43,6 +129,11 @@ namespace DocXPlus
             return this;
         }
 
+        /// <summary>
+        /// Appends text to the paragraph
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public Paragraph Append(string text)
         {
             GetRun(text);
@@ -50,6 +141,11 @@ namespace DocXPlus
             return this;
         }
 
+        /// <summary>
+        /// Appends bold text to the paragraph
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public Paragraph AppendBold(string text)
         {
             var run = GetRun(text);
@@ -58,6 +154,11 @@ namespace DocXPlus
             return this;
         }
 
+        /// <summary>
+        /// Appends italic text to the paragraph
+        /// </summary>
+        /// <param name="text"></param>
+        /// <returns></returns>
         public Paragraph AppendItalic(string text)
         {
             var run = GetRun(text);
@@ -66,6 +167,11 @@ namespace DocXPlus
             return this;
         }
 
+        /// <summary>
+        /// Appends a page count code to the paragraph
+        /// </summary>
+        /// <param name="format"></param>
+        /// <returns></returns>
         public Paragraph AppendPageCount(PageNumberFormat format)
         {
             var run = paragraph.AppendChild(new Run());
@@ -103,6 +209,11 @@ namespace DocXPlus
             return this;
         }
 
+        /// <summary>
+        /// Appends a page number code to the paragraph
+        /// </summary>
+        /// <param name="format"></param>
+        /// <returns></returns>
         public Paragraph AppendPageNumber(PageNumberFormat format)
         {
             var run = paragraph.AppendChild(new Run());
@@ -140,6 +251,12 @@ namespace DocXPlus
             return this;
         }
 
+        /// <summary>
+        /// Appends underlined text to the paragraph
+        /// </summary>
+        /// <param name="text"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public Paragraph AppendUnderline(string text, UnderlineValues value)
         {
             var run = GetRun(text);
@@ -148,6 +265,10 @@ namespace DocXPlus
             return this;
         }
 
+        /// <summary>
+        /// Makes a paragraph text bold
+        /// </summary>
+        /// <returns></returns>
         public Paragraph Bold()
         {
             if (Runs.Count() == 0)
@@ -169,11 +290,10 @@ namespace DocXPlus
             return this;
         }
 
-        public ParagraphProperties GetParagraphProperties()
-        {
-            return paragraph.GetOrCreate<ParagraphProperties>(true);
-        }
-
+        /// <summary>
+        /// Makes a paragraph text italic
+        /// </summary>
+        /// <returns></returns>
         public Paragraph Italic()
         {
             if (Runs.Count() == 0)
@@ -195,6 +315,11 @@ namespace DocXPlus
             return this;
         }
 
+        /// <summary>
+        /// Sets the paragraph alignment
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public Paragraph SetAlignment(JustificationValues value)
         {
             var justification = GetParagraphProperties().GetOrCreate<Justification>();
@@ -203,6 +328,11 @@ namespace DocXPlus
             return this;
         }
 
+        /// <summary>
+        /// Makes a paragraph text underlined
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public Paragraph Underline(UnderlineValues value)
         {
             if (Runs.Count() == 0)
@@ -222,6 +352,11 @@ namespace DocXPlus
             }
 
             return this;
+        }
+
+        internal ParagraphProperties GetParagraphProperties()
+        {
+            return paragraph.GetOrCreate<ParagraphProperties>(true);
         }
 
         internal Run NewRun()
