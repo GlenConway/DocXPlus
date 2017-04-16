@@ -76,7 +76,7 @@
         /// <returns></returns>
         public static Paragraph SetBoldText(this TableRow row, int cellIndex, string text, Align alignment)
         {
-            return row.Cells[cellIndex].AddParagraph(text).Bold().SetAlignment(alignment);
+            return row.Cells[cellIndex].SetBoldText(text).SetAlignment(alignment);
         }
 
         /// <summary>
