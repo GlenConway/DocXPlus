@@ -28,21 +28,18 @@ using (var doc = new DocX())
 
 **Different Page Orientation After Section Break**
 ``` c#
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Wordprocessing;
-
-var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
-doc.Orientation = PageOrientationValues.Landscape;
+var doc = DocX.Create(filename, DocumentType.Document);
+doc.Orientation = PageOrientation.Landscape;
 
 doc.AddParagraph().Append("Landscape");
 
 doc.InsertSectionPageBreak();
-doc.Orientation = PageOrientationValues.Portrait;
+doc.Orientation = PageOrientation.Portrait;
 
 doc.AddParagraph().Append("Portrait");
 
 doc.InsertSectionPageBreak();
-doc.Orientation = PageOrientationValues.Landscape;
+doc.Orientation = PageOrientation.Landscape;
 
 doc.AddParagraph().Append("Landscape");
 
@@ -50,10 +47,7 @@ doc.Close();
 ```
 **Different Headers and Footers After Section Break**
 ```c#
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Wordprocessing;
-
-var doc = DocXPlus.DocX.Create(filename, WordprocessingDocumentType.Document);
+var doc = DocX.Create(filename, DocumentType.Document);
 
 doc.AddHeaders();
 doc.AddFooters();
@@ -81,6 +75,8 @@ doc.Close();
 ```
 You can also add page numbers to the footer
 ```c#
+doc.AddFooters();
+
 doc.DefaultFooter
     .AddParagraph()
     .Append("Page ")
@@ -88,29 +84,23 @@ doc.DefaultFooter
     .Append(" of ")
     .AppendPageCount(PageNumberFormat.Normal)
     .Bold()
-    .Alignment = JustificationValues.Center;
+    .Alignment = Align.Center;
 ```
 **Tables**
 ```c#
-using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Wordprocessing;
-using DocXPlus;
+ var doc = DocX.Create(filename, DocumentType.Document);
 
-var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
-
-// 5 columns
 var table = doc.AddTable(5);
 
-for (int i = 0; i < 5; i++)
+for (int i = 0; i < 50; i++)
 {
     var row = table.AddRow();
-
-    row.SetBorders(Units.HalfPt, BorderValues.Single);
+    row.SetBorders(Units.HalfPt, BorderValue.Single);
 
     if (i == 0)
     {
         // shade the first row and set as a header
-        row.SetShading(ShadingPatternValues.Clear, "E7E6E6");
+        row.SetShading("E7E6E6");
 
         row.HeaderRow = true;
     }
@@ -118,11 +108,6 @@ for (int i = 0; i < 5; i++)
     for (int j = 0; j < 5; j++)
     {
         row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
-    }
-
-    if (i > 0)
-    {
-        row.Cells[0].MergeRight = i;
     }
 }
 

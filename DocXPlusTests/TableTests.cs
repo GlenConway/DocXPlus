@@ -131,7 +131,8 @@ namespace DocXPlusTests
 
                 if (i == 0)
                 {
-                    row.SetShading(ShadingPattern.Clear, "E7E6E6");
+                    // shade the first row and set as a header
+                    row.SetShading("E7E6E6");
 
                     row.HeaderRow = true;
                 }

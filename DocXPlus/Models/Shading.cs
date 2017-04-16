@@ -161,5 +161,15 @@ namespace DocXPlus
             Color = color;
             Fill = fill;
         }
+
+        /// <summary>
+        /// Sets the fill and color
+        /// </summary>
+        /// <param name="fill">Hex fill color</param>
+        /// <param name="color"></param>
+        public void Set(string fill, string color = "auto")
+        {
+            Set(ShadingPattern.Clear, fill, color);
+        }
     }
 }

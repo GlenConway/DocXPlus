@@ -134,6 +134,16 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Sets the Top, Bottom, Left and Right shading for every cell in the row
+        /// </summary>
+        /// <param name="fill">Hex fill color</param>
+        /// <param name="color"></param>
+        public void SetShading(string fill, string color = "auto")
+        {
+            SetShading(ShadingPattern.Clear, fill, color);
+        }
+
         internal CantSplit GetCantSplit()
         {
             return GetTableRowProperties().GetOrCreate<CantSplit>();
