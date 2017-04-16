@@ -206,20 +206,32 @@ namespace DocXPlus
 
         private void AddCells()
         {
+            var tableCells = tableRow.Descendants<DocumentFormat.OpenXml.Wordprocessing.TableCell>().ToArray();
+
             cells = new TableCell[table.NumberOfColumns];
 
-            for (int i = 0; i < table.NumberOfColumns; i++)
+            if (tableCells.Count() > 0)
             {
-                var tableCell = tableRow.AppendChild(new DocumentFormat.OpenXml.Wordprocessing.TableCell());
+                for (int i = 0; i < table.NumberOfColumns; i++)
+                {
+                    cells[i] = new TableCell(this, tableCells[i]);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < table.NumberOfColumns; i++)
+                {
+                    var tableCell = tableRow.AppendChild(new DocumentFormat.OpenXml.Wordprocessing.TableCell());
 
-                var tableCellWidth = tableCell.GetOrCreate<TableCellWidth>();
-                tableCellWidth.Width = table.ColumnWidths[i];
-                tableCellWidth.Type = TableWidthUnitValues.Dxa;
+                    var tableCellWidth = tableCell.GetOrCreate<TableCellWidth>();
+                    tableCellWidth.Width = table.ColumnWidths[i];
+                    tableCellWidth.Type = TableWidthUnitValues.Dxa;
 
-                var cell = new TableCell(this, tableCell);
-                cell.AddParagraph();
+                    var cell = new TableCell(this, tableCell);
+                    cell.AddParagraph();
 
-                cells[i] = cell;
+                    cells[i] = cell;
+                }
             }
         }
     }

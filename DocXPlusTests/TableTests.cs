@@ -79,6 +79,60 @@ namespace DocXPlusTests
         }
 
         [TestMethod]
+        public void TableRows()
+        {
+            var filename = Path.Combine(TempDirectory, "TableRows.docx");
+
+            var doc = DocX.Create(filename, DocumentType.Document);
+
+            for (int k = 0; k < 5; k++)
+            {
+                var columnCount = (k + 1) * 2;
+
+                var table = doc.AddTable(columnCount);
+
+                for (int i = 0; i < columnCount; i++)
+                {
+                    var row = table.AddRow();
+                    row.SetBorders(Units.HalfPt, BorderValue.Single);
+
+                    if (i == 0)
+                    {
+                        row.SetShading(ShadingPattern.Clear, "E7E6E6");
+
+                        row.HeaderRow = true;
+                    }
+
+                    for (int j = 0; j < columnCount; j++)
+                    {
+                        row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
+                    }
+                }
+
+                doc.AddParagraph();
+            }
+
+            var tables = doc.Tables.ToList();
+
+            for (int i = 0; i < 5; i++)
+            {
+                var columnCount = (i + 1) * 2;
+
+                var table = tables[i];
+
+                Assert.IsNotNull(table);
+                Assert.IsNotNull(table.Rows);
+                Assert.AreEqual(columnCount, table.Rows.Count());
+            }
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
         public void TableWidths()
         {
             var filename = Path.Combine(TempDirectory, "TableWidths.docx");
@@ -239,24 +293,6 @@ namespace DocXPlusTests
         }
 
         [TestMethod]
-        public void TwoColumnTableWithMergeRight()
-        {
-            var filename = Path.Combine(TempDirectory, "TwoColumnTableWithMergeRight.docx");
-
-            var doc = DocX.Create(filename, DocumentType.Document);
-
-            var table = doc.AddTable(2);
-            var row = table.AddRow();
-            row.Cells[0].MergeRight = 1;
-            
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
-        }
-
-        [TestMethod]
         public void TableWithMergeRightAndDown()
         {
             var filename = Path.Combine(TempDirectory, "TableWithMergeRightAndDown.docx");
@@ -355,6 +391,24 @@ namespace DocXPlusTests
                     cell.SetVerticalAlignment(TableVerticalAlignment.Center);
                 }
             }
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
+        public void TwoColumnTableWithMergeRight()
+        {
+            var filename = Path.Combine(TempDirectory, "TwoColumnTableWithMergeRight.docx");
+
+            var doc = DocX.Create(filename, DocumentType.Document);
+
+            var table = doc.AddTable(2);
+            var row = table.AddRow();
+            row.Cells[0].MergeRight = 1;
 
             doc.Close();
 

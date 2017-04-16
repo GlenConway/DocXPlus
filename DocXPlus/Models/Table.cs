@@ -22,6 +22,9 @@ namespace DocXPlus
             this.table = table;
 
             this.document = document;
+
+            BuildColumnWidths();
+            BuildRows();
         }
 
         internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, DocX document) : this(table, document)
@@ -106,21 +109,6 @@ namespace DocXPlus
             }
         }
 
-        internal int ColumnCount
-        {
-            get
-            {
-                if (!table.Has<TableGrid>())
-                {
-                    return 0;
-                }
-
-                var tableGrid = table.GetOrCreate<TableGrid>();
-
-                return tableGrid.Descendants<GridColumn>().Count();
-            }
-        }
-
         internal string[] ColumnWidths => columnWidths;
 
         internal TableLook TableLook
@@ -181,11 +169,6 @@ namespace DocXPlus
             {
                 rows[i].Cells[cellIndex].GetVerticalMerge().Val = MergedCellValues.Continue;
             }
-        }
-
-        internal void UpdateColumnCount()
-        {
-            numberOfColumns = ColumnCount;
         }
 
         private void AddGrid()
@@ -254,6 +237,38 @@ namespace DocXPlus
             {
                 var gridColumn = tableGrid.AppendChild(new GridColumn());
                 gridColumn.Width = columnWidths[i];
+            }
+        }
+
+        private void BuildColumnWidths()
+        {
+            if (!table.Has<TableGrid>())
+            {
+                return;
+            }
+
+            var tableGrid = table.GetOrCreate<TableGrid>();
+
+            var grids = tableGrid.Descendants<GridColumn>().ToArray();
+
+            numberOfColumns = grids.Count();
+            columnWidths = new string[numberOfColumns];
+
+            for (int i = 0; i < numberOfColumns; i++)
+            {
+                columnWidths[i] = grids[i].Width;
+            }
+        }
+
+        private void BuildRows()
+        {
+            var tableRows = table.Descendants<DocumentFormat.OpenXml.Wordprocessing.TableRow>();
+
+            rows = new List<TableRow>();
+
+            foreach (var row in tableRows)
+            {
+                rows.Add(new TableRow(this, row));
             }
         }
     }

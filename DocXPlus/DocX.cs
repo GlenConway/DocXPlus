@@ -228,8 +228,7 @@ namespace DocXPlus
                 foreach (var table in tables)
                 {
                     var t = new Table(table, this);
-                    t.UpdateColumnCount();
-
+                                        
                     result.Add(t);
                 }
 
