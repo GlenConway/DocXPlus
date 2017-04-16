@@ -191,13 +191,18 @@ namespace DocXPlus
             // calculate the new width of the cell after the merge
             var newWidth = tableCell.Width;
 
-            for (int i = 1; i <= value; i++)
+            // iterate through each of the cells that are being merged
+            // starting with the cell immediately to the right of this one
+            var startIndex = index + 1;
+
+            for (int i = startIndex; i < startIndex + value; i++)
             {
                 var cell = Cells[i];
 
                 // not sure how to handle nil and auto
                 newWidth += cell.Width;
 
+                // remove the merged cell from the xml
                 cell.RemoveFromRow();
             }
 

@@ -66,10 +66,12 @@ namespace DocXPlus
             {
                 if (mergeRight != value)
                 {
+                    // process the rows are that are merged with this one
                     tableRow.MergeRight(this, value);
 
                     mergeRight = value;
 
+                    // set the gridspan to the value plus this cell
                     GetGridSpan().Val = value + 1;
                 }
             }

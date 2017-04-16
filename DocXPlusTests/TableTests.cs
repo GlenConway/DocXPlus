@@ -293,6 +293,44 @@ namespace DocXPlusTests
         }
 
         [TestMethod]
+        public void TableWithMergeRight2()
+        {
+            var filename = Path.Combine(TempDirectory, "TableWithMergeRight2.docx");
+
+            var doc = DocX.Create(filename, DocumentType.Document);
+
+            var table = doc.AddTable(9);
+
+            var row = table.AddRow();
+            row.HeaderRow = true;
+
+            for (int i = 0; i < 9; i++)
+            {
+                row.Cells[i].SetBoldText((i + 1).ToString());
+            }
+
+            row = table.AddRow();
+            row.HeaderRow = true;
+
+            // this should merge cells 2, 3 and 4
+            row.Cells[1].MergeRight = 2;
+
+            // this should merge cells 5 and 6
+            row.Cells[4].MergeRight = 1;
+
+            row.SetBoldText(1, "Test1", Align.Center);
+            row.SetBoldText(4, "Test2", Align.Center);
+
+            row.Underline(1, 4);
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
         public void TableWithMergeRightAndDown()
         {
             var filename = Path.Combine(TempDirectory, "TableWithMergeRightAndDown.docx");
