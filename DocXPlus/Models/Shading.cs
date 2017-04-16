@@ -137,11 +137,11 @@ namespace DocXPlus
         /// <summary>
         /// Shading pattern
         /// </summary>
-        public ShadingPatternValue Val
+        public ShadingPattern Val
         {
             get
             {
-                return Convert.ToShadingPatternValue(shading.Val);
+                return Convert.ToShadingPattern(shading.Val);
             }
             set
             {
@@ -155,7 +155,7 @@ namespace DocXPlus
         /// <param name="value"></param>
         /// <param name="fill">Hex fill color</param>
         /// <param name="color"></param>
-        public void Set(ShadingPatternValue value, string fill, string color = "auto")
+        public void Set(ShadingPattern value, string fill, string color = "auto")
         {
             Val = value;
             Color = color;

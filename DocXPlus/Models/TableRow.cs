@@ -126,7 +126,7 @@ namespace DocXPlus
         /// <param name="value"></param>
         /// <param name="fill">Hex fill color</param>
         /// <param name="color"></param>
-        public void SetShading(ShadingPatternValue value, string fill, string color = "auto")
+        public void SetShading(ShadingPattern value, string fill, string color = "auto")
         {
             foreach (var cell in Cells)
             {

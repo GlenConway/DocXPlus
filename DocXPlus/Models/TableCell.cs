@@ -107,6 +107,23 @@ namespace DocXPlus
         }
 
         /// <summary>
+        /// Gets or set the vertical alignment of the cell
+        /// </summary>
+        public TableVerticalAlignment VerticalAlignment
+        {
+            get
+            {
+                var tableCellVerticalAlignment = GetTableCellProperties().GetOrCreate<TableCellVerticalAlignment>();
+                return Convert.ToTableVerticalAlignment(tableCellVerticalAlignment.Val);
+            }
+            set
+            {
+                var tableCellVerticalAlignment = GetTableCellProperties().GetOrCreate<TableCellVerticalAlignment>();
+                tableCellVerticalAlignment.Val = Convert.ToTableVerticalAlignmentValues(value);
+            }
+        }
+
+        /// <summary>
         /// Adds a paragraph to the table cell
         /// </summary>
         /// <returns></returns>
@@ -142,10 +159,10 @@ namespace DocXPlus
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public TableCell SetVerticalAlignment(TableVerticalAlignmentValues value)
+        public TableCell SetVerticalAlignment(TableVerticalAlignment value)
         {
             var tableCellVerticalAlignment = GetTableCellProperties().GetOrCreate<TableCellVerticalAlignment>();
-            tableCellVerticalAlignment.Val = value;
+            tableCellVerticalAlignment.Val = Convert.ToTableVerticalAlignmentValues(value);
 
             return this;
         }

@@ -1,6 +1,6 @@
 ﻿namespace DocXPlus
 {
-    public enum ShadingPatternValue
+    public enum ShadingPattern
     {
         //
         // Summary:

@@ -26,7 +26,7 @@ namespace DocXPlusTests
 
                 if (i == 0)
                 {
-                    row.SetShading(ShadingPatternValue.Clear, "E7E6E6");
+                    row.SetShading(ShadingPattern.Clear, "E7E6E6");
 
                     row.HeaderRow = true;
                 }
@@ -60,7 +60,7 @@ namespace DocXPlusTests
 
                 if (i == 0)
                 {
-                    row.SetShading(ShadingPatternValue.Clear, "E7E6E6");
+                    row.SetShading(ShadingPattern.Clear, "E7E6E6");
 
                     row.HeaderRow = true;
                 }
@@ -97,7 +97,7 @@ namespace DocXPlusTests
 
                 if (i == 0)
                 {
-                    row.SetShading(ShadingPatternValue.Clear, "E7E6E6");
+                    row.SetShading(ShadingPattern.Clear, "E7E6E6");
 
                     row.HeaderRow = true;
                 }
@@ -131,7 +131,7 @@ namespace DocXPlusTests
 
                 if (i == 0)
                 {
-                    row.SetShading(ShadingPatternValue.Clear, "E7E6E6");
+                    row.SetShading(ShadingPattern.Clear, "E7E6E6");
 
                     row.HeaderRow = true;
                 }
@@ -165,7 +165,7 @@ namespace DocXPlusTests
 
                 if (i == 0)
                 {
-                    row.SetShading(ShadingPatternValue.Clear, "E7E6E6");
+                    row.SetShading(ShadingPattern.Clear, "E7E6E6");
 
                     row.HeaderRow = true;
                 }
@@ -214,7 +214,7 @@ namespace DocXPlusTests
                 if (i == 0)
                 {
                     // shade the first row and set as a header
-                    row.SetShading(ShadingPatternValue.Clear, "E7E6E6");
+                    row.SetShading(ShadingPattern.Clear, "E7E6E6");
 
                     row.HeaderRow = true;
                 }
@@ -253,7 +253,7 @@ namespace DocXPlusTests
 
                 if (i == 0)
                 {
-                    row.SetShading(ShadingPatternValue.Clear, "E7E6E6");
+                    row.SetShading(ShadingPattern.Clear, "E7E6E6");
 
                     row.HeaderRow = true;
                 }
@@ -301,7 +301,7 @@ namespace DocXPlusTests
 
             row.Cells[0].Borders.Set(Units.HalfPt, BorderValue.Single);
 
-            row.SetShading(ShadingPatternValue.Clear, "E7E6E6");
+            row.SetShading(ShadingPattern.Clear, "E7E6E6");
 
             row = table.AddRow();
 
@@ -317,8 +317,8 @@ namespace DocXPlusTests
             row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(Align.Center);
             row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(Align.Right);
 
-            row.Cells[1].Shading.Set(ShadingPatternValue.Clear, "F2F2F2");
-            row.Cells[2].Shading.Set(ShadingPatternValue.Clear, "auto");
+            row.Cells[1].Shading.Set(ShadingPattern.Clear, "F2F2F2");
+            row.Cells[2].Shading.Set(ShadingPattern.Clear, "auto");
 
             var rows = table.Rows.ToList();
 
@@ -333,7 +333,7 @@ namespace DocXPlusTests
                 {
                     var cell = row.Cells[j];
 
-                    cell.SetVerticalAlignment(TableVerticalAlignmentValues.Center);
+                    cell.SetVerticalAlignment(TableVerticalAlignment.Center);
                 }
             }
 

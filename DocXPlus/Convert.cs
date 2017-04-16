@@ -37,14 +37,24 @@
             return (DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues)((int)value);
         }
 
-        internal static ShadingPatternValue ToShadingPatternValue(DocumentFormat.OpenXml.Wordprocessing.ShadingPatternValues value)
+        internal static ShadingPattern ToShadingPattern(DocumentFormat.OpenXml.Wordprocessing.ShadingPatternValues value)
         {
-            return (ShadingPatternValue)((int)value);
+            return (ShadingPattern)((int)value);
         }
 
-        internal static DocumentFormat.OpenXml.Wordprocessing.ShadingPatternValues ToShadingPatternValues(ShadingPatternValue value)
+        internal static DocumentFormat.OpenXml.Wordprocessing.ShadingPatternValues ToShadingPatternValues(ShadingPattern value)
         {
             return (DocumentFormat.OpenXml.Wordprocessing.ShadingPatternValues)((int)value);
+        }
+
+        internal static TableVerticalAlignment ToTableVerticalAlignment(DocumentFormat.OpenXml.Wordprocessing.TableVerticalAlignmentValues value)
+        {
+            return (TableVerticalAlignment)((int)value);
+        }
+
+        internal static DocumentFormat.OpenXml.Wordprocessing.TableVerticalAlignmentValues ToTableVerticalAlignmentValues(TableVerticalAlignment value)
+        {
+            return (DocumentFormat.OpenXml.Wordprocessing.TableVerticalAlignmentValues)((int)value);
         }
 
         internal static UnderlineType ToUnderlineType(DocumentFormat.OpenXml.Wordprocessing.UnderlineValues value)
