@@ -96,17 +96,17 @@ namespace DocXPlusTests
 
             doc.AddParagraph().AppendBold("Right");
 
-            doc.AddParagraph().Append(LoremIpsum).SetAlignment(JustificationValues.Right);
+            doc.AddParagraph().Append(LoremIpsum).SetAlignment(Align.Right);
 
             doc.AddParagraph().AppendBold("Center");
 
             var paragraph = doc.AddParagraph();
-            paragraph.SetAlignment(JustificationValues.Center);
+            paragraph.SetAlignment(Align.Center);
             paragraph.Append(LoremIpsum);
 
             doc.AddParagraph().AppendBold("Both");
 
-            doc.AddParagraph().Append(LoremIpsum).SetAlignment(JustificationValues.Both);
+            doc.AddParagraph().Append(LoremIpsum).SetAlignment(Align.Both);
 
             doc.Close();
 

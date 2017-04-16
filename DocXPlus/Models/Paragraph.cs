@@ -21,17 +21,17 @@ namespace DocXPlus
         /// <summary>
         /// Gets or sets the paragrapg alignment
         /// </summary>
-        public JustificationValues Alignment
+        public Align Alignment
         {
             get
             {
                 var justification = GetParagraphProperties().GetOrCreate<Justification>();
-                return justification.Val;
+                return Utils.ConvertToAlign(justification.Val);
             }
             set
             {
                 var justification = GetParagraphProperties().GetOrCreate<Justification>();
-                justification.Val = value;
+                justification.Val = Utils.ConvertToJustificationValues(value);
             }
         }
 
@@ -410,14 +410,15 @@ namespace DocXPlus
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Paragraph SetAlignment(JustificationValues value)
+        public Paragraph SetAlignment(Align value)
         {
             var justification = GetParagraphProperties().GetOrCreate<Justification>();
-            justification.Val = value;
+            justification.Val = Utils.ConvertToJustificationValues(value);
 
             return this;
         }
-
+        
+        
         /// <summary>
         /// Makes a paragraph text underlined
         /// </summary>

@@ -298,8 +298,8 @@ namespace DocXPlusTests
             row.HeaderRow = true;
 
             row.Cells[0].Paragraphs[0].Append("Cell 1");
-            row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(JustificationValues.Center);
-            row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(JustificationValues.Right);
+            row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(Align.Center);
+            row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(Align.Right);
 
             row.Cells[0].Borders.Set(Units.HalfPt, BorderValues.Single);
 
@@ -310,14 +310,14 @@ namespace DocXPlusTests
             row.SetBorders(Units.HalfPt, BorderValues.Single);
 
             row.Cells[0].Paragraphs[0].Append("Cell 1");
-            row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(JustificationValues.Center);
-            row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(JustificationValues.Right);
+            row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(Align.Center);
+            row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(Align.Right);
 
             row = table.AddRow();
 
             row.Cells[0].Paragraphs[0].Append("Cell 1");
-            row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(JustificationValues.Center);
-            row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(JustificationValues.Right);
+            row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(Align.Center);
+            row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(Align.Right);
 
             row.Cells[1].Shading.Set(ShadingPatternValues.Clear, "F2F2F2");
             row.Cells[2].Shading.Set(ShadingPatternValues.Clear, "auto");

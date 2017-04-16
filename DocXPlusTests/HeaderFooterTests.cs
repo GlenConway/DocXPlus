@@ -86,7 +86,7 @@ namespace DocXPlusTests
                 .Append(" of ")
                 .AppendPageCount(PageNumberFormat.Normal)
                 .Bold()
-                .Alignment = JustificationValues.Center;
+                .Alignment = Align.Center;
 
             for (int i = 0; i < 9; i++)
             {
@@ -115,7 +115,7 @@ namespace DocXPlusTests
                 .Append(" of ")
                 .AppendPageCount(PageNumberFormat.Roman)
                 .Bold()
-                .Alignment = JustificationValues.Center;
+                .Alignment = Align.Center;
 
             for (int i = 0; i < 9; i++)
             {
@@ -179,12 +179,12 @@ namespace DocXPlusTests
 
             doc.DefaultHeader
                 .AddParagraph()
-                .SetAlignment(JustificationValues.Right)
+                .SetAlignment(Align.Right)
                 .Append(LoremIpsum);
 
             doc.DefaultFooter
                 .AddParagraph()
-                .SetAlignment(JustificationValues.Center)
+                .SetAlignment(Align.Center)
                 .Append(LoremIpsum);
 
             doc.Close();

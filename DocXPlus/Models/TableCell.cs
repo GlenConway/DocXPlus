@@ -132,7 +132,7 @@ namespace DocXPlus
         /// <param name="text"></param>
         /// <param name="alignment"></param>
         /// <returns></returns>
-        public Paragraph AddParagraph(string text, JustificationValues alignment)
+        public Paragraph AddParagraph(string text, Align alignment)
         {
             return AddParagraph().Append(text).SetAlignment(alignment);
         }
