@@ -105,6 +105,16 @@
             return (DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues)((int)value);
         }
 
+        internal static UnderlineType ToUnderlineType(DocumentFormat.OpenXml.Wordprocessing.UnderlineValues value)
+        {
+            return (UnderlineType)((int)value);
+        }
+
+        internal static DocumentFormat.OpenXml.Wordprocessing.UnderlineValues ToUnderlineValues(UnderlineType value)
+        {
+            return (DocumentFormat.OpenXml.Wordprocessing.UnderlineValues)((int)value);
+        }
+
         internal static DocumentFormat.OpenXml.WordprocessingDocumentType ToWordprocessingDocumentType(DocumentType value)
         {
             return (DocumentFormat.OpenXml.WordprocessingDocumentType)((int)value);

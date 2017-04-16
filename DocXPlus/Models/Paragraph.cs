@@ -275,7 +275,7 @@ namespace DocXPlus
         /// <param name="text"></param>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Paragraph AppendUnderline(string text, UnderlineValues value)
+        public Paragraph AppendUnderline(string text, UnderlineType value)
         {
             var run = GetRun(text);
             run.Underline(value);
@@ -423,7 +423,7 @@ namespace DocXPlus
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public Paragraph Underline(UnderlineValues value)
+        public Paragraph Underline(UnderlineType value)
         {
             if (Runs.Count() == 0)
             {
@@ -431,7 +431,7 @@ namespace DocXPlus
                 var paragraphMarkRunProperties = paragraphProperties.GetOrCreate<ParagraphMarkRunProperties>();
 
                 Underline Underline = paragraphMarkRunProperties.GetOrCreate<Underline>();
-                Underline.Val = value;
+                Underline.Val = Convert.ToUnderlineValues(value);
             }
             else
             {

@@ -1,5 +1,4 @@
-﻿
-using DocXPlus;
+﻿using DocXPlus;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
@@ -167,34 +166,34 @@ namespace DocXPlusTests
 
             doc.AddParagraph().Append("Append normal paragraph");
 
-            doc.AddParagraph().Append("Append then set Underline").Underline(UnderlineValues.Single);
+            doc.AddParagraph().Append("Append then set Underline").Underline(UnderlineType.Single);
 
-            doc.AddParagraph().AppendUnderline("Append Underline paragraph", UnderlineValues.Single);
+            doc.AddParagraph().AppendUnderline("Append Underline paragraph", UnderlineType.Single);
 
             var paragraph = doc.AddParagraph();
-            paragraph.Underline(UnderlineValues.Single);
+            paragraph.Underline(UnderlineType.Single);
             paragraph.Append("Add paragraph, set Underline then append text.");
 
-            doc.AddParagraph().Append("Append normal paragraph").AppendUnderline("Then append Underline paragraph", UnderlineValues.Single);
+            doc.AddParagraph().Append("Append normal paragraph").AppendUnderline("Then append Underline paragraph", UnderlineType.Single);
 
-            doc.AddParagraph().AppendUnderline("Dash", UnderlineValues.Dash);
-            doc.AddParagraph().AppendUnderline("DashDotDotHeavy", UnderlineValues.DashDotDotHeavy);
-            doc.AddParagraph().AppendUnderline("DashDotHeavy", UnderlineValues.DashDotHeavy);
-            doc.AddParagraph().AppendUnderline("DashedHeavy", UnderlineValues.DashedHeavy);
-            doc.AddParagraph().AppendUnderline("DashLong", UnderlineValues.DashLong);
-            doc.AddParagraph().AppendUnderline("DashLongHeavy", UnderlineValues.DashLongHeavy);
-            doc.AddParagraph().AppendUnderline("DotDash", UnderlineValues.DotDash);
-            doc.AddParagraph().AppendUnderline("DotDotDash", UnderlineValues.DotDotDash);
-            doc.AddParagraph().AppendUnderline("Dotted", UnderlineValues.Dotted);
-            doc.AddParagraph().AppendUnderline("DottedHeavy", UnderlineValues.DottedHeavy);
-            doc.AddParagraph().AppendUnderline("Double", UnderlineValues.Double);
-            doc.AddParagraph().AppendUnderline("None", UnderlineValues.None);
-            doc.AddParagraph().AppendUnderline("Single", UnderlineValues.Single);
-            doc.AddParagraph().AppendUnderline("Thick", UnderlineValues.Thick);
-            doc.AddParagraph().AppendUnderline("Wave", UnderlineValues.Wave);
-            doc.AddParagraph().AppendUnderline("WavyDouble", UnderlineValues.WavyDouble);
-            doc.AddParagraph().AppendUnderline("WavyHeavy", UnderlineValues.WavyHeavy);
-            doc.AddParagraph().AppendUnderline("Words Words Words", UnderlineValues.Words);
+            doc.AddParagraph().AppendUnderline("Dash", UnderlineType.Dash);
+            doc.AddParagraph().AppendUnderline("DashDotDotHeavy", UnderlineType.DashDotDotHeavy);
+            doc.AddParagraph().AppendUnderline("DashDotHeavy", UnderlineType.DashDotHeavy);
+            doc.AddParagraph().AppendUnderline("DashedHeavy", UnderlineType.DashedHeavy);
+            doc.AddParagraph().AppendUnderline("DashLong", UnderlineType.DashLong);
+            doc.AddParagraph().AppendUnderline("DashLongHeavy", UnderlineType.DashLongHeavy);
+            doc.AddParagraph().AppendUnderline("DotDash", UnderlineType.DotDash);
+            doc.AddParagraph().AppendUnderline("DotDotDash", UnderlineType.DotDotDash);
+            doc.AddParagraph().AppendUnderline("Dotted", UnderlineType.Dotted);
+            doc.AddParagraph().AppendUnderline("DottedHeavy", UnderlineType.DottedHeavy);
+            doc.AddParagraph().AppendUnderline("Double", UnderlineType.Double);
+            doc.AddParagraph().AppendUnderline("None", UnderlineType.None);
+            doc.AddParagraph().AppendUnderline("Single", UnderlineType.Single);
+            doc.AddParagraph().AppendUnderline("Thick", UnderlineType.Thick);
+            doc.AddParagraph().AppendUnderline("Wave", UnderlineType.Wave);
+            doc.AddParagraph().AppendUnderline("WavyDouble", UnderlineType.WavyDouble);
+            doc.AddParagraph().AppendUnderline("WavyHeavy", UnderlineType.WavyHeavy);
+            doc.AddParagraph().AppendUnderline("Words Words Words", UnderlineType.Words);
 
             doc.Close();
 

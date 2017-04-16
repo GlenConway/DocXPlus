@@ -96,11 +96,11 @@ namespace DocXPlus
             }
         }
 
-        internal static void Underline(this Run run, UnderlineValues value)
+        internal static void Underline(this Run run, UnderlineType value)
         {
             RunProperties runProperties = run.GetOrCreate<RunProperties>(true);
             Underline prop = runProperties.GetOrCreate<Underline>();
-            prop.Val = value;
+            prop.Val = Convert.ToUnderlineValues(value);
         }
     }
 }
