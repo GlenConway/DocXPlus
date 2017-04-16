@@ -44,7 +44,7 @@
         }
 
         /// <summary>
-        /// Sets the text of the first paragraph in row cell at the given index
+        /// Sets the text of the first paragraph in the row cell at the given index
         /// </summary>
         /// <param name="row"></param>
         /// <param name="cellIndex"></param>
@@ -56,7 +56,7 @@
         }
 
         /// <summary>
-        /// Sets the text of the first paragraph in row cell at the given index
+        /// Sets the text of the first paragraph in the row cell at the given index
         /// </summary>
         /// <param name="cell"></param>
         /// <param name="text"></param>
@@ -67,7 +67,7 @@
         }
 
         /// <summary>
-        /// Sets the text of the first paragraph in row cell at the given index
+        /// Sets the text of the first paragraph in the row cell at the given index
         /// </summary>
         /// <param name="row"></param>
         /// <param name="cellIndex"></param>
@@ -80,7 +80,7 @@
         }
 
         /// <summary>
-        /// Sets the text of the first paragraph in row cell at the given index
+        /// Sets the text of the first paragraph in the row cell at the given index
         /// </summary>
         /// <param name="cell"></param>
         /// <param name="text"></param>
@@ -92,7 +92,7 @@
         }
 
         /// <summary>
-        /// Sets the text of the first paragraph in row cell at the given index
+        /// Sets the text of the first paragraph in the row cell at the given index
         /// </summary>
         /// <param name="row"></param>
         /// <param name="cellIndex"></param>
@@ -104,7 +104,7 @@
         }
 
         /// <summary>
-        /// Sets the text of the first paragraph in row cell at the given index
+        /// Sets the text of the first paragraph in the row cell at the given index
         /// </summary>
         /// <param name="row"></param>
         /// <param name="cellIndex"></param>
