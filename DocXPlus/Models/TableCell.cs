@@ -124,6 +124,44 @@ namespace DocXPlus
         }
 
         /// <summary>
+        /// The width of the cell
+        /// </summary>
+        public double Width
+        {
+            get
+            {
+                var tableCellWidth = tableCell.GetOrCreate<TableCellWidth>();
+
+                if (double.TryParse(tableCellWidth.Width, out double result))
+                    return result;
+
+                return 0;
+            }
+            set
+            {
+                var tableCellWidth = tableCell.GetOrCreate<TableCellWidth>();
+                tableCellWidth.Width = value.ToString();
+            }
+        }
+
+        /// <summary>
+        /// The width of the cell
+        /// </summary>
+        public TableWidthUnitValue WidthType
+        {
+            get
+            {
+                var tableCellWidth = tableCell.GetOrCreate<TableCellWidth>();
+                return Convert.ToTableWidthUnitValue(tableCellWidth.Type);
+            }
+            set
+            {
+                var tableCellWidth = tableCell.GetOrCreate<TableCellWidth>();
+                tableCellWidth.Type = Convert.ToTableWidthUnitValues(value);
+            }
+        }
+
+        /// <summary>
         /// Adds a paragraph to the table cell
         /// </summary>
         /// <returns></returns>

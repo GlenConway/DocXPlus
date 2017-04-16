@@ -239,6 +239,24 @@ namespace DocXPlusTests
         }
 
         [TestMethod]
+        public void TwoColumnTableWithMergeRight()
+        {
+            var filename = Path.Combine(TempDirectory, "TwoColumnTableWithMergeRight.docx");
+
+            var doc = DocX.Create(filename, DocumentType.Document);
+
+            var table = doc.AddTable(2);
+            var row = table.AddRow();
+            row.Cells[0].MergeRight = 1;
+            
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
         public void TableWithMergeRightAndDown()
         {
             var filename = Path.Combine(TempDirectory, "TableWithMergeRightAndDown.docx");

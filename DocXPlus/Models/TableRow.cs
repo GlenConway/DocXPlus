@@ -188,10 +188,20 @@ namespace DocXPlus
             if (value + index >= Cells.Count())
                 throw new ArgumentOutOfRangeException(nameof(value), $"Value {value} must be less than {Cells.Count() - index}");
 
+            // calculate the new width of the cell after the merge
+            var newWidth = tableCell.Width;
+
             for (int i = 1; i <= value; i++)
             {
-                Cells[i].RemoveFromRow();
+                var cell = Cells[i];
+
+                // not sure how to handle nil and auto
+                newWidth += cell.Width;
+
+                cell.RemoveFromRow();
             }
+
+            tableCell.Width = newWidth;
         }
 
         private void AddCells()
