@@ -1,8 +1,8 @@
 ﻿namespace DocXPlus
 {
-    internal static class Utils
+    internal static class Convert
     {
-        internal static Align ConvertToAlign(DocumentFormat.OpenXml.Wordprocessing.JustificationValues value)
+        internal static Align ToAlign(DocumentFormat.OpenXml.Wordprocessing.JustificationValues value)
         {
             switch (value)
             {
@@ -46,7 +46,12 @@
             return Align.Left;
         }
 
-        internal static DocumentFormat.OpenXml.Wordprocessing.JustificationValues ConvertToJustificationValues(Align value)
+        internal static DocumentType ToDocumentType(DocumentFormat.OpenXml.WordprocessingDocumentType value)
+        {
+            return (DocumentType)((int)value);
+        }
+
+        internal static DocumentFormat.OpenXml.Wordprocessing.JustificationValues ToJustificationValues(Align value)
         {
             switch (value)
             {
@@ -90,14 +95,19 @@
             return DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Left;
         }
 
-        internal static PageOrientation ConvertToPageOrientation(DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues value)
+        internal static PageOrientation ToPageOrientation(DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues value)
         {
             return (PageOrientation)((int)value);
         }
 
-        internal static DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues ConvertToPageOrientationValues(PageOrientation value)
+        internal static DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues ToPageOrientationValues(PageOrientation value)
         {
             return (DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues)((int)value);
+        }
+
+        internal static DocumentFormat.OpenXml.WordprocessingDocumentType ToWordprocessingDocumentType(DocumentType value)
+        {
+            return (DocumentFormat.OpenXml.WordprocessingDocumentType)((int)value);
         }
     }
 }

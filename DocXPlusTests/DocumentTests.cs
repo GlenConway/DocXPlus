@@ -34,7 +34,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "CreateUsingFile.docx");
 
-            var doc = DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
 
             doc.AddParagraph().Append(LoremIpsum);
 
@@ -52,7 +52,7 @@ namespace DocXPlusTests
 
             using (var stream = new FileStream(filename, FileMode.Create))
             {
-                var doc = DocX.Create(stream, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+                var doc = DocX.Create(stream, DocumentType.Document);
 
                 doc.AddParagraph().Append(LoremIpsum);
 
@@ -69,7 +69,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "Landscape.docx");
 
-            var doc = DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
             doc.Orientation = PageOrientation.Landscape;
 
             doc.Close();

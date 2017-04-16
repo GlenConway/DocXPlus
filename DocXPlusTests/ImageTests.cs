@@ -12,7 +12,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddSingleImage.docx");
 
-            var doc = DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
 
             var width = 0d;
             var height = 0d;
@@ -43,7 +43,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "AddTwoImages.docx");
 
-            var doc = DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
 
             var width = 0d;
             var height = 0d;

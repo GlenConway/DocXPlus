@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml;
-using DocumentFormat.OpenXml.Wordprocessing;
+﻿
 using DocXPlus;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
@@ -14,7 +13,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "BoldParagraphs.docx");
 
-            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
 
             doc.AddParagraph().Append("Append normal paragraph");
 
@@ -40,7 +39,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "Fonts.docx");
 
-            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
 
             doc.AddParagraph().Append("Append normal paragraph");
 
@@ -62,7 +61,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "ItalicParagraphs.docx");
 
-            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
 
             doc.AddParagraph().Append("Append normal paragraph");
 
@@ -88,7 +87,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "ParagraphAlignment.docx");
 
-            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
 
             doc.AddParagraph().AppendBold("Default (Left)");
 
@@ -120,7 +119,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "ParagraphIndentation.docx");
 
-            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
 
             doc.AddParagraph().AppendBold("1\" IndentationBefore");
 
@@ -146,7 +145,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "Paragraphs.docx");
 
-            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
 
             doc.AddParagraph().Append("Append paragraph");
 
@@ -164,7 +163,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "UnderlineParagraphs.docx");
 
-            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
 
             doc.AddParagraph().Append("Append normal paragraph");
 

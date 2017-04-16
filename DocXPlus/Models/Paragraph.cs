@@ -26,12 +26,12 @@ namespace DocXPlus
             get
             {
                 var justification = GetParagraphProperties().GetOrCreate<Justification>();
-                return Utils.ConvertToAlign(justification.Val);
+                return Convert.ToAlign(justification.Val);
             }
             set
             {
                 var justification = GetParagraphProperties().GetOrCreate<Justification>();
-                justification.Val = Utils.ConvertToJustificationValues(value);
+                justification.Val = Convert.ToJustificationValues(value);
             }
         }
 
@@ -413,7 +413,7 @@ namespace DocXPlus
         public Paragraph SetAlignment(Align value)
         {
             var justification = GetParagraphProperties().GetOrCreate<Justification>();
-            justification.Val = Utils.ConvertToJustificationValues(value);
+            justification.Val = Convert.ToJustificationValues(value);
 
             return this;
         }

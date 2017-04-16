@@ -1,5 +1,4 @@
-﻿using DocumentFormat.OpenXml;
-using DocXPlus;
+﻿using DocXPlus;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.IO;
 
@@ -13,7 +12,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "SectionPageBreak.docx");
 
-            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
 
             doc.AddParagraph().Append("Page 1");
 
@@ -37,7 +36,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "SectionPageBreakLandscapePortrait.docx");
 
-            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
 
             doc.Orientation = PageOrientation.Landscape;
 
@@ -61,7 +60,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "SectionPageBreakLandscapePortraitLandscape.docx");
 
-            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
             doc.Orientation = PageOrientation.Landscape;
 
             doc.AddParagraph().Append("Landscape");
@@ -88,7 +87,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "SectionPageBreakPortraitLandscape.docx");
 
-            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
 
             doc.AddParagraph().Append("Portrait");
 
@@ -110,7 +109,7 @@ namespace DocXPlusTests
         {
             var filename = Path.Combine(TempDirectory, "SectionPageBreakPortraitLandscapePortrait.docx");
 
-            var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
+            var doc = DocX.Create(filename, DocumentType.Document);
 
             doc.AddParagraph().Append("Portrait");
 

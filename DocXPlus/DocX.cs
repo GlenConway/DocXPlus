@@ -140,7 +140,7 @@ namespace DocXPlus
         {
             get
             {
-                return Utils.ConvertToPageOrientation(GetPageSize().Orient ?? PageOrientationValues.Portrait);
+                return Convert.ToPageOrientation(GetPageSize().Orient ?? PageOrientationValues.Portrait);
             }
             set
             {
@@ -291,7 +291,7 @@ namespace DocXPlus
         /// <param name="path"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static DocX Create(string path, WordprocessingDocumentType type)
+        public static DocX Create(string path, DocumentType type)
         {
             return Create(path, type, false);
         }
@@ -303,10 +303,10 @@ namespace DocXPlus
         /// <param name="type"></param>
         /// <param name="autoSave"></param>
         /// <returns></returns>
-        public static DocX Create(string path, WordprocessingDocumentType type, bool autoSave)
+        public static DocX Create(string path, DocumentType type, bool autoSave)
         {
             var docX = new DocX();
-            docX.Create(WordprocessingDocument.Create(path, type, autoSave));
+            docX.Create(WordprocessingDocument.Create(path, Convert.ToWordprocessingDocumentType(type), autoSave));
 
             return docX;
         }
@@ -317,7 +317,7 @@ namespace DocXPlus
         /// <param name="stream"></param>
         /// <param name="type"></param>
         /// <returns></returns>
-        public static DocX Create(Stream stream, WordprocessingDocumentType type)
+        public static DocX Create(Stream stream, DocumentType type)
         {
             return Create(stream, type, false);
         }
@@ -329,10 +329,10 @@ namespace DocXPlus
         /// <param name="type"></param>
         /// <param name="autoSave"></param>
         /// <returns></returns>
-        public static DocX Create(Stream stream, WordprocessingDocumentType type, bool autoSave)
+        public static DocX Create(Stream stream, DocumentType type, bool autoSave)
         {
             var docX = new DocX();
-            docX.Create(WordprocessingDocument.Create(stream, type, autoSave));
+            docX.Create(WordprocessingDocument.Create(stream, Convert.ToWordprocessingDocumentType(type), autoSave));
 
             return docX;
         }
@@ -494,7 +494,7 @@ namespace DocXPlus
         /// </summary>
         /// <param name="type"></param>
         /// <returns></returns>
-        public DocX Create(WordprocessingDocumentType type)
+        public DocX Create(DocumentType type)
         {
             stream = new MemoryStream();
 
@@ -741,7 +741,7 @@ namespace DocXPlus
         internal DocX SetOrientation(PageOrientation value)
         {
             bool documentChanged = false;
-            PageOrientationValues orientationValue = Utils.ConvertToPageOrientationValues(value);
+            PageOrientationValues orientationValue = Convert.ToPageOrientationValues(value);
 
             var sectionProperty = GetBodySectionProperty();
 
