@@ -136,11 +136,11 @@ namespace DocXPlus
         /// <summary>
         /// Orientation of the document or current section
         /// </summary>
-        public PageOrientationValues Orientation
+        public PageOrientation Orientation
         {
             get
             {
-                return GetPageSize().Orient ?? PageOrientationValues.Portrait;
+                return Utils.ConvertToPageOrientation(GetPageSize().Orient ?? PageOrientationValues.Portrait);
             }
             set
             {
@@ -738,9 +738,10 @@ namespace DocXPlus
             var documentSettingsPart = MainDocumentPart.AddNewPart<DocumentSettingsPart>();
         }
 
-        internal DocX SetOrientation(PageOrientationValues value)
+        internal DocX SetOrientation(PageOrientation value)
         {
             bool documentChanged = false;
+            PageOrientationValues orientationValue = Utils.ConvertToPageOrientationValues(value);
 
             var sectionProperty = GetBodySectionProperty();
 
@@ -757,20 +758,20 @@ namespace DocXPlus
                 // create the Orient property if the property does not
                 // already exist, and you are setting it to Portrait.
                 // That is the default value.
-                if (value != PageOrientationValues.Portrait)
+                if (value != PageOrientation.Portrait)
                 {
                     pageOrientationChanged = true;
                     documentChanged = true;
-                    pageSize.Orient = new EnumValue<PageOrientationValues>(value);
+                    pageSize.Orient = new EnumValue<PageOrientationValues>(orientationValue);
                 }
             }
             else
             {
                 // The Orient property exists, but its value
                 // is different than the new value.
-                if (pageSize.Orient.Value != value)
+                if (pageSize.Orient.Value != orientationValue)
                 {
-                    pageSize.Orient.Value = value;
+                    pageSize.Orient.Value = orientationValue;
                     pageOrientationChanged = true;
                     documentChanged = true;
                 }

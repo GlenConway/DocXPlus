@@ -70,7 +70,7 @@ namespace DocXPlusTests
             var filename = Path.Combine(TempDirectory, "Landscape.docx");
 
             var doc = DocX.Create(filename, DocumentFormat.OpenXml.WordprocessingDocumentType.Document);
-            doc.Orientation = DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues.Landscape;
+            doc.Orientation = PageOrientation.Landscape;
 
             doc.Close();
 

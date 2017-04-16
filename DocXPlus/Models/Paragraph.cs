@@ -417,8 +417,7 @@ namespace DocXPlus
 
             return this;
         }
-        
-        
+
         /// <summary>
         /// Makes a paragraph text underlined
         /// </summary>

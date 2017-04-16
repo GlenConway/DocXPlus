@@ -172,7 +172,7 @@ namespace DocXPlusTests
             var filename = Path.Combine(TempDirectory, "AddHeaderAndFooterLandscape.docx");
 
             var doc = DocX.Create(filename, WordprocessingDocumentType.Document);
-            doc.Orientation = PageOrientationValues.Landscape;
+            doc.Orientation = PageOrientation.Landscape;
 
             doc.AddHeaders();
             doc.AddFooters();

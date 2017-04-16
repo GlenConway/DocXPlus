@@ -89,5 +89,15 @@
 
             return DocumentFormat.OpenXml.Wordprocessing.JustificationValues.Left;
         }
+
+        internal static PageOrientation ConvertToPageOrientation(DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues value)
+        {
+            return (PageOrientation)((int)value);
+        }
+
+        internal static DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues ConvertToPageOrientationValues(PageOrientation value)
+        {
+            return (DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues)((int)value);
+        }
     }
 }
