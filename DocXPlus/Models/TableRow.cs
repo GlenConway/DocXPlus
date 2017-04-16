@@ -124,9 +124,9 @@ namespace DocXPlus
         /// Sets the Top, Bottom, Left and Right shading for every cell in the row
         /// </summary>
         /// <param name="value"></param>
-        /// <param name="fill"></param>
+        /// <param name="fill">Hex fill color</param>
         /// <param name="color"></param>
-        public void SetShading(ShadingPatternValues value, string fill, string color = "auto")
+        public void SetShading(ShadingPatternValue value, string fill, string color = "auto")
         {
             foreach (var cell in Cells)
             {

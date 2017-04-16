@@ -2,6 +2,9 @@
 
 namespace DocXPlus
 {
+    /// <summary>
+    /// Represents shading
+    /// </summary>
     public class Shading
     {
         private DocumentFormat.OpenXml.Wordprocessing.Shading shading;
@@ -11,6 +14,9 @@ namespace DocXPlus
             this.shading = shading;
         }
 
+        /// <summary>
+        /// Shading Hex color
+        /// </summary>
         public string Color
         {
             get
@@ -23,6 +29,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Shading fill
+        /// </summary>
         public string Fill
         {
             get
@@ -35,6 +44,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Shading theme color value
+        /// </summary>
         public ThemeColorValues ThemeColor
         {
             get
@@ -47,6 +59,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Shading theme fill value
+        /// </summary>
         public ThemeColorValues ThemeFill
         {
             get
@@ -59,6 +74,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Shading theme fill shade
+        /// </summary>
         public string ThemeFillShade
         {
             get
@@ -71,6 +89,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Shading theme fill tinit
+        /// </summary>
         public string ThemeFillTint
         {
             get
@@ -83,6 +104,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Shading theme shade
+        /// </summary>
         public string ThemeShade
         {
             get
@@ -95,6 +119,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Shading theme tint
+        /// </summary>
         public string ThemeTint
         {
             get
@@ -107,19 +134,28 @@ namespace DocXPlus
             }
         }
 
-        public ShadingPatternValues Val
+        /// <summary>
+        /// Shading pattern
+        /// </summary>
+        public ShadingPatternValue Val
         {
             get
             {
-                return shading.Val;
+                return Convert.ToShadingPatternValue(shading.Val);
             }
             set
             {
-                shading.Val = value;
+                shading.Val = Convert.ToShadingPatternValues(value);
             }
         }
 
-        public void Set(ShadingPatternValues value, string fill, string color = "auto")
+        /// <summary>
+        /// Sets the pattern, fill and color
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="fill">Hex fill color</param>
+        /// <param name="color"></param>
+        public void Set(ShadingPatternValue value, string fill, string color = "auto")
         {
             Val = value;
             Color = color;
