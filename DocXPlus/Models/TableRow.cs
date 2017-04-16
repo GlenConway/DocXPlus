@@ -5,6 +5,9 @@ using System.Linq;
 
 namespace DocXPlus
 {
+    /// <summary>
+    /// Represents a row in a table
+    /// </summary>
     public class TableRow
     {
         private TableCell[] cells;
@@ -20,6 +23,9 @@ namespace DocXPlus
             AddCells();
         }
 
+        /// <summary>
+        /// Allow the row to break across pages
+        /// </summary>
         public bool BreakAcrossPages
         {
             get
@@ -32,8 +38,14 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// The cells in the row
+        /// </summary>
         public TableCell[] Cells => cells;
 
+        /// <summary>
+        /// Gets or sets if the row is a header
+        /// </summary>
         public bool HeaderRow
         {
             get
@@ -42,7 +54,7 @@ namespace DocXPlus
             }
             set
             {
-                GetTableHeader().Val = (value ? OnOffOnlyValues.On : OnOffOnlyValues.Off);
+                GetTableHeader().Val = value.ToOnOffOnlyValues();
             }
         }
 
@@ -61,6 +73,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// The type of height
+        /// </summary>
         public HeightRuleValues HeightType
         {
             get
@@ -73,8 +88,16 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// The table that contains the row
+        /// </summary>
         public Table Table => table;
 
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="index"></param>
+        /// <returns></returns>
         public TableCell this[int index]
         {
             get
@@ -89,7 +112,7 @@ namespace DocXPlus
         /// <param name="size">The size of the border in Twips</param>
         /// <param name="value"></param>
         /// <param name="color"></param>
-        public void SetBorders(UInt32Value size, BorderValues value, string color = "auto")
+        public void SetBorders(UInt32Value size, BorderValue value, string color = "auto")
         {
             foreach (var cell in Cells)
             {
@@ -97,6 +120,12 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Sets the Top, Bottom, Left and Right shading for every cell in the row
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="fill"></param>
+        /// <param name="color"></param>
         public void SetShading(ShadingPatternValues value, string fill, string color = "auto")
         {
             foreach (var cell in Cells)

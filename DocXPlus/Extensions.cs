@@ -96,6 +96,11 @@ namespace DocXPlus
             }
         }
 
+        internal static OnOffOnlyValues ToOnOffOnlyValues(this bool value)
+        {
+            return value ? OnOffOnlyValues.On : OnOffOnlyValues.Off;
+        }
+
         internal static void Underline(this Run run, UnderlineType value)
         {
             RunProperties runProperties = run.GetOrCreate<RunProperties>(true);

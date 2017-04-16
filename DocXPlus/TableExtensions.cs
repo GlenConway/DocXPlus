@@ -26,7 +26,7 @@
         /// <returns></returns>
         public static TableCell DoubleUnderline(this TableCell cell)
         {
-            cell.Borders.BottomBorder.Set(Units.OnePt, DocumentFormat.OpenXml.Wordprocessing.BorderValues.Double);
+            cell.Borders.BottomBorder.Set(Units.OnePt, BorderValue.Double);
 
             return cell;
         }
@@ -38,7 +38,7 @@
         /// <returns></returns>
         public static TableCell Overline(this TableCell cell)
         {
-            cell.Borders.TopBorder.Set(Units.OnePt, DocumentFormat.OpenXml.Wordprocessing.BorderValues.Single);
+            cell.Borders.TopBorder.Set(Units.OnePt, BorderValue.Single);
 
             return cell;
         }
@@ -204,7 +204,7 @@
         /// <returns></returns>
         public static TableCell Underline(this TableCell cell)
         {
-            cell.Borders.BottomBorder.Set(Units.OnePt, DocumentFormat.OpenXml.Wordprocessing.BorderValues.Single);
+            cell.Borders.BottomBorder.Set(Units.OnePt, BorderValue.Single);
 
             return cell;
         }

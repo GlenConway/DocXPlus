@@ -22,7 +22,7 @@ namespace DocXPlusTests
             for (int i = 0; i < 3; i++)
             {
                 var row = table.AddRow();
-                row.SetBorders(Units.HalfPt, BorderValues.Single);
+                row.SetBorders(Units.HalfPt, BorderValue.Single);
 
                 if (i == 0)
                 {
@@ -56,7 +56,7 @@ namespace DocXPlusTests
             for (int i = 0; i < 3; i++)
             {
                 var row = table.AddRow();
-                row.SetBorders(Units.HalfPt, BorderValues.Single);
+                row.SetBorders(Units.HalfPt, BorderValue.Single);
 
                 if (i == 0)
                 {
@@ -93,7 +93,7 @@ namespace DocXPlusTests
             for (int i = 0; i < 3; i++)
             {
                 var row = table.AddRow();
-                row.SetBorders(Units.HalfPt, BorderValues.Single);
+                row.SetBorders(Units.HalfPt, BorderValue.Single);
 
                 if (i == 0)
                 {
@@ -127,7 +127,7 @@ namespace DocXPlusTests
             for (int i = 0; i < 50; i++)
             {
                 var row = table.AddRow();
-                row.SetBorders(Units.HalfPt, BorderValues.Single);
+                row.SetBorders(Units.HalfPt, BorderValue.Single);
 
                 if (i == 0)
                 {
@@ -161,7 +161,7 @@ namespace DocXPlusTests
             for (int i = 0; i < 5; i++)
             {
                 var row = table.AddRow();
-                row.SetBorders(Units.HalfPt, BorderValues.Single);
+                row.SetBorders(Units.HalfPt, BorderValue.Single);
 
                 if (i == 0)
                 {
@@ -209,7 +209,7 @@ namespace DocXPlusTests
             {
                 var row = table.AddRow();
 
-                row.SetBorders(Units.HalfPt, BorderValues.Single);
+                row.SetBorders(Units.HalfPt, BorderValue.Single);
 
                 if (i == 0)
                 {
@@ -249,7 +249,7 @@ namespace DocXPlusTests
             for (int i = 0; i < 5; i++)
             {
                 var row = table.AddRow();
-                row.SetBorders(Units.HalfPt, BorderValues.Single);
+                row.SetBorders(Units.HalfPt, BorderValue.Single);
 
                 if (i == 0)
                 {
@@ -299,13 +299,13 @@ namespace DocXPlusTests
             row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(Align.Center);
             row.Cells[2].Paragraphs[0].Append("Cell 3").SetAlignment(Align.Right);
 
-            row.Cells[0].Borders.Set(Units.HalfPt, BorderValues.Single);
+            row.Cells[0].Borders.Set(Units.HalfPt, BorderValue.Single);
 
             row.SetShading(ShadingPatternValues.Clear, "E7E6E6");
 
             row = table.AddRow();
 
-            row.SetBorders(Units.HalfPt, BorderValues.Single);
+            row.SetBorders(Units.HalfPt, BorderValue.Single);
 
             row.Cells[0].Paragraphs[0].Append("Cell 1");
             row.Cells[1].Paragraphs[0].Append("Cell 2").SetAlignment(Align.Center);

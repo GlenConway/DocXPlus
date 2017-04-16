@@ -12,6 +12,9 @@ namespace DocXPlus
             this.parent = parent;
         }
 
+        /// <summary>
+        /// Bottom border
+        /// </summary>
         public Border BottomBorder
         {
             get
@@ -21,6 +24,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// End border
+        /// </summary>
         public Border EndBorder
         {
             get
@@ -30,6 +36,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Inside horizontal border
+        /// </summary>
         public Border InsideHorizontalBorder
         {
             get
@@ -39,6 +48,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Inside vertical border
+        /// </summary>
         public Border InsideVerticalBorder
         {
             get
@@ -48,6 +60,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Left border
+        /// </summary>
         public Border LeftBorder
         {
             get
@@ -57,6 +72,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Right border
+        /// </summary>
         public Border RightBorder
         {
             get
@@ -66,6 +84,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Start border
+        /// </summary>
         public Border StartBorder
         {
             get
@@ -75,6 +96,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Top border
+        /// </summary>
         public Border TopBorder
         {
             get
@@ -84,6 +108,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Top left to bottom right cell border
+        /// </summary>
         public Border TopLeftToBottomRightCellBorder
         {
             get
@@ -93,6 +120,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Top right to bottom left cell border
+        /// </summary>
         public Border TopRightToBottomLeftCellBorder
         {
             get
@@ -108,7 +138,7 @@ namespace DocXPlus
         /// <param name="size">The size of the border in Twips</param>
         /// <param name="value"></param>
         /// <param name="color"></param>
-        public void Set(UInt32Value size, BorderValues value, string color = "auto")
+        public void Set(UInt32Value size, BorderValue value, string color = "auto")
         {
             TopBorder.Set(size, value, color);
             BottomBorder.Set(size, value, color);

@@ -3,6 +3,9 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace DocXPlus
 {
+    /// <summary>
+    /// Represents a border
+    /// </summary>
     public class Border
     {
         private BorderType parent;
@@ -12,6 +15,9 @@ namespace DocXPlus
             this.parent = parent;
         }
 
+        /// <summary>
+        /// The border color Hex value
+        /// </summary>
         public string Color
         {
             get
@@ -24,6 +30,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Specifies if the border has a frame
+        /// </summary>
         public bool Frame
         {
             get
@@ -36,6 +45,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Specifies if the border has a shadow
+        /// </summary>
         public bool Shadow
         {
             get
@@ -63,6 +75,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// The spacing of the border in Twips
+        /// </summary>
         public UInt32Value Space
         {
             get
@@ -75,6 +90,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// The border theme color value
+        /// </summary>
         public ThemeColorValues ThemeColor
         {
             get
@@ -87,6 +105,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// The border theme shade
+        /// </summary>
         public string ThemeShade
         {
             get
@@ -99,6 +120,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// the border theme tint
+        /// </summary>
         public string ThemeTint
         {
             get
@@ -111,15 +135,18 @@ namespace DocXPlus
             }
         }
 
-        public BorderValues Value
+        /// <summary>
+        /// The type of border
+        /// </summary>
+        public BorderValue Value
         {
             get
             {
-                return parent.Val;
+                return Convert.ToBorderValue(parent.Val);
             }
             set
             {
-                parent.Val = value;
+                parent.Val = Convert.ToBorderValues(value);
             }
         }
 
@@ -129,7 +156,7 @@ namespace DocXPlus
         /// <param name="size">The size of the border in Twips</param>
         /// <param name="value"></param>
         /// <param name="color"></param>
-        public void Set(UInt32Value size, BorderValues value, string color = "auto")
+        public void Set(UInt32Value size, BorderValue value, string color = "auto")
         {
             Size = size;
             Value = value;

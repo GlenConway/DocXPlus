@@ -46,6 +46,16 @@
             return Align.Left;
         }
 
+        internal static BorderValue ToBorderValue(DocumentFormat.OpenXml.Wordprocessing.BorderValues value)
+        {
+            return (BorderValue)((int)value);
+        }
+
+        internal static DocumentFormat.OpenXml.Wordprocessing.BorderValues ToBorderValues(BorderValue value)
+        {
+            return (DocumentFormat.OpenXml.Wordprocessing.BorderValues)((int)value);
+        }
+
         internal static DocumentType ToDocumentType(DocumentFormat.OpenXml.WordprocessingDocumentType value)
         {
             return (DocumentType)((int)value);
