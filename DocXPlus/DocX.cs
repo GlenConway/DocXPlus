@@ -14,7 +14,7 @@ namespace DocXPlus
     /// <summary>
     /// Wrapper around an OpenXml SDK Wordprocessing Document
     /// </summary>
-    public class DocX : IDisposable
+    public class DocX : Container, IDisposable
     {
         internal static MarkupCompatibilityAttributes MarkupCompatibilityAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se wp14" };
 
@@ -433,27 +433,6 @@ namespace DocXPlus
             {
                 return AddImage(stream, contentType, width, height);
             }
-        }
-
-        /// <summary>
-        /// Adds a paragraph to the document just before the body section properties
-        /// </summary>
-        /// <returns></returns>
-        public Paragraph AddParagraph()
-        {
-            var paragraph = GetBodySectionProperty().InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Paragraph());
-
-            return new Paragraph(paragraph);
-        }
-
-        /// <summary>
-        /// Adds a paragraph with the supplied text to the document.
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public Paragraph AddParagraph(string text)
-        {
-            return AddParagraph().Append(text);
         }
 
         /// <summary>
@@ -918,6 +897,15 @@ namespace DocXPlus
             }
 
             disposed = true;
+        }
+
+        /// <summary>
+        /// Adds a paragraph to the document just before the body section properties
+        /// </summary>
+        /// <returns></returns>
+        protected override DocumentFormat.OpenXml.Wordprocessing.Paragraph NewParagraph()
+        {
+            return GetBodySectionProperty().InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Paragraph());
         }
 
         private static void GenerateDocumentSettingsPartContent(DocumentSettingsPart documentSettingsPart)

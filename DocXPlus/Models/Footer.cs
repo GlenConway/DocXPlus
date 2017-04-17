@@ -8,7 +8,7 @@ namespace DocXPlus
     /// <summary>
     /// Represents a footer in the document
     /// </summary>
-    public class Footer
+    public class Footer : Container
     {
         private DocX document;
         private DocumentFormat.OpenXml.Wordprocessing.Footer footer;
@@ -83,16 +83,6 @@ namespace DocXPlus
         }
 
         /// <summary>
-        /// Adds a paragraph to the footer
-        /// </summary>
-        /// <returns></returns>
-        public Paragraph AddParagraph()
-        {
-            var paragraph = footer.AppendChild(new DocumentFormat.OpenXml.Wordprocessing.Paragraph());
-            return new Paragraph(paragraph);
-        }
-
-        /// <summary>
         /// Adds a table with the specified number of columns. Columns widths are evenly distributed.
         /// </summary>
         /// <param name="numberOfColumns"></param>
@@ -133,6 +123,15 @@ namespace DocXPlus
         internal void Save()
         {
             footer.Save();
+        }
+
+        /// <summary>
+        /// Adds a paragraph to the footer
+        /// </summary>
+        /// <returns></returns>
+        protected override DocumentFormat.OpenXml.Wordprocessing.Paragraph NewParagraph()
+        {
+            return footer.AppendChild(new DocumentFormat.OpenXml.Wordprocessing.Paragraph());
         }
     }
 }

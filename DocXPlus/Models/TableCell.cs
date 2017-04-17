@@ -6,7 +6,7 @@ namespace DocXPlus
     /// <summary>
     /// Represents a cell in a table
     /// </summary>
-    public class TableCell
+    public class TableCell : Container
     {
         private int mergeDown;
         private int mergeRight;
@@ -164,37 +164,6 @@ namespace DocXPlus
         }
 
         /// <summary>
-        /// Adds a paragraph to the table cell
-        /// </summary>
-        /// <returns></returns>
-        public Paragraph AddParagraph()
-        {
-            var paragraph = tableCell.AppendChild(new DocumentFormat.OpenXml.Wordprocessing.Paragraph());
-            return new Paragraph(paragraph);
-        }
-
-        /// <summary>
-        /// Adds a paragraph with the supplied text to the table cell
-        /// </summary>
-        /// <param name="text"></param>
-        /// <returns></returns>
-        public Paragraph AddParagraph(string text)
-        {
-            return AddParagraph().Append(text);
-        }
-
-        /// <summary>
-        /// Adds a paragraph with the supplied text to the table cell and sets the alignment
-        /// </summary>
-        /// <param name="text"></param>
-        /// <param name="alignment"></param>
-        /// <returns></returns>
-        public Paragraph AddParagraph(string text, Align alignment)
-        {
-            return AddParagraph().Append(text).SetAlignment(alignment);
-        }
-
-        /// <summary>
         /// Adds a Table to the cell with the specified number of columns
         /// </summary>
         /// <param name="numberOfColumns"></param>
@@ -267,6 +236,15 @@ namespace DocXPlus
         internal void RemoveFromRow()
         {
             tableCell.Remove();
+        }
+
+        /// <summary>
+        /// Adds a paragraph to the table cell
+        /// </summary>
+        /// <returns></returns>
+        protected override DocumentFormat.OpenXml.Wordprocessing.Paragraph NewParagraph()
+        {
+            return tableCell.AppendChild(new DocumentFormat.OpenXml.Wordprocessing.Paragraph());
         }
 
         private DocumentFormat.OpenXml.Wordprocessing.Table AddTable()
