@@ -195,7 +195,7 @@ namespace DocXPlus
         }
 
         /// <summary>
-        /// Adds a Table to the document with the specified number of columns
+        /// Adds a Table to the cell with the specified number of columns
         /// </summary>
         /// <param name="numberOfColumns"></param>
         /// <returns></returns>
@@ -205,7 +205,7 @@ namespace DocXPlus
         }
 
         /// <summary>
-        /// Adds a Table to the document with the specified number of columns using the percent widths
+        /// Adds a Table to the cell with the specified number of columns using the percent widths
         /// </summary>
         /// <param name="numberOfColumns"></param>
         /// <param name="percent"></param>
@@ -216,7 +216,7 @@ namespace DocXPlus
         }
 
         /// <summary>
-        /// Adds a Table to the document with the specified number of columns using the supplied widths
+        /// Adds a Table to the cell with the specified number of columns using the supplied widths
         /// </summary>
         /// <param name="numberOfColumns"></param>
         /// <param name="widths">The widths of the columns in Twips</param>
