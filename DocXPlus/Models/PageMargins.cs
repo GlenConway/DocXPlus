@@ -3,17 +3,23 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace DocXPlus
 {
+    /// <summary>
+    /// Represents the page margins
+    /// </summary>
     public class PageMargins
     {
         private DocX document;
         private PageMargin pageMargin;
 
-        public PageMargins(DocX document)
+        internal PageMargins(DocX document)
         {
             this.document = document;
             pageMargin = document.GetBodySectionProperty().GetOrCreate<PageMargin>();
         }
 
+        /// <summary>
+        /// Bottom margin in Twips
+        /// </summary>
         public Int32Value Bottom
         {
             get
@@ -26,6 +32,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Footer margin in Twips
+        /// </summary>
         public UInt32Value Footer
         {
             get
@@ -38,6 +47,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Gutter margin in Twips
+        /// </summary>
         public UInt32Value Gutter
         {
             get
@@ -50,6 +62,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Header margin in Twips
+        /// </summary>
         public UInt32Value Header
         {
             get
@@ -62,6 +77,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Left margin in Twips
+        /// </summary>
         public UInt32Value Left
         {
             get
@@ -74,6 +92,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Right margin in Twips
+        /// </summary>
         public UInt32Value Right
         {
             get
@@ -86,6 +107,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Right and left margin in Twips
+        /// </summary>
         public UInt32Value RightAndLeft
         {
             get
@@ -99,6 +123,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Top margin in Twips
+        /// </summary>
         public Int32Value Top
         {
             get
@@ -111,6 +138,9 @@ namespace DocXPlus
             }
         }
 
+        /// <summary>
+        /// Top and bottom margin in Twips
+        /// </summary>
         public Int32Value TopAndBottom
         {
             get

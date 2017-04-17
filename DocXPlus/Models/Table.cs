@@ -49,6 +49,17 @@ namespace DocXPlus
         }
 
         /// <summary>
+        /// The default margins for table cells
+        /// </summary>
+        public TableCellMarginDefault DefaultMargins
+        {
+            get
+            {
+                return new TableCellMarginDefault(GetTableProperties().GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.TableCellMarginDefault>());
+            }
+        }
+
+        /// <summary>
         /// Gets the number of columns in the table
         /// </summary>
         public int NumberOfColumns => numberOfColumns;
@@ -110,6 +121,7 @@ namespace DocXPlus
         }
 
         internal string[] ColumnWidths => columnWidths;
+
         internal Container Document => container;
 
         internal TableLook TableLook
@@ -268,6 +280,11 @@ namespace DocXPlus
             {
                 rows.Add(new TableRow(this, row));
             }
+        }
+
+        private TableProperties GetTableProperties()
+        {
+            return table.GetOrCreate<TableProperties>();
         }
     }
 }

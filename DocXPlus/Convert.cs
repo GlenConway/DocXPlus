@@ -67,6 +67,16 @@
             return (DocumentFormat.OpenXml.Wordprocessing.TableWidthUnitValues)((int)value);
         }
 
+        internal static TableWidthValue ToTableWidthValue(DocumentFormat.OpenXml.Wordprocessing.TableWidthValues value)
+        {
+            return (TableWidthValue)((int)value);
+        }
+
+        internal static DocumentFormat.OpenXml.Wordprocessing.TableWidthValues ToTableWidthValues(TableWidthValue value)
+        {
+            return (DocumentFormat.OpenXml.Wordprocessing.TableWidthValues)((int)value);
+        }
+
         internal static UnderlineType ToUnderlineType(DocumentFormat.OpenXml.Wordprocessing.UnderlineValues value)
         {
             return (UnderlineType)((int)value);

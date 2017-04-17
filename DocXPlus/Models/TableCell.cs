@@ -40,6 +40,17 @@ namespace DocXPlus
         }
 
         /// <summary>
+        /// The margins for the table cell
+        /// </summary>
+        public TableCellMargin Margins
+        {
+            get
+            {
+                return new TableCellMargin(tableCell.GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.TableCellMargin>());
+            }
+        }
+
+        /// <summary>
         /// Merges this cell with the cells in the same column for the supplied number of rows. Does not merge the cell contents.
         /// </summary>
         public int MergeDown

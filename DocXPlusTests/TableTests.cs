@@ -9,6 +9,31 @@ namespace DocXPlusTests
     public class TableTests : TestBase
     {
         [TestMethod]
+        public void TableCellMargins()
+        {
+            var filename = Path.Combine(TempDirectory, "TableCellMargins.docx");
+
+            var doc = DocX.Create(filename, DocumentType.Document);
+
+            var table = doc.AddTable(5);
+
+            var row = table.AddRow();
+
+            row.Cells[0].Margins.LeftMargin.Width = Units.InchToTwips(.25).ToString();
+            row.Cells[0].Margins.TopMargin.Width = Units.InchToTwips(.25).ToString();
+            row.Cells[0].Margins.BottomMargin.Width = Units.InchToTwips(.25).ToString();
+            row.Cells[0].Margins.RightMargin.Width = Units.InchToTwips(.25).ToString();
+
+            row.Cells[0].SetText("1/4\"");
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
         public void TableInHeader()
         {
             var filename = Path.Combine(TempDirectory, "TableInHeader.docx");
@@ -62,6 +87,31 @@ namespace DocXPlusTests
 
             var table2 = row.Cells[1].AddTable(3);
             table2.AddRow().Cells[0].SetText("Table 2, Cell 1");
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
+        public void TableMargins()
+        {
+            var filename = Path.Combine(TempDirectory, "TableMargins.docx");
+
+            var doc = DocX.Create(filename, DocumentType.Document);
+
+            var table = doc.AddTable(5);
+
+            table.DefaultMargins.LeftMargin.Width = System.Convert.ToInt16(Units.InchToTwips(.25).Value);
+            table.DefaultMargins.TopMargin.Width = Units.InchToTwips(.25).ToString();
+            table.DefaultMargins.BottomMargin.Width = Units.InchToTwips(.25).ToString();
+            table.DefaultMargins.RightMargin.Width = System.Convert.ToInt16(Units.InchToTwips(.25).Value);
+
+            var row = table.AddRow();
+
+            row.Cells[0].SetText("1/4\"");
 
             doc.Close();
 
@@ -319,44 +369,6 @@ namespace DocXPlusTests
         }
 
         [TestMethod]
-        public void TableWithMultipleMergeRight()
-        {
-            var filename = Path.Combine(TempDirectory, "TableWithMultipleMergeRight.docx");
-
-            var doc = DocX.Create(filename, DocumentType.Document);
-
-            var table = doc.AddTable(9);
-
-            var row = table.AddRow();
-            row.HeaderRow = true;
-
-            for (int i = 0; i < 9; i++)
-            {
-                row.Cells[i].SetBoldText((i + 1).ToString());
-            }
-
-            row = table.AddRow();
-            row.HeaderRow = true;
-
-            // this should merge cells 2, 3 and 4
-            row.Cells[1].MergeRight = 2;
-
-            // this should merge cells 5 and 6
-            row.Cells[4].MergeRight = 1;
-
-            row.SetBoldText(1, "Test1", Align.Center);
-            row.SetBoldText(4, "Test2", Align.Center);
-
-            row.Underline(1, 4);
-
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
-        }
-
-        [TestMethod]
         public void TableWithMergeRightAndDown()
         {
             var filename = Path.Combine(TempDirectory, "TableWithMergeRightAndDown.docx");
@@ -394,6 +406,44 @@ namespace DocXPlusTests
 
             var thirdRow = rows[2];
             thirdRow.Cells[1].AddParagraph().Append("Should not display.");
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
+        public void TableWithMultipleMergeRight()
+        {
+            var filename = Path.Combine(TempDirectory, "TableWithMultipleMergeRight.docx");
+
+            var doc = DocX.Create(filename, DocumentType.Document);
+
+            var table = doc.AddTable(9);
+
+            var row = table.AddRow();
+            row.HeaderRow = true;
+
+            for (int i = 0; i < 9; i++)
+            {
+                row.Cells[i].SetBoldText((i + 1).ToString());
+            }
+
+            row = table.AddRow();
+            row.HeaderRow = true;
+
+            // this should merge cells 2, 3 and 4
+            row.Cells[1].MergeRight = 2;
+
+            // this should merge cells 5 and 6
+            row.Cells[4].MergeRight = 1;
+
+            row.SetBoldText(1, "Test1", Align.Center);
+            row.SetBoldText(4, "Test2", Align.Center);
+
+            row.Underline(1, 4);
 
             doc.Close();
 
