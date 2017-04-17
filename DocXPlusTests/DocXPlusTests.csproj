@@ -74,7 +74,10 @@
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\Peggys_Cove_Nova_Scotia_01.bmp" />
+    <EmbeddedResource Include="Resources\Peggys_Cove_Nova_Scotia_01.png" />
+  </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\Peggys_Cove_Nova_Scotia_01.jpg" />
   </ItemGroup>
