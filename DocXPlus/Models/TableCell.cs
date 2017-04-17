@@ -1,4 +1,5 @@
-﻿using DocumentFormat.OpenXml.Wordprocessing;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Wordprocessing;
 using System.Linq;
 
 namespace DocXPlus
@@ -19,6 +20,11 @@ namespace DocXPlus
             this.tableRow = tableRow;
             this.tableCell = tableCell;
         }
+
+        /// <summary>
+        /// The width of the cell
+        /// </summary>
+        public override UInt32Value AvailableWidth => UInt32Value.FromUInt32(System.Convert.ToUInt32(Width));
 
         /// <summary>
         /// Cell borders
@@ -164,38 +170,6 @@ namespace DocXPlus
         }
 
         /// <summary>
-        /// Adds a Table to the cell with the specified number of columns
-        /// </summary>
-        /// <param name="numberOfColumns"></param>
-        /// <returns></returns>
-        public Table AddTable(int numberOfColumns)
-        {
-            return tableRow.Table.Document.AddTable(numberOfColumns, AddTable());
-        }
-
-        /// <summary>
-        /// Adds a Table to the cell with the specified number of columns using the percent widths
-        /// </summary>
-        /// <param name="numberOfColumns"></param>
-        /// <param name="percent"></param>
-        /// <returns></returns>
-        public Table AddTable(int numberOfColumns, params int[] percent)
-        {
-            return tableRow.Table.Document.AddTable(numberOfColumns, AddTable(), percent);
-        }
-
-        /// <summary>
-        /// Adds a Table to the cell with the specified number of columns using the supplied widths
-        /// </summary>
-        /// <param name="numberOfColumns"></param>
-        /// <param name="widths">The widths of the columns in Twips</param>
-        /// <returns></returns>
-        public Table AddTable(int numberOfColumns, params string[] widths)
-        {
-            return tableRow.Table.Document.AddTable(numberOfColumns, AddTable(), widths);
-        }
-
-        /// <summary>
         /// Sets the vertical alignment of the cell
         /// </summary>
         /// <param name="value"></param>
@@ -247,7 +221,11 @@ namespace DocXPlus
             return tableCell.AppendChild(new DocumentFormat.OpenXml.Wordprocessing.Paragraph());
         }
 
-        private DocumentFormat.OpenXml.Wordprocessing.Table AddTable()
+        /// <summary>
+        /// Adds a new table before the last paragraph in the cell
+        /// </summary>
+        /// <returns></returns>
+        protected override DocumentFormat.OpenXml.Wordprocessing.Table NewTable()
         {
             var paragraph = tableCell.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>().Last();
             return paragraph.InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Table());

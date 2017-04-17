@@ -11,37 +11,37 @@ namespace DocXPlus
     public class Table
     {
         private string[] columnWidths;
-        private DocX document;
+        private Container container;
         private int numberOfColumns;
         private IList<TableRow> rows;
         private DocumentFormat.OpenXml.Wordprocessing.Table table;
         private TableLook tableLook;
 
-        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, DocX document)
+        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, Container container)
         {
             this.table = table;
 
-            this.document = document;
+            this.container = container;
 
             BuildColumnWidths();
             BuildRows();
         }
 
-        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, DocX document) : this(table, document)
+        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, Container container) : this(table, container)
         {
             this.numberOfColumns = numberOfColumns;
 
             AddGrid();
         }
 
-        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, DocX document, params int[] percent) : this(table, document)
+        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, Container container, params int[] percent) : this(table, container)
         {
             this.numberOfColumns = numberOfColumns;
 
             AddGrid(percent);
         }
 
-        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, DocX document, params string[] widths) : this(table, document)
+        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, Container container, params string[] widths) : this(table, container)
         {
             this.numberOfColumns = numberOfColumns;
 
@@ -110,7 +110,7 @@ namespace DocXPlus
         }
 
         internal string[] ColumnWidths => columnWidths;
-        internal DocX Document => document;
+        internal Container Document => container;
 
         internal TableLook TableLook
         {
@@ -176,8 +176,7 @@ namespace DocXPlus
         {
             var tableGrid = table.AppendChild(new TableGrid());
 
-            var width = document.PageWidth.Value - document.PageMargins.RightAndLeft.Value;
-            var columnWidth = width / NumberOfColumns;
+            var columnWidth = container.AvailableWidth / NumberOfColumns;
 
             columnWidths = new string[NumberOfColumns];
 
@@ -200,7 +199,7 @@ namespace DocXPlus
 
             var tableGrid = table.AppendChild(new TableGrid());
 
-            var width = document.PageWidth.Value - document.PageMargins.RightAndLeft.Value;
+            var width = container.AvailableWidth;
 
             columnWidths = new string[NumberOfColumns];
 
@@ -224,8 +223,6 @@ namespace DocXPlus
                 throw new ArgumentException("Widths must equal the number of columns");
 
             var tableGrid = table.AppendChild(new TableGrid());
-
-            var width = document.PageWidth.Value - document.PageMargins.RightAndLeft.Value;
 
             columnWidths = new string[NumberOfColumns];
 

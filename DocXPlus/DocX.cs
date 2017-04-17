@@ -39,6 +39,11 @@ namespace DocXPlus
         }
 
         /// <summary>
+        /// The width of the document minus left and right margins
+        /// </summary>
+        public override UInt32Value AvailableWidth => PageWidth.Value - PageMargins.RightAndLeft.Value;
+
+        /// <summary>
         /// The default (odd) footer.
         /// </summary>
         public Footer DefaultFooter => footers.Where(p => p.Type == HeaderFooterValues.Default).First();
@@ -436,38 +441,6 @@ namespace DocXPlus
         }
 
         /// <summary>
-        /// Adds a Table to the document with the specified number of columns
-        /// </summary>
-        /// <param name="numberOfColumns"></param>
-        /// <returns></returns>
-        public Table AddTable(int numberOfColumns)
-        {
-            return AddTable(numberOfColumns, AddTable());
-        }
-
-        /// <summary>
-        /// Adds a Table to the document with the specified number of columns using the percent widths
-        /// </summary>
-        /// <param name="numberOfColumns"></param>
-        /// <param name="percent"></param>
-        /// <returns></returns>
-        public Table AddTable(int numberOfColumns, params int[] percent)
-        {
-            return AddTable(numberOfColumns, AddTable(), percent);
-        }
-
-        /// <summary>
-        /// Adds a Table to the document with the specified number of columns using the supplied widths
-        /// </summary>
-        /// <param name="numberOfColumns"></param>
-        /// <param name="widths">The widths of the columns in Twips</param>
-        /// <returns></returns>
-        public Table AddTable(int numberOfColumns, params string[] widths)
-        {
-            return AddTable(numberOfColumns, AddTable(), widths);
-        }
-
-        /// <summary>
         /// Saves and closes the document.
         /// </summary>
         public void Close()
@@ -712,48 +685,6 @@ namespace DocXPlus
             part.Header = header;
         }
 
-        internal Table AddTable(int numberOfColumns, DocumentFormat.OpenXml.Wordprocessing.Table table)
-        {
-            var result = new Table(table, numberOfColumns, this)
-            {
-                TableStyle = "TableGrid",
-                Width = "0",
-                WidthType = TableWidthUnitValues.Auto
-            };
-
-            SetTableLook(result);
-
-            return result;
-        }
-
-        internal Table AddTable(int numberOfColumns, DocumentFormat.OpenXml.Wordprocessing.Table table, params int[] percent)
-        {
-            var result = new Table(table, numberOfColumns, this, percent)
-            {
-                TableStyle = "TableGrid",
-                Width = "0",
-                WidthType = TableWidthUnitValues.Auto
-            };
-
-            SetTableLook(result);
-
-            return result;
-        }
-
-        internal Table AddTable(int numberOfColumns, DocumentFormat.OpenXml.Wordprocessing.Table table, params string[] widths)
-        {
-            var result = new Table(table, numberOfColumns, this, widths)
-            {
-                TableStyle = "TableGrid",
-                Width = "0",
-                WidthType = TableWidthUnitValues.Auto
-            };
-
-            SetTableLook(result);
-
-            return result;
-        }
-
         internal void Create(WordprocessingDocument doc)
         {
             document = doc;
@@ -908,23 +839,21 @@ namespace DocXPlus
             return GetBodySectionProperty().InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Paragraph());
         }
 
+        /// <summary>
+        /// Adds a table to the document just before the body section properties
+        /// </summary>
+        /// <returns></returns>
+        protected override DocumentFormat.OpenXml.Wordprocessing.Table NewTable()
+        {
+            return GetBodySectionProperty().InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Table());
+        }
+
         private static void GenerateDocumentSettingsPartContent(DocumentSettingsPart documentSettingsPart)
         {
             Settings settings = new Settings() { MCAttributes = MarkupCompatibilityAttributes };
             Schemas.AddNamespaceDeclarations(settings);
 
             documentSettingsPart.Settings = settings;
-        }
-
-        private static void SetTableLook(Table result)
-        {
-            result.TableLook.Value = "04A0";
-            result.TableLook.FirstRow = true;
-            result.TableLook.LastRow = false;
-            result.TableLook.FirstColumn = true;
-            result.TableLook.LastColumn = false;
-            result.TableLook.NoHorizontalBand = false;
-            result.TableLook.NoVerticalBand = true;
         }
 
         private Footer AddFooter(HeaderFooterValues type)
@@ -951,11 +880,6 @@ namespace DocXPlus
             GetBodySectionProperty().PrependChild(new HeaderReference() { Id = id, Type = type });
 
             return new Header(part, this, type);
-        }
-
-        private DocumentFormat.OpenXml.Wordprocessing.Table AddTable()
-        {
-            return GetBodySectionProperty().InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Table());
         }
 
         private void SaveFooters()

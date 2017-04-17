@@ -319,9 +319,9 @@ namespace DocXPlusTests
         }
 
         [TestMethod]
-        public void TableWithMergeRight2()
+        public void TableWithMultipleMergeRight()
         {
-            var filename = Path.Combine(TempDirectory, "TableWithMergeRight2.docx");
+            var filename = Path.Combine(TempDirectory, "TableWithMultipleMergeRight.docx");
 
             var doc = DocX.Create(filename, DocumentType.Document);
 
