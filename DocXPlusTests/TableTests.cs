@@ -209,9 +209,113 @@ namespace DocXPlusTests
         }
 
         [TestMethod]
-        public void TableWidths()
+        public void TableWidthsCM()
         {
-            var filename = Path.Combine(TempDirectory, "TableWidths.docx");
+            var filename = Path.Combine(TempDirectory, "TableWidthsCM.docx");
+
+            var doc = DocX.Create(filename, DocumentType.Document);
+
+            var table = doc.AddTable(3, "9.906cm", "3.302cm", "3.302cm");
+
+            for (int i = 0; i < 3; i++)
+            {
+                var row = table.AddRow();
+                row.SetBorders(Units.HalfPt, BorderValue.Single);
+
+                if (i == 0)
+                {
+                    row.SetShading(ShadingPattern.Clear, "E7E6E6");
+
+                    row.HeaderRow = true;
+                }
+
+                for (int j = 0; j < 3; j++)
+                {
+                    row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
+                }
+            }
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
+        public void TableWidthsInches()
+        {
+            var filename = Path.Combine(TempDirectory, "TableWidthsInches.docx");
+
+            var doc = DocX.Create(filename, DocumentType.Document);
+
+            var table = doc.AddTable(3, "3.9in", "1.3in", "1.3in");
+
+            for (int i = 0; i < 3; i++)
+            {
+                var row = table.AddRow();
+                row.SetBorders(Units.HalfPt, BorderValue.Single);
+
+                if (i == 0)
+                {
+                    row.SetShading(ShadingPattern.Clear, "E7E6E6");
+
+                    row.HeaderRow = true;
+                }
+
+                for (int j = 0; j < 3; j++)
+                {
+                    row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
+                }
+            }
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
+        public void TableWidthsMixed()
+        {
+            var filename = Path.Combine(TempDirectory, "TableWidthsMixed.docx");
+
+            var doc = DocX.Create(filename, DocumentType.Document);
+
+            var col3 = Units.InchToTwips(1.3).ToString();
+
+            var table = doc.AddTable(3, "9.906cm", "1.3in", col3);
+
+            for (int i = 0; i < 3; i++)
+            {
+                var row = table.AddRow();
+                row.SetBorders(Units.HalfPt, BorderValue.Single);
+
+                if (i == 0)
+                {
+                    row.SetShading(ShadingPattern.Clear, "E7E6E6");
+
+                    row.HeaderRow = true;
+                }
+
+                for (int j = 0; j < 3; j++)
+                {
+                    row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
+                }
+            }
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
+        public void TableWidthsTwips()
+        {
+            var filename = Path.Combine(TempDirectory, "TableWidthsTwips.docx");
 
             var doc = DocX.Create(filename, DocumentType.Document);
 

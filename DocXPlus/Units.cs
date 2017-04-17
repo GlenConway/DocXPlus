@@ -131,6 +131,16 @@ namespace DocXPlus
         }
 
         /// <summary>
+        /// Converts an centimetre value such as 1.25 into Twips
+        /// </summary>
+        /// <param name="cm"></param>
+        /// <returns></returns>
+        public static Int32Value CMToTwips(double cm)
+        {
+            return System.Convert.ToInt32(cm * (1440 / 2.54));
+        }
+
+        /// <summary>
         /// Converts an inch to an English Metric Unit (EMU)
         /// </summary>
         /// <param name="inches"></param>

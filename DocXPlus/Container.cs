@@ -116,7 +116,7 @@ namespace DocXPlus
         /// Adds a Table to the container with the specified number of columns using the supplied widths
         /// </summary>
         /// <param name="numberOfColumns"></param>
-        /// <param name="widths">The widths of the columns in Twips</param>
+        /// <param name="widths">The widths of the columns in Twips, CM or Inch. Leave blank for Twips, end with cm for centimetres or in for inches</param>
         /// <returns></returns>
         public Table AddTable(int numberOfColumns, params string[] widths)
         {
@@ -153,6 +153,31 @@ namespace DocXPlus
 
         internal Table AddTable(int numberOfColumns, DocumentFormat.OpenXml.Wordprocessing.Table table, params string[] widths)
         {
+            for (int i = 0; i < widths.Length; i++)
+            {
+                var width = widths[i];
+
+                if (width.EndsWith("cm", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    width = width.Remove(width.Length - 2, 2);
+                    
+                    if (double.TryParse(width, out double value))
+                    {
+                        width = Units.CMToTwips(value).Value.ToString();
+                    }
+                }
+
+                if (width.EndsWith("in", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    width = width.Remove(width.Length - 2, 2);
+
+                    if (double.TryParse(width, out double value))
+                    {
+                        width = Units.InchToTwips(value).Value.ToString();
+                    }
+                }
+            }
+
             var result = new Table(table, numberOfColumns, this, widths)
             {
                 TableStyle = "TableGrid",
