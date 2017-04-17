@@ -44,6 +44,30 @@
         }
 
         /// <summary>
+        /// Overlines a cell in a row at the supplied index
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="index"></param>
+        public static void Overline(this TableRow row, int index)
+        {
+            row.Overline(index, index);
+        }
+
+        /// <summary>
+        /// Overlines table cells from startIndex to endIndex
+        /// </summary>
+        /// <param name="row"></param>
+        /// <param name="startIndex"></param>
+        /// <param name="endIndex"></param>
+        public static void Overline(this TableRow row, int startIndex, int endIndex)
+        {
+            for (int i = startIndex; i <= endIndex; i++)
+            {
+                row.Cells[i].Overline();
+            }
+        }
+
+        /// <summary>
         /// Sets the text of the first paragraph in the row cell at the given index
         /// </summary>
         /// <param name="row"></param>
@@ -234,7 +258,7 @@
         }
 
         /// <summary>
-        /// Underlines and overlines a table cell
+        /// Overlines a table cell
         /// </summary>
         /// <param name="cell"></param>
         /// <returns></returns>
