@@ -1,5 +1,7 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System;
+using System.IO;
 using System.Linq;
 
 namespace DocXPlus
@@ -210,6 +212,17 @@ namespace DocXPlus
         internal void RemoveFromRow()
         {
             tableCell.Remove();
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="contentType"></param>
+        /// <returns></returns>
+        protected override string AddImagePart(Stream stream, string contentType)
+        {
+            throw new NotSupportedException();
         }
 
         /// <summary>

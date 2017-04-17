@@ -394,53 +394,6 @@ namespace DocXPlus
         }
 
         /// <summary>
-        /// Adds an image to the document which can then be added to a paragraph
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="x">The width of the image in English Metric Units (EMU)</param>
-        /// <param name="y">The height of the image in English Metric Units (EMU)</param>
-        /// <returns></returns>
-        public Drawing AddImage(string fileName, Int64Value x, Int64Value y)
-        {
-            using (FileStream stream = new FileStream(fileName, FileMode.Open))
-            {
-                return AddImage(stream, FileNameContentType(fileName), x, y);
-            }
-        }
-
-        /// <summary>
-        /// Adds an image to the document which can then be added to a paragraph
-        /// </summary>
-        /// <param name="stream"></param>
-        /// <param name="contentType"></param>
-        /// <param name="width">The width of the image in English Metric Units (EMU)</param>
-        /// <param name="height">The height of the image in English Metric Units (EMU)</param>
-        /// <returns></returns>
-        public Drawing AddImage(Stream stream, string contentType, Int64Value width, Int64Value height)
-        {
-            ImagePart imagePart = MainDocumentPart.AddImagePart(contentType);
-            imagePart.FeedData(stream);
-
-            return CreateDrawing(MainDocumentPart.GetIdOfPart(imagePart), width, height);
-        }
-
-        /// <summary>
-        /// Adds an image to the document which can then be added to a paragraph
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="contentType"></param>
-        /// <param name="width">The width of the image in English Metric Units (EMU)</param>
-        /// <param name="height">The height of the image in English Metric Units (EMU)</param>
-        /// <returns></returns>
-        public Drawing AddImage(byte[] data, string contentType, Int64Value width, Int64Value height)
-        {
-            using (var stream = new MemoryStream(data))
-            {
-                return AddImage(stream, contentType, width, height);
-            }
-        }
-
-        /// <summary>
         /// Saves and closes the document.
         /// </summary>
         public void Close()
@@ -801,6 +754,20 @@ namespace DocXPlus
             }
 
             return this;
+        }
+
+        /// <summary>
+        /// Adds an image part to the document and returns the part ID
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="contentType"></param>
+        /// <returns></returns>
+        protected override string AddImagePart(Stream stream, string contentType)
+        {
+            var imagePart = MainDocumentPart.AddImagePart(contentType);
+            imagePart.FeedData(stream);
+
+            return MainDocumentPart.GetIdOfPart(imagePart);
         }
 
         /// <summary>

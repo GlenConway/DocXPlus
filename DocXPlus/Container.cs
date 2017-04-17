@@ -1,5 +1,6 @@
 ﻿using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Wordprocessing;
+using System.IO;
 
 namespace DocXPlus
 {
@@ -14,6 +15,50 @@ namespace DocXPlus
         public abstract UInt32Value AvailableWidth
         {
             get;
+        }
+
+        /// <summary>
+        /// Adds an image to the container which can then be added to a paragraph
+        /// </summary>
+        /// <param name="fileName"></param>
+        /// <param name="x">The width of the image in English Metric Units (EMU)</param>
+        /// <param name="y">The height of the image in English Metric Units (EMU)</param>
+        /// <returns></returns>
+        public Drawing AddImage(string fileName, Int64Value x, Int64Value y)
+        {
+            using (FileStream stream = new FileStream(fileName, FileMode.Open))
+            {
+                return AddImage(stream, DocX.FileNameContentType(fileName), x, y);
+            }
+        }
+
+        /// <summary>
+        /// Adds an image to the container which can then be added to a paragraph
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="contentType"></param>
+        /// <param name="width">The width of the image in English Metric Units (EMU)</param>
+        /// <param name="height">The height of the image in English Metric Units (EMU)</param>
+        /// <returns></returns>
+        public Drawing AddImage(Stream stream, string contentType, Int64Value width, Int64Value height)
+        {
+            return DocX.CreateDrawing(AddImagePart(stream, contentType), width, height);
+        }
+
+        /// <summary>
+        /// Adds an image to the container which can then be added to a paragraph
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="contentType"></param>
+        /// <param name="width">The width of the image in English Metric Units (EMU)</param>
+        /// <param name="height">The height of the image in English Metric Units (EMU)</param>
+        /// <returns></returns>
+        public Drawing AddImage(byte[] data, string contentType, Int64Value width, Int64Value height)
+        {
+            using (var stream = new MemoryStream(data))
+            {
+                return AddImage(stream, contentType, width, height);
+            }
         }
 
         /// <summary>
@@ -119,6 +164,14 @@ namespace DocXPlus
 
             return result;
         }
+
+        /// <summary>
+        /// Adds an image part to the container and returns the part ID
+        /// </summary>
+        /// <param name="stream"></param>
+        /// <param name="contentType"></param>
+        /// <returns></returns>
+        protected abstract string AddImagePart(Stream stream, string contentType);
 
         /// <summary>
         /// Creates a new paragraph in the container

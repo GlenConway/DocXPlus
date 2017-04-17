@@ -2,6 +2,7 @@
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Wordprocessing;
 using System.IO;
+using System;
 
 namespace DocXPlus
 {
@@ -41,50 +42,17 @@ namespace DocXPlus
         }
 
         /// <summary>
-        /// Adds an image to the footer which can then be added to a paragraph
-        /// </summary>
-        /// <param name="fileName"></param>
-        /// <param name="x">The width of the image in English Metric Units (EMU)</param>
-        /// <param name="y">The height of the image in English Metric Units (EMU)</param>
-        /// <returns></returns>
-        public Drawing AddImage(string fileName, Int64Value x, Int64Value y)
-        {
-            using (FileStream stream = new FileStream(fileName, FileMode.Open))
-            {
-                return AddImage(stream, DocX.FileNameContentType(fileName), x, y);
-            }
-        }
-
-        /// <summary>
-        /// Adds an image to the footer which can then be added to a paragraph
+        /// Adds an image part to the header and returns the part ID
         /// </summary>
         /// <param name="stream"></param>
         /// <param name="contentType"></param>
-        /// <param name="width">The width of the image in English Metric Units (EMU)</param>
-        /// <param name="height">The height of the image in English Metric Units (EMU)</param>
         /// <returns></returns>
-        public Drawing AddImage(Stream stream, string contentType, Int64Value width, Int64Value height)
+        protected override string AddImagePart(Stream stream, string contentType)
         {
-            ImagePart imagePart = headerPart.AddImagePart(contentType);
+            var imagePart = headerPart.AddImagePart(contentType);
             imagePart.FeedData(stream);
 
-            return DocX.CreateDrawing(headerPart.GetIdOfPart(imagePart), width, height);
-        }
-
-        /// <summary>
-        /// Adds an image to the footer which can then be added to a paragraph
-        /// </summary>
-        /// <param name="data"></param>
-        /// <param name="contentType"></param>
-        /// <param name="width">The width of the image in English Metric Units (EMU)</param>
-        /// <param name="height">The height of the image in English Metric Units (EMU)</param>
-        /// <returns></returns>
-        public Drawing AddImage(byte[] data, string contentType, Int64Value width, Int64Value height)
-        {
-            using (var stream = new MemoryStream(data))
-            {
-                return AddImage(stream, contentType, width, height);
-            }
+            return headerPart.GetIdOfPart(imagePart);
         }
 
         internal void Save()
