@@ -45,6 +45,32 @@ namespace DocXPlusTests
         }
 
         [TestMethod]
+        public void TableInTable()
+        {
+            var filename = Path.Combine(TempDirectory, "TableInTable.docx");
+
+            var doc = DocX.Create(filename, DocumentType.Document);
+
+            var table = doc.AddTable(2, 50, 50);
+            var row = table.AddRow();
+
+            row.Cells[0].AddParagraph();
+            row.Cells[1].AddParagraph();
+
+            var table1 = row.Cells[0].AddTable(3);
+            table1.AddRow().Cells[0].SetText("Table 1, Cell 1");
+
+            var table2 = row.Cells[1].AddTable(3);
+            table2.AddRow().Cells[0].SetText("Table 2, Cell 1");
+
+            doc.Close();
+
+            ValidateWordDocument(filename);
+
+            Launch(filename);
+        }
+
+        [TestMethod]
         public void TablePercent()
         {
             var filename = Path.Combine(TempDirectory, "TablePercent.docx");

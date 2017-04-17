@@ -110,6 +110,7 @@ namespace DocXPlus
         }
 
         internal string[] ColumnWidths => columnWidths;
+        internal DocX Document => document;
 
         internal TableLook TableLook
         {

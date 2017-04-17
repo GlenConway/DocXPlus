@@ -195,6 +195,38 @@ namespace DocXPlus
         }
 
         /// <summary>
+        /// Adds a Table to the document with the specified number of columns
+        /// </summary>
+        /// <param name="numberOfColumns"></param>
+        /// <returns></returns>
+        public Table AddTable(int numberOfColumns)
+        {
+            return tableRow.Table.Document.AddTable(numberOfColumns, AddTable());
+        }
+
+        /// <summary>
+        /// Adds a Table to the document with the specified number of columns using the percent widths
+        /// </summary>
+        /// <param name="numberOfColumns"></param>
+        /// <param name="percent"></param>
+        /// <returns></returns>
+        public Table AddTable(int numberOfColumns, params int[] percent)
+        {
+            return tableRow.Table.Document.AddTable(numberOfColumns, AddTable(), percent);
+        }
+
+        /// <summary>
+        /// Adds a Table to the document with the specified number of columns using the supplied widths
+        /// </summary>
+        /// <param name="numberOfColumns"></param>
+        /// <param name="widths">The widths of the columns in Twips</param>
+        /// <returns></returns>
+        public Table AddTable(int numberOfColumns, params string[] widths)
+        {
+            return tableRow.Table.Document.AddTable(numberOfColumns, AddTable(), widths);
+        }
+
+        /// <summary>
         /// Sets the vertical alignment of the cell
         /// </summary>
         /// <param name="value"></param>
@@ -235,6 +267,12 @@ namespace DocXPlus
         internal void RemoveFromRow()
         {
             tableCell.Remove();
+        }
+
+        private DocumentFormat.OpenXml.Wordprocessing.Table AddTable()
+        {
+            var paragraph = tableCell.Descendants<DocumentFormat.OpenXml.Wordprocessing.Paragraph>().Last();
+            return paragraph.InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Table());
         }
     }
 }

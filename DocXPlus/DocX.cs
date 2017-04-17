@@ -463,9 +463,7 @@ namespace DocXPlus
         /// <returns></returns>
         public Table AddTable(int numberOfColumns)
         {
-            var table = GetBodySectionProperty().InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Table());
-
-            return AddTable(numberOfColumns, table);
+            return AddTable(numberOfColumns, AddTable());
         }
 
         /// <summary>
@@ -476,9 +474,7 @@ namespace DocXPlus
         /// <returns></returns>
         public Table AddTable(int numberOfColumns, params int[] percent)
         {
-            var table = GetBodySectionProperty().InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Table());
-
-            return AddTable(numberOfColumns, table, percent);
+            return AddTable(numberOfColumns, AddTable(), percent);
         }
 
         /// <summary>
@@ -489,9 +485,7 @@ namespace DocXPlus
         /// <returns></returns>
         public Table AddTable(int numberOfColumns, params string[] widths)
         {
-            var table = GetBodySectionProperty().InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Table());
-
-            return AddTable(numberOfColumns, table, widths);
+            return AddTable(numberOfColumns, AddTable(), widths);
         }
 
         /// <summary>
@@ -657,7 +651,7 @@ namespace DocXPlus
                                      new PIC.NonVisualPictureProperties(
                                          new PIC.NonVisualDrawingProperties()
                                          {
-                                             Id = 0U,
+                                             Id = 1U,
                                              Name = "New Bitmap Image.jpg"
                                          },
                                          new PIC.NonVisualPictureDrawingProperties()),
@@ -969,6 +963,11 @@ namespace DocXPlus
             GetBodySectionProperty().PrependChild(new HeaderReference() { Id = id, Type = type });
 
             return new Header(part, this, type);
+        }
+
+        private DocumentFormat.OpenXml.Wordprocessing.Table AddTable()
+        {
+            return GetBodySectionProperty().InsertBeforeSelf(new DocumentFormat.OpenXml.Wordprocessing.Table());
         }
 
         private void SaveFooters()
