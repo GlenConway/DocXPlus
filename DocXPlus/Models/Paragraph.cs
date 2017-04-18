@@ -25,12 +25,12 @@ namespace DocXPlus
         {
             get
             {
-                var justification = GetParagraphProperties().GetOrCreate<Justification>();
+                var justification = GetJustification();
                 return Convert.ToAlign(justification.Val);
             }
             set
             {
-                var justification = GetParagraphProperties().GetOrCreate<Justification>();
+                var justification = GetJustification();
                 justification.Val = Convert.ToJustificationValues(value);
             }
         }
@@ -289,20 +289,15 @@ namespace DocXPlus
         /// <returns></returns>
         public Paragraph Bold()
         {
-            if (Runs.Count() == 0)
-            {
-                var paragraphProperties = paragraph.GetOrCreate<ParagraphProperties>();
-                var paragraphMarkRunProperties = paragraphProperties.GetOrCreate<ParagraphMarkRunProperties>();
+            var paragraphProperties = paragraph.GetOrCreate<ParagraphProperties>(true);
+            var paragraphMarkRunProperties = paragraphProperties.GetOrCreate<ParagraphMarkRunProperties>();
 
-                Bold bold = paragraphMarkRunProperties.GetOrCreate<Bold>();
-                bold.Val = true;
-            }
-            else
+            Bold bold = paragraphMarkRunProperties.GetOrCreate<Bold>();
+            bold.Val = true;
+
+            foreach (var run in Runs)
             {
-                foreach (var run in Runs)
-                {
-                    run.Bold();
-                }
+                run.Bold();
             }
 
             return this;
@@ -412,8 +407,7 @@ namespace DocXPlus
         /// <returns></returns>
         public Paragraph SetAlignment(Align value)
         {
-            var justification = GetParagraphProperties().GetOrCreate<Justification>();
-            justification.Val = Convert.ToJustificationValues(value);
+            Alignment = value;
 
             return this;
         }
@@ -466,6 +460,11 @@ namespace DocXPlus
             }
 
             return result;
+        }
+
+        private Justification GetJustification()
+        {
+            return GetParagraphProperties().GetOrCreate<Justification>(true);
         }
 
         private Run GetRun(string text)

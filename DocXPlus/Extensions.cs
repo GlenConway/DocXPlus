@@ -10,7 +10,7 @@ namespace DocXPlus
         internal static void Bold(this Run run)
         {
             RunProperties runProperties = run.GetOrCreate<RunProperties>(true);
-            Bold prop = runProperties.GetOrCreate<Bold>();
+            Bold prop = runProperties.GetOrCreate<Bold>(true);
             prop.Val = true;
         }
 

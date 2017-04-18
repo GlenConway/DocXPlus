@@ -25,6 +25,8 @@ namespace DocXPlusTests
 
                 doc.AddParagraph().Append("Append normal paragraph").AppendBold("Then append bold paragraph");
 
+                doc.AddParagraph("Append using AddParagraph overload then set bold").Bold();
+
                 Validate(doc);
 
                 doc.Close();

@@ -80,6 +80,33 @@ namespace DocXPlusTests
                     .AppendPageNumber(PageNumberFormat.Normal)
                     .Append(" of ")
                     .AppendPageCount(PageNumberFormat.Normal)
+                    .Alignment = Align.Center;
+
+                for (int i = 0; i < 9; i++)
+                {
+                    doc.InsertPageBreak();
+                }
+
+                Validate(doc);
+
+                doc.Close();
+            }
+        }
+
+        [TestMethod]
+        public void AddFooterWithNormalBoldPageNumbers()
+        {
+            using (var doc = new DocX())
+            {
+                doc.Create();
+
+                doc.AddFooters();
+                doc.DefaultFooter
+                    .AddParagraph()
+                    .Append("Page ")
+                    .AppendPageNumber(PageNumberFormat.Normal)
+                    .Append(" of ")
+                    .AppendPageCount(PageNumberFormat.Normal)
                     .Bold()
                     .Alignment = Align.Center;
 
