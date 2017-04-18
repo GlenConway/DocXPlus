@@ -11,13 +11,13 @@ namespace DocXPlus
     public class Table
     {
         private string[] columnWidths;
-        private Container container;
+        private IContainer container;
         private int numberOfColumns;
         private IList<TableRow> rows;
         private DocumentFormat.OpenXml.Wordprocessing.Table table;
         private TableLook tableLook;
 
-        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, Container container)
+        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, IContainer container)
         {
             this.table = table;
 
@@ -27,21 +27,21 @@ namespace DocXPlus
             BuildRows();
         }
 
-        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, Container container) : this(table, container)
+        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, IContainer container) : this(table, container)
         {
             this.numberOfColumns = numberOfColumns;
 
             AddGrid();
         }
 
-        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, Container container, params int[] percent) : this(table, container)
+        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, IContainer container, params int[] percent) : this(table, container)
         {
             this.numberOfColumns = numberOfColumns;
 
             AddGrid(percent);
         }
 
-        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, Container container, params string[] widths) : this(table, container)
+        internal Table(DocumentFormat.OpenXml.Wordprocessing.Table table, int numberOfColumns, IContainer container, params string[] widths) : this(table, container)
         {
             this.numberOfColumns = numberOfColumns;
 
@@ -122,7 +122,7 @@ namespace DocXPlus
 
         internal string[] ColumnWidths => columnWidths;
 
-        internal Container Document => container;
+        internal IContainer Document => container;
 
         internal TableLook TableLook
         {

@@ -8,7 +8,7 @@ namespace DocXPlus
     /// <summary>
     /// Represents a footer in the document
     /// </summary>
-    public class Footer : Container
+    public class Footer : Container, IContainer
     {
         private DocX document;
         private DocumentFormat.OpenXml.Wordprocessing.Footer footer;

@@ -7,7 +7,7 @@ namespace DocXPlus
     /// <summary>
     /// Container class for common functions
     /// </summary>
-    public abstract class Container
+    public abstract class Container : IContainer
     {
         /// <summary>
         /// The width of the container
@@ -160,7 +160,7 @@ namespace DocXPlus
                 if (width.EndsWith("cm", System.StringComparison.OrdinalIgnoreCase))
                 {
                     width = width.Remove(width.Length - 2, 2);
-                    
+
                     if (double.TryParse(width, out double value))
                     {
                         width = Units.CMToTwips(value).Value.ToString();

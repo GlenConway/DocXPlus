@@ -14,7 +14,7 @@ namespace DocXPlus
     /// <summary>
     /// Wrapper around an OpenXml SDK Wordprocessing Document
     /// </summary>
-    public class DocX : Container, IDisposable
+    public class DocX : Container, IContainer, IDisposable
     {
         internal static MarkupCompatibilityAttributes MarkupCompatibilityAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se wp14" };
 

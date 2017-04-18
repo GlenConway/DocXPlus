@@ -9,7 +9,7 @@ namespace DocXPlus
     /// <summary>
     /// Represents a cell in a table
     /// </summary>
-    public class TableCell : Container
+    public class TableCell : Container, IContainer
     {
         private int mergeDown;
         private int mergeRight;

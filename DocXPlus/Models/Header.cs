@@ -9,7 +9,7 @@ namespace DocXPlus
     /// <summary>
     /// Represents a header in the document
     /// </summary>
-    public class Header : Container
+    public class Header : Container, IContainer
     {
         private DocX document;
         private DocumentFormat.OpenXml.Wordprocessing.Header header;
