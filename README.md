@@ -13,7 +13,7 @@ Stay tuned, under development
 ### Build Status
 | Status|
 |:--------------:|
-|[![Build status](https://ci.appveyor.com/api/projects/status/github/glenconway/docxplus?svg=true)](https://ci.appveyor.com/api/projects/status/github/glenconway/docxplus)|
+|[![Build status](https://ci.appveyor.com/api/projects/status/el8k4pypwojavkv2/branch/master?svg=true)](https://ci.appveyor.com/project/GlenConway/docxplus/branch/master)|
 
 ## Some Code
 **Create Using Default Stream**
