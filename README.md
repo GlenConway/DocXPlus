@@ -10,6 +10,11 @@ DocXPlus targets .NET Standard 1.3 so version 2.7 of the [Open XML SDK](https://
 
 Stay tuned, under development
 
+### Build Status
+| Status|
+|:--------------:|
+|[![Build status](https://ci.appveyor.com/api/projects/status/github/glenconway/docxplus?svg=true)](https://ci.appveyor.com/api/projects/status/github/glenconway/docxplus)|
+
 ## Some Code
 **Create Using Default Stream**
 ``` c#
