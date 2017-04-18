@@ -1,6 +1,5 @@
 ﻿using DocXPlus;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
 
 namespace DocXPlusTests
 {
@@ -10,346 +9,335 @@ namespace DocXPlusTests
         [TestMethod]
         public void AddFooter()
         {
-            var filename = Path.Combine(TempDirectory, "AddFooter.docx");
+            using (var doc = new DocX())
+            {
+                doc.Create();
 
-            var doc = DocX.Create(filename, DocumentType.Document);
+                doc.AddFooters();
+                doc.DefaultFooter.AddParagraph().Append("Footer Paragraph");
 
-            doc.AddFooters();
-            doc.DefaultFooter.AddParagraph().Append("Footer Paragraph");
+                Validate(doc);
 
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
+                doc.Close();
+            }
         }
 
         [TestMethod]
         public void AddFooters()
         {
-            var filename = Path.Combine(TempDirectory, "AddFooters.docx");
+            using (var doc = new DocX())
+            {
+                doc.Create();
 
-            var doc = DocX.Create(filename, DocumentType.Document);
+                doc.AddFooters();
 
-            doc.AddFooters();
+                doc.DefaultFooter
+                    .AddParagraph()
+                    .Append("Default (Odd) Footer");
 
-            doc.DefaultFooter
-                .AddParagraph()
-                .Append("Default (Odd) Footer");
+                doc.EvenFooter
+                    .AddParagraph()
+                    .Append("Even Footer");
 
-            doc.EvenFooter
-                .AddParagraph()
-                .Append("Even Footer");
+                doc.FirstFooter
+                    .AddParagraph()
+                    .Append("First Footer");
 
-            doc.FirstFooter
-                .AddParagraph()
-                .Append("First Footer");
+                doc.DifferentFirstPage = true;
+                doc.EvenAndOddHeaders = true;
 
-            doc.DifferentFirstPage = true;
-            doc.EvenAndOddHeaders = true;
+                doc.AddParagraph().Append("Page 1");
 
-            doc.AddParagraph().Append("Page 1");
+                doc.InsertPageBreak();
 
-            doc.InsertPageBreak();
+                doc.AddParagraph().Append("Page 2");
 
-            doc.AddParagraph().Append("Page 2");
+                doc.InsertPageBreak();
 
-            doc.InsertPageBreak();
+                doc.AddParagraph().Append("Page 3");
 
-            doc.AddParagraph().Append("Page 3");
+                doc.InsertPageBreak();
 
-            doc.InsertPageBreak();
+                doc.AddParagraph().Append("Page 4");
 
-            doc.AddParagraph().Append("Page 4");
+                Validate(doc);
 
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
+                doc.Close();
+            }
         }
 
         [TestMethod]
         public void AddFooterWithNormalPageNumbers()
         {
-            var filename = Path.Combine(TempDirectory, "AddFooterWithNormalPageNumbers.docx");
-
-            var doc = DocX.Create(filename, DocumentType.Document);
-
-            doc.AddFooters();
-            doc.DefaultFooter
-                .AddParagraph()
-                .Append("Page ")
-                .AppendPageNumber(PageNumberFormat.Normal)
-                .Append(" of ")
-                .AppendPageCount(PageNumberFormat.Normal)
-                .Bold()
-                .Alignment = Align.Center;
-
-            for (int i = 0; i < 9; i++)
+            using (var doc = new DocX())
             {
-                doc.InsertPageBreak();
+                doc.Create();
+
+                doc.AddFooters();
+                doc.DefaultFooter
+                    .AddParagraph()
+                    .Append("Page ")
+                    .AppendPageNumber(PageNumberFormat.Normal)
+                    .Append(" of ")
+                    .AppendPageCount(PageNumberFormat.Normal)
+                    .Bold()
+                    .Alignment = Align.Center;
+
+                for (int i = 0; i < 9; i++)
+                {
+                    doc.InsertPageBreak();
+                }
+
+                Validate(doc);
+
+                doc.Close();
             }
-
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
         }
 
         [TestMethod]
         public void AddFooterWithRomanPageNumbers()
         {
-            var filename = Path.Combine(TempDirectory, "AddFooterWithRomanPageNumbers.docx");
-
-            var doc = DocX.Create(filename, DocumentType.Document);
-
-            doc.AddFooters();
-            doc.DefaultFooter
-                .AddParagraph()
-                .Append("Page: ")
-                .AppendPageNumber(PageNumberFormat.Roman)
-                .Append(" of ")
-                .AppendPageCount(PageNumberFormat.Roman)
-                .Bold()
-                .Alignment = Align.Center;
-
-            for (int i = 0; i < 9; i++)
+            using (var doc = new DocX())
             {
-                doc.InsertPageBreak();
+                doc.Create();
+
+                doc.AddFooters();
+                doc.DefaultFooter
+                    .AddParagraph()
+                    .Append("Page: ")
+                    .AppendPageNumber(PageNumberFormat.Roman)
+                    .Append(" of ")
+                    .AppendPageCount(PageNumberFormat.Roman)
+                    .Bold()
+                    .Alignment = Align.Center;
+
+                for (int i = 0; i < 9; i++)
+                {
+                    doc.InsertPageBreak();
+                }
+
+                Validate(doc);
+
+                doc.Close();
             }
-
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
         }
 
         [TestMethod]
         public void AddHeader()
         {
-            var filename = Path.Combine(TempDirectory, "AddHeader.docx");
+            using (var doc = new DocX())
+            {
+                doc.Create();
 
-            var doc = DocX.Create(filename, DocumentType.Document);
+                doc.AddHeaders();
+                doc.DefaultHeader.AddParagraph().Append("Header Paragraph");
 
-            doc.AddHeaders();
-            doc.DefaultHeader.AddParagraph().Append("Header Paragraph");
+                Validate(doc);
 
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
+                doc.Close();
+            }
         }
 
         [TestMethod]
         public void AddHeaderAndFooter()
         {
-            var filename = Path.Combine(TempDirectory, "AddHeaderAndFooter.docx");
+            using (var doc = new DocX())
+            {
+                doc.Create();
 
-            var doc = DocX.Create(filename, DocumentType.Document);
+                doc.AddHeaders();
+                doc.AddFooters();
 
-            doc.AddHeaders();
-            doc.AddFooters();
+                doc.DefaultHeader.AddParagraph().Append("Header Paragraph");
+                doc.DefaultFooter.AddParagraph().Append("Footer Paragraph");
 
-            doc.DefaultHeader.AddParagraph().Append("Header Paragraph");
-            doc.DefaultFooter.AddParagraph().Append("Footer Paragraph");
+                Validate(doc);
 
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
+                doc.Close();
+            }
         }
 
         [TestMethod]
         public void AddHeaderAndFooterLandscape()
         {
-            var filename = Path.Combine(TempDirectory, "AddHeaderAndFooterLandscape.docx");
+            using (var doc = new DocX())
+            {
+                doc.Create();
 
-            var doc = DocX.Create(filename, DocumentType.Document);
-            doc.Orientation = PageOrientation.Landscape;
+                doc.Orientation = PageOrientation.Landscape;
 
-            doc.AddHeaders();
-            doc.AddFooters();
+                doc.AddHeaders();
+                doc.AddFooters();
 
-            doc.DefaultHeader
-                .AddParagraph()
-                .SetAlignment(Align.Right)
-                .Append(LoremIpsum);
+                doc.DefaultHeader
+                    .AddParagraph()
+                    .SetAlignment(Align.Right)
+                    .Append(LoremIpsum);
 
-            doc.DefaultFooter
-                .AddParagraph()
-                .SetAlignment(Align.Center)
-                .Append(LoremIpsum);
+                doc.DefaultFooter
+                    .AddParagraph()
+                    .SetAlignment(Align.Center)
+                    .Append(LoremIpsum);
 
-            doc.Close();
+                Validate(doc);
 
-            ValidateWordDocument(filename);
-
-            Launch(filename);
+                doc.Close();
+            }
         }
 
         [TestMethod]
         public void AddHeaders()
         {
-            var filename = Path.Combine(TempDirectory, "AddHeaders.docx");
+            using (var doc = new DocX())
+            {
+                doc.Create();
 
-            var doc = DocX.Create(filename, DocumentType.Document);
+                doc.AddHeaders();
+                doc.DifferentFirstPage = true;
+                doc.EvenAndOddHeaders = true;
 
-            doc.AddHeaders();
-            doc.DifferentFirstPage = true;
-            doc.EvenAndOddHeaders = true;
+                doc.DefaultHeader
+                    .AddParagraph()
+                    .Append("Default (Odd) Header");
 
-            doc.DefaultHeader
-                .AddParagraph()
-                .Append("Default (Odd) Header");
+                doc.EvenHeader
+                    .AddParagraph()
+                    .Append("Even Header");
 
-            doc.EvenHeader
-                .AddParagraph()
-                .Append("Even Header");
+                doc.FirstHeader
+                    .AddParagraph()
+                    .Append("First Header");
 
-            doc.FirstHeader
-                .AddParagraph()
-                .Append("First Header");
+                doc.AddParagraph().Append("Page 1");
 
-            doc.AddParagraph().Append("Page 1");
+                doc.InsertPageBreak();
 
-            doc.InsertPageBreak();
+                doc.AddParagraph().Append("Page 2");
 
-            doc.AddParagraph().Append("Page 2");
+                doc.InsertPageBreak();
 
-            doc.InsertPageBreak();
+                doc.AddParagraph().Append("Page 3");
 
-            doc.AddParagraph().Append("Page 3");
+                doc.InsertPageBreak();
 
-            doc.InsertPageBreak();
+                doc.AddParagraph().Append("Page 4");
 
-            doc.AddParagraph().Append("Page 4");
+                Validate(doc);
 
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
+                doc.Close();
+            }
         }
 
         [TestMethod]
         public void AddSectionFooter()
         {
-            var filename = Path.Combine(TempDirectory, "AddSectionFooter.docx");
+            using (var doc = new DocX())
+            {
+                doc.Create();
 
-            var doc = DocX.Create(filename, DocumentType.Document);
+                doc.AddFooters();
 
-            doc.AddFooters();
+                doc.DefaultFooter.AddParagraph().Append("Footer 1");
 
-            doc.DefaultFooter.AddParagraph().Append("Footer 1");
+                doc.InsertSectionPageBreak();
 
-            doc.InsertSectionPageBreak();
+                doc.AddFooters();
 
-            doc.AddFooters();
+                doc.DefaultFooter.AddParagraph().Append("Footer 2");
 
-            doc.DefaultFooter.AddParagraph().Append("Footer 2");
+                doc.InsertSectionPageBreak();
 
-            doc.InsertSectionPageBreak();
+                doc.AddFooters();
 
-            doc.AddFooters();
+                doc.DefaultFooter.AddParagraph().Append("Footer 3");
 
-            doc.DefaultFooter.AddParagraph().Append("Footer 3");
+                Validate(doc);
 
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
+                doc.Close();
+            }
         }
 
         [TestMethod]
         public void AddSectionHeader()
         {
-            var filename = Path.Combine(TempDirectory, "AddSectionHeader.docx");
+            using (var doc = new DocX())
+            {
+                doc.Create();
 
-            var doc = DocX.Create(filename, DocumentType.Document);
+                doc.AddHeaders();
 
-            doc.AddHeaders();
+                doc.DefaultHeader.AddParagraph().Append("Header 1");
 
-            doc.DefaultHeader.AddParagraph().Append("Header 1");
+                doc.InsertSectionPageBreak();
 
-            doc.InsertSectionPageBreak();
+                doc.AddHeaders();
 
-            doc.AddHeaders();
+                doc.DefaultHeader.AddParagraph().Append("Header 2");
 
-            doc.DefaultHeader.AddParagraph().Append("Header 2");
+                doc.InsertSectionPageBreak();
 
-            doc.InsertSectionPageBreak();
+                doc.AddHeaders();
 
-            doc.AddHeaders();
+                doc.DefaultHeader.AddParagraph().Append("Header 3");
 
-            doc.DefaultHeader.AddParagraph().Append("Header 3");
+                Validate(doc);
 
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
+                doc.Close();
+            }
         }
 
         [TestMethod]
         public void AddSectionHeaderFooter()
         {
-            var filename = Path.Combine(TempDirectory, "AddSectionHeaderFooter.docx");
+            using (var doc = new DocX())
+            {
+                doc.Create();
 
-            var doc = DocX.Create(filename, DocumentType.Document);
+                doc.AddHeaders();
+                doc.AddFooters();
 
-            doc.AddHeaders();
-            doc.AddFooters();
+                doc.DefaultHeader.AddParagraph().Append("Header 1");
+                doc.DefaultFooter.AddParagraph().Append("Footer 1");
 
-            doc.DefaultHeader.AddParagraph().Append("Header 1");
-            doc.DefaultFooter.AddParagraph().Append("Footer 1");
+                doc.InsertSectionPageBreak();
 
-            doc.InsertSectionPageBreak();
+                doc.AddHeaders();
+                doc.AddFooters();
 
-            doc.AddHeaders();
-            doc.AddFooters();
+                doc.DefaultHeader.AddParagraph().Append("Header 2");
+                doc.DefaultFooter.AddParagraph().Append("Footer 2");
 
-            doc.DefaultHeader.AddParagraph().Append("Header 2");
-            doc.DefaultFooter.AddParagraph().Append("Footer 2");
+                doc.InsertSectionPageBreak();
 
-            doc.InsertSectionPageBreak();
+                doc.AddHeaders();
+                doc.AddFooters();
 
-            doc.AddHeaders();
-            doc.AddFooters();
+                doc.DefaultHeader.AddParagraph().Append("Header 3");
+                doc.DefaultFooter.AddParagraph().Append("Footer 3");
 
-            doc.DefaultHeader.AddParagraph().Append("Header 3");
-            doc.DefaultFooter.AddParagraph().Append("Footer 3");
+                Validate(doc);
 
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
+                doc.Close();
+            }
         }
 
         [TestMethod]
         public void AddSectionPageBreakSameHeader()
         {
-            var filename = Path.Combine(TempDirectory, "AddSectionPageBreakSameHeader.docx");
+            using (var doc = new DocX())
+            {
+                doc.Create();
 
-            var doc = DocX.Create(filename, DocumentType.Document);
+                doc.AddHeaders();
 
-            doc.AddHeaders();
+                doc.DefaultHeader.AddParagraph().Append("Header 1");
 
-            doc.DefaultHeader.AddParagraph().Append("Header 1");
+                doc.InsertSectionPageBreak();
 
-            doc.InsertSectionPageBreak();
+                Validate(doc);
 
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
+                doc.Close();
+            }
         }
     }
 }

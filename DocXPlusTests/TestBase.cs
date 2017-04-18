@@ -5,6 +5,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 
 namespace DocXPlusTests
 {
@@ -46,41 +47,41 @@ namespace DocXPlusTests
             System.Diagnostics.Process.Start(filename);
         }
 
-        protected void ValidateWordDocument(string filepath)
+        protected void Validate(DocXPlus.DocX document)
         {
-            using (WordprocessingDocument wordprocessingDocument =
-            WordprocessingDocument.Open(filepath, true))
+            using (var stream = new MemoryStream())
             {
-                try
-                {
-                    OpenXmlValidator validator = new OpenXmlValidator();
-                    var validation = validator.Validate(wordprocessingDocument);
+                document.SaveAs(stream);
 
-                    Assert.AreEqual(0, validation.Count());
-
-                    //    int count = 0;
-                    //    foreach (ValidationErrorInfo error in
-                    //        )
-                    //    {
-                    //        count++;
-                    //        Console.WriteLine("Error " + count);
-                    //        Console.WriteLine("Description: " + error.Description);
-                    //        Console.WriteLine("ErrorType: " + error.ErrorType);
-                    //        Console.WriteLine("Node: " + error.Node);
-                    //        Console.WriteLine("Path: " + error.Path.XPath);
-                    //        Console.WriteLine("Part: " + error.Part.Uri);
-                    //        Console.WriteLine("-------------------------------------------");
-                    //    }
-
-                    //    Console.WriteLine("count={0}", count);
-                }
-                catch (Exception ex)
+                using (WordprocessingDocument wordprocessingDocument = WordprocessingDocument.Open(stream, true))
                 {
-                    Console.WriteLine(ex.Message);
-                }
-                finally
-                {
-                    wordprocessingDocument.Close();
+                    try
+                    {
+                        OpenXmlValidator validator = new OpenXmlValidator();
+                        var validation = validator.Validate(wordprocessingDocument);
+
+                        var sb = new StringBuilder();
+
+                        foreach (ValidationErrorInfo error in validation)
+                        {
+                            sb.AppendLine("Description: " + error.Description);
+                            sb.AppendLine("ErrorType: " + error.ErrorType);
+                            sb.AppendLine("Node: " + error.Node);
+                            sb.AppendLine("Path: " + error.Path.XPath);
+                            sb.AppendLine("Part: " + error.Part.Uri);
+
+                            sb.AppendLine(string.Empty);
+                        }
+
+                        if (validation.Count() > 0)
+                        {
+                            Assert.Fail(sb.ToString());
+                        }
+                    }
+                    finally
+                    {
+                        wordprocessingDocument.Close();
+                    }
                 }
             }
         }

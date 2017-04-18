@@ -1,6 +1,5 @@
 ﻿using DocXPlus;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.IO;
 
 namespace DocXPlusTests
 {
@@ -10,126 +9,122 @@ namespace DocXPlusTests
         [TestMethod]
         public void SectionPageBreak()
         {
-            var filename = Path.Combine(TempDirectory, "SectionPageBreak.docx");
+            using (var doc = new DocX())
+            {
+                doc.Create();
 
-            var doc = DocX.Create(filename, DocumentType.Document);
+                doc.AddParagraph().Append("Page 1");
 
-            doc.AddParagraph().Append("Page 1");
+                doc.InsertSectionPageBreak();
 
-            doc.InsertSectionPageBreak();
+                doc.AddParagraph().Append("Page 2");
 
-            doc.AddParagraph().Append("Page 2");
+                doc.InsertSectionPageBreak();
 
-            doc.InsertSectionPageBreak();
+                doc.AddParagraph().Append("Page 3");
 
-            doc.AddParagraph().Append("Page 3");
+                Validate(doc);
 
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
+                doc.Close();
+            }
         }
 
         [TestMethod]
         public void SectionPageBreakLandscapePortrait()
         {
-            var filename = Path.Combine(TempDirectory, "SectionPageBreakLandscapePortrait.docx");
+            using (var doc = new DocX())
+            {
+                doc.Create();
 
-            var doc = DocX.Create(filename, DocumentType.Document);
+                doc.Orientation = PageOrientation.Landscape;
 
-            doc.Orientation = PageOrientation.Landscape;
+                doc.AddParagraph().Append("Landscape");
 
-            doc.AddParagraph().Append("Landscape");
+                doc.InsertSectionPageBreak();
 
-            doc.InsertSectionPageBreak();
+                doc.Orientation = PageOrientation.Portrait;
 
-            doc.Orientation = PageOrientation.Portrait;
+                doc.AddParagraph().Append("Portrait");
 
-            doc.AddParagraph().Append("Portrait");
+                Validate(doc);
 
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
+                doc.Close();
+            }
         }
 
         [TestMethod]
         public void SectionPageBreakLandscapePortraitLandscape()
         {
-            var filename = Path.Combine(TempDirectory, "SectionPageBreakLandscapePortraitLandscape.docx");
+            using (var doc = new DocX())
+            {
+                doc.Create();
 
-            var doc = DocX.Create(filename, DocumentType.Document);
-            doc.Orientation = PageOrientation.Landscape;
+                doc.Orientation = PageOrientation.Landscape;
 
-            doc.AddParagraph().Append("Landscape");
+                doc.AddParagraph().Append("Landscape");
 
-            doc.InsertSectionPageBreak();
-            doc.Orientation = PageOrientation.Portrait;
+                doc.InsertSectionPageBreak();
+                doc.Orientation = PageOrientation.Portrait;
 
-            doc.AddParagraph().Append("Portrait");
+                doc.AddParagraph().Append("Portrait");
 
-            doc.InsertSectionPageBreak();
-            doc.Orientation = PageOrientation.Landscape;
+                doc.InsertSectionPageBreak();
+                doc.Orientation = PageOrientation.Landscape;
 
-            doc.AddParagraph().Append("Landscape");
+                doc.AddParagraph().Append("Landscape");
 
-            doc.Close();
+                Validate(doc);
 
-            ValidateWordDocument(filename);
-
-            Launch(filename);
+                doc.Close();
+            }
         }
 
         [TestMethod]
         public void SectionPageBreakPortraitLandscape()
         {
-            var filename = Path.Combine(TempDirectory, "SectionPageBreakPortraitLandscape.docx");
+            using (var doc = new DocX())
+            {
+                doc.Create();
 
-            var doc = DocX.Create(filename, DocumentType.Document);
+                doc.AddParagraph().Append("Portrait");
 
-            doc.AddParagraph().Append("Portrait");
+                doc.InsertSectionPageBreak();
 
-            doc.InsertSectionPageBreak();
+                doc.Orientation = PageOrientation.Landscape;
 
-            doc.Orientation = PageOrientation.Landscape;
+                doc.AddParagraph().Append("Landscape");
 
-            doc.AddParagraph().Append("Landscape");
+                Validate(doc);
 
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
+                doc.Close();
+            }
         }
 
         [TestMethod]
         public void SectionPageBreakPortraitLandscapePortrait()
         {
-            var filename = Path.Combine(TempDirectory, "SectionPageBreakPortraitLandscapePortrait.docx");
+            using (var doc = new DocX())
+            {
+                doc.Create();
 
-            var doc = DocX.Create(filename, DocumentType.Document);
+                doc.AddParagraph().Append("Portrait");
 
-            doc.AddParagraph().Append("Portrait");
+                doc.InsertSectionPageBreak();
 
-            doc.InsertSectionPageBreak();
+                doc.Orientation = PageOrientation.Landscape;
 
-            doc.Orientation = PageOrientation.Landscape;
+                doc.AddParagraph().Append("Landscape");
 
-            doc.AddParagraph().Append("Landscape");
+                doc.InsertSectionPageBreak();
 
-            doc.InsertSectionPageBreak();
+                doc.Orientation = PageOrientation.Portrait;
 
-            doc.Orientation = PageOrientation.Portrait;
+                doc.AddParagraph().Append("Portrait");
 
-            doc.AddParagraph().Append("Portrait");
+                Validate(doc);
 
-            doc.Close();
-
-            ValidateWordDocument(filename);
-
-            Launch(filename);
+                doc.Close();
+            }
         }
     }
 }

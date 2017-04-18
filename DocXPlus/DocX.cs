@@ -253,10 +253,7 @@ namespace DocXPlus
         {
             get
             {
-                if (document == null)
-                {
-                    throw new InvalidOperationException("You must call Create before accessing the Main Document Part.");
-                }
+                CheckDocumentCreated();
 
                 return document.MainDocumentPart;
             }
@@ -266,6 +263,8 @@ namespace DocXPlus
         {
             get
             {
+                CheckDocumentCreated();
+
                 var part = document.MainDocumentPart.DocumentSettingsPart;
 
                 if (part == null)
@@ -591,8 +590,7 @@ namespace DocXPlus
                          DistanceFromTop = (UInt32Value)0U,
                          DistanceFromBottom = (UInt32Value)0U,
                          DistanceFromLeft = (UInt32Value)0U,
-                         DistanceFromRight = (UInt32Value)0U,
-                         EditId = "50D07946"
+                         DistanceFromRight = (UInt32Value)0U
                      });
 
             return element;
@@ -847,6 +845,14 @@ namespace DocXPlus
             GetBodySectionProperty().PrependChild(new HeaderReference() { Id = id, Type = type });
 
             return new Header(part, this, type);
+        }
+
+        private void CheckDocumentCreated()
+        {
+            if (document == null)
+            {
+                throw new InvalidOperationException("You must call Create before accessing the Main Document Part.");
+            }
         }
 
         private void SaveFooters()
