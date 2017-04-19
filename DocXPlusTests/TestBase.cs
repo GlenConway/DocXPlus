@@ -57,7 +57,7 @@ namespace DocXPlusTests
                 {
                     try
                     {
-                        OpenXmlValidator validator = new OpenXmlValidator();
+                        OpenXmlValidator validator = new OpenXmlValidator(DocumentFormat.OpenXml.FileFormatVersions.Office2010);
                         var validation = validator.Validate(wordprocessingDocument);
 
                         var sb = new StringBuilder();

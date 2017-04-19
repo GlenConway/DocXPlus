@@ -161,7 +161,7 @@ namespace DocXPlus
 
         internal TableRowProperties GetTableRowProperties()
         {
-            return tableRow.GetOrCreate<TableRowProperties>();
+            return tableRow.GetOrCreate<TableRowProperties>(true);
         }
 
         internal void MergeDown(TableCell tableCell, int value)

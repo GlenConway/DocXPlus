@@ -18,6 +18,7 @@ namespace DocXPlus
     {
         internal static MarkupCompatibilityAttributes MarkupCompatibilityAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se wp14" };
 
+        private static int propId;
         private bool disposed = false;
 
         private WordprocessingDocument document;
@@ -238,6 +239,16 @@ namespace DocXPlus
                 }
 
                 return result;
+            }
+        }
+
+        internal static int PropId
+        {
+            get
+            {
+                propId++;
+
+                return propId;
             }
         }
 
@@ -528,8 +539,13 @@ namespace DocXPlus
             document.Clone(stream);
         }
 
-        internal static Drawing CreateDrawing(string id, Int64Value width, Int64Value height)
+        internal static Drawing CreateDrawing(string id, Int64Value width, Int64Value height, string name)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                name = Guid.NewGuid().ToString();
+            }
+
             // Define the reference of the image.
             var element =
                  new Drawing(
@@ -544,8 +560,8 @@ namespace DocXPlus
                          },
                          new DW.DocProperties()
                          {
-                             Id = 1U,
-                             Name = "Picture 1"
+                             Id = System.Convert.ToUInt32(PropId),
+                             Name = Guid.NewGuid().ToString()
                          },
                          new DW.NonVisualGraphicFrameDrawingProperties(
                              new A.GraphicFrameLocks() { NoChangeAspect = true }),
@@ -555,8 +571,8 @@ namespace DocXPlus
                                      new PIC.NonVisualPictureProperties(
                                          new PIC.NonVisualDrawingProperties()
                                          {
-                                             Id = 1U,
-                                             Name = "New Bitmap Image.jpg"
+                                             Id = System.Convert.ToUInt32(PropId),
+                                             Name = name
                                          },
                                          new PIC.NonVisualPictureDrawingProperties()),
                                      new PIC.BlipFill(

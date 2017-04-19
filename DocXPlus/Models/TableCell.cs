@@ -207,7 +207,7 @@ namespace DocXPlus
 
         internal TableCellProperties GetTableCellProperties()
         {
-            return tableCell.GetOrCreate<TableCellProperties>();
+            return tableCell.GetOrCreate<TableCellProperties>(true);
         }
 
         internal DocumentFormat.OpenXml.Wordprocessing.Shading GetTableCellShading()

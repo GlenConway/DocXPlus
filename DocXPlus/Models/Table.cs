@@ -137,7 +137,7 @@ namespace DocXPlus
             }
         }
 
-        internal TableProperties TableProperties => table.GetOrCreate<TableProperties>();
+        internal TableProperties TableProperties => table.GetOrCreate<TableProperties>(true);
 
         /// <summary>
         /// Adds a row to the table. The row will have the same number of cells as the number of columns in the table.

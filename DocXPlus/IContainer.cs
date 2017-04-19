@@ -21,8 +21,9 @@ namespace DocXPlus
         /// <param name="contentType"></param>
         /// <param name="width">The width of the image in English Metric Units (EMU)</param>
         /// <param name="height">The height of the image in English Metric Units (EMU)</param>
+        /// <param name="name">The name of the image. Leave blank to generate a Guid</param>
         /// <returns></returns>
-        Drawing AddImage(byte[] data, string contentType, Int64Value width, Int64Value height);
+        Drawing AddImage(byte[] data, string contentType, Int64Value width, Int64Value height, string name);
 
         /// <summary>
         /// Adds an image to the container which can then be added to a paragraph
@@ -31,7 +32,8 @@ namespace DocXPlus
         /// <param name="contentType"></param>
         /// <param name="width">The width of the image in English Metric Units (EMU)</param>
         /// <param name="height">The height of the image in English Metric Units (EMU)</param>
-        Drawing AddImage(Stream stream, string contentType, Int64Value width, Int64Value height);
+        /// <param name="name">The name of the image. Leave blank to generate a Guid</param>
+        Drawing AddImage(Stream stream, string contentType, Int64Value width, Int64Value height, string name);
 
         /// <summary>
         /// Adds an image to the container which can then be added to a paragraph

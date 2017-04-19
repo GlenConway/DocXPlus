@@ -26,9 +26,11 @@ namespace DocXPlus
         /// <returns></returns>
         public Drawing AddImage(string fileName, Int64Value x, Int64Value y)
         {
+            var name = (new FileInfo(fileName)).Name;
+
             using (FileStream stream = new FileStream(fileName, FileMode.Open))
             {
-                return AddImage(stream, DocX.FileNameContentType(fileName), x, y);
+                return AddImage(stream, DocX.FileNameContentType(fileName), x, y, name);
             }
         }
 
@@ -39,10 +41,11 @@ namespace DocXPlus
         /// <param name="contentType"></param>
         /// <param name="width">The width of the image in English Metric Units (EMU)</param>
         /// <param name="height">The height of the image in English Metric Units (EMU)</param>
+        /// <param name="name">The name of the image. Leave blank to generate a Guid</param>
         /// <returns></returns>
-        public Drawing AddImage(Stream stream, string contentType, Int64Value width, Int64Value height)
+        public Drawing AddImage(Stream stream, string contentType, Int64Value width, Int64Value height, string name = "")
         {
-            return DocX.CreateDrawing(AddImagePart(stream, contentType), width, height);
+            return DocX.CreateDrawing(AddImagePart(stream, contentType), width, height, name);
         }
 
         /// <summary>
@@ -52,12 +55,13 @@ namespace DocXPlus
         /// <param name="contentType"></param>
         /// <param name="width">The width of the image in English Metric Units (EMU)</param>
         /// <param name="height">The height of the image in English Metric Units (EMU)</param>
+        /// <param name="name">The name of the image. Leave blank to generate a Guid</param>
         /// <returns></returns>
-        public Drawing AddImage(byte[] data, string contentType, Int64Value width, Int64Value height)
+        public Drawing AddImage(byte[] data, string contentType, Int64Value width, Int64Value height, string name = "")
         {
             using (var stream = new MemoryStream(data))
             {
-                return AddImage(stream, contentType, width, height);
+                return AddImage(stream, contentType, width, height, name);
             }
         }
 
