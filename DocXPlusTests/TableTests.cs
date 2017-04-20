@@ -18,10 +18,10 @@ namespace DocXPlusTests
 
                 var row = table.AddRow();
 
-                row.Cells[0].Margins.LeftMargin.Width = Units.InchToTwips(.25).ToString();
-                row.Cells[0].Margins.TopMargin.Width = Units.InchToTwips(.25).ToString();
-                row.Cells[0].Margins.BottomMargin.Width = Units.InchToTwips(.25).ToString();
-                row.Cells[0].Margins.RightMargin.Width = Units.InchToTwips(.25).ToString();
+                row.Cells[0].Margins.LeftMargin.SetInch(.25);
+                row.Cells[0].Margins.TopMargin.SetInch(.25);
+                row.Cells[0].Margins.BottomMargin.SetInch(.25);
+                row.Cells[0].Margins.RightMargin.SetInch(.25);
 
                 row.Cells[0].SetText("1/4\"");
 

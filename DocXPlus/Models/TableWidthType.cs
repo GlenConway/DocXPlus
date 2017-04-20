@@ -41,5 +41,25 @@
                 tableWidthType.Width = value;
             }
         }
+
+        /// <summary>
+        /// Sets the width in centimetres
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetCm(double value)
+        {
+            Width = Units.CMToTwips(value).ToString();
+            Type = TableWidthUnitValue.Dxa;
+        }
+
+        /// <summary>
+        /// Sets the width in inches
+        /// </summary>
+        /// <param name="value"></param>
+        public void SetInch(double value)
+        {
+            Width = Units.InchToTwips(value).ToString();
+            Type = TableWidthUnitValue.Dxa;
+        }
     }
 }

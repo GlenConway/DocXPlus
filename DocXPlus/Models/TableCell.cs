@@ -46,7 +46,7 @@ namespace DocXPlus
         {
             get
             {
-                return new TableCellMargin(tableCell.GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.TableCellMargin>());
+                return new TableCellMargin(GetTableCellProperties().GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.TableCellMargin>());
             }
         }
 
