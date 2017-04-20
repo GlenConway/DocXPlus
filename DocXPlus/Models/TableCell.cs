@@ -151,7 +151,7 @@ namespace DocXPlus
         {
             get
             {
-                var tableCellWidth = tableCell.GetOrCreate<TableCellWidth>();
+                var tableCellWidth = GetTableCellProperties().GetOrCreate<TableCellWidth>();
 
                 if (double.TryParse(tableCellWidth.Width, out double result))
                     return result;
@@ -160,7 +160,7 @@ namespace DocXPlus
             }
             set
             {
-                var tableCellWidth = tableCell.GetOrCreate<TableCellWidth>();
+                var tableCellWidth = GetTableCellProperties().GetOrCreate<TableCellWidth>();
                 tableCellWidth.Width = value.ToString();
             }
         }
@@ -172,12 +172,12 @@ namespace DocXPlus
         {
             get
             {
-                var tableCellWidth = tableCell.GetOrCreate<TableCellWidth>();
+                var tableCellWidth = GetTableCellProperties().GetOrCreate<TableCellWidth>();
                 return Convert.ToTableWidthUnitValue(tableCellWidth.Type);
             }
             set
             {
-                var tableCellWidth = tableCell.GetOrCreate<TableCellWidth>();
+                var tableCellWidth = GetTableCellProperties().GetOrCreate<TableCellWidth>();
                 tableCellWidth.Type = Convert.ToTableWidthUnitValues(value);
             }
         }

@@ -10,6 +10,15 @@ namespace DocXPlus
         internal Borders(OpenXmlCompositeElement parent)
         {
             this.parent = parent;
+
+            TopBorder.Value = BorderValue.Nil;
+            LeftBorder.Value = BorderValue.Nil;
+            BottomBorder.Value = BorderValue.Nil;
+            RightBorder.Value = BorderValue.Nil;
+            InsideHorizontalBorder.Value = BorderValue.Nil;
+            InsideVerticalBorder.Value = BorderValue.Nil;
+            TopLeftToBottomRightCellBorder.Value = BorderValue.Nil;
+            TopRightToBottomLeftCellBorder.Value = BorderValue.Nil;
         }
 
         /// <summary>
@@ -141,8 +150,8 @@ namespace DocXPlus
         public void Set(UInt32Value size, BorderValue value, string color = "auto")
         {
             TopBorder.Set(size, value, color);
-            BottomBorder.Set(size, value, color);
             LeftBorder.Set(size, value, color);
+            BottomBorder.Set(size, value, color);
             RightBorder.Set(size, value, color);
         }
     }

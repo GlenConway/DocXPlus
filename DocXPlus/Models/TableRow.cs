@@ -228,7 +228,8 @@ namespace DocXPlus
                 {
                     var tableCell = tableRow.AppendChild(new DocumentFormat.OpenXml.Wordprocessing.TableCell());
 
-                    var tableCellWidth = tableCell.GetOrCreate<TableCellWidth>();
+                    var tableCellProperties = tableCell.GetOrCreate<TableCellProperties>(true);
+                    var tableCellWidth = tableCellProperties.GetOrCreate<TableCellWidth>();
                     tableCellWidth.Width = table.ColumnWidths[i];
                     tableCellWidth.Type = TableWidthUnitValues.Dxa;
 
