@@ -14,6 +14,16 @@ namespace DocXPlus
             prop.Val = true;
         }
 
+        internal static OpenXmlElement Find<T>(this OpenXmlCompositeElement element) where T : OpenXmlElement, new()
+        {
+            if (element.Elements<T>().Count() > 0)
+            {
+                return element.Elements<T>().First();
+            }
+
+            return null;
+        }
+
         internal static void FontFamily(this Run run, string name)
         {
             RunProperties runProperties = run.GetOrCreate<RunProperties>(true);
@@ -52,6 +62,26 @@ namespace DocXPlus
                 {
                     element.AppendChild(new T());
                 }
+            }
+
+            return element.Elements<T>().First();
+        }
+
+        internal static T GetOrCreateAfter<T>(this OpenXmlCompositeElement element, OpenXmlElement after) where T : OpenXmlElement, new()
+        {
+            if (!element.Has<T>())
+            {
+                element.InsertAfter(new T(), after);
+            }
+
+            return element.Elements<T>().First();
+        }
+
+        internal static T GetOrCreateBefore<T>(this OpenXmlCompositeElement element, OpenXmlElement before) where T : OpenXmlElement, new()
+        {
+            if (!element.Has<T>())
+            {
+                element.InsertBefore(new T(), before);
             }
 
             return element.Elements<T>().First();

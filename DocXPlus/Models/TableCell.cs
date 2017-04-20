@@ -134,12 +134,12 @@ namespace DocXPlus
         {
             get
             {
-                var tableCellVerticalAlignment = GetTableCellProperties().GetOrCreate<TableCellVerticalAlignment>();
+                var tableCellVerticalAlignment = GetTableCellVerticalAlignment();
                 return Convert.ToTableVerticalAlignment(tableCellVerticalAlignment.Val);
             }
             set
             {
-                var tableCellVerticalAlignment = GetTableCellProperties().GetOrCreate<TableCellVerticalAlignment>();
+                var tableCellVerticalAlignment = GetTableCellVerticalAlignment();
                 tableCellVerticalAlignment.Val = Convert.ToTableVerticalAlignmentValues(value);
             }
         }
@@ -151,16 +151,18 @@ namespace DocXPlus
         {
             get
             {
-                var tableCellWidth = GetTableCellProperties().GetOrCreate<TableCellWidth>();
+                var tableCellWidth = GetTableCellWidth();
 
                 if (double.TryParse(tableCellWidth.Width, out double result))
+                {
                     return result;
+                }
 
                 return 0;
             }
             set
             {
-                var tableCellWidth = GetTableCellProperties().GetOrCreate<TableCellWidth>();
+                var tableCellWidth = GetTableCellWidth();
                 tableCellWidth.Width = value.ToString();
             }
         }
@@ -172,12 +174,12 @@ namespace DocXPlus
         {
             get
             {
-                var tableCellWidth = GetTableCellProperties().GetOrCreate<TableCellWidth>();
+                var tableCellWidth = GetTableCellWidth();
                 return Convert.ToTableWidthUnitValue(tableCellWidth.Type);
             }
             set
             {
-                var tableCellWidth = GetTableCellProperties().GetOrCreate<TableCellWidth>();
+                var tableCellWidth = GetTableCellWidth();
                 tableCellWidth.Type = Convert.ToTableWidthUnitValues(value);
             }
         }
@@ -189,7 +191,7 @@ namespace DocXPlus
         /// <returns></returns>
         public TableCell SetVerticalAlignment(TableVerticalAlignment value)
         {
-            var tableCellVerticalAlignment = GetTableCellProperties().GetOrCreate<TableCellVerticalAlignment>();
+            var tableCellVerticalAlignment = GetTableCellVerticalAlignment();
             tableCellVerticalAlignment.Val = Convert.ToTableVerticalAlignmentValues(value);
 
             return this;
@@ -197,7 +199,16 @@ namespace DocXPlus
 
         internal GridSpan GetGridSpan()
         {
-            return GetTableCellProperties().GetOrCreate<GridSpan>();
+            OpenXmlElement after = null;
+
+            after = GetTableCellProperties().Find<TableCellWidth>();
+
+            if (after == null)
+            {
+                return GetTableCellProperties().GetOrCreate<GridSpan>();
+            }
+
+            return GetTableCellProperties().GetOrCreateAfter<GridSpan>(after);
         }
 
         internal TableCellBorders GetTableCellBorders()
@@ -215,9 +226,38 @@ namespace DocXPlus
             return GetTableCellProperties().GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.Shading>();
         }
 
+        internal TableCellVerticalAlignment GetTableCellVerticalAlignment()
+        {
+            return GetTableCellProperties().GetOrCreate<TableCellVerticalAlignment>();
+        }
+
+        internal TableCellWidth GetTableCellWidth()
+        {
+            return GetTableCellProperties().GetOrCreate<TableCellWidth>(true);
+        }
+
         internal VerticalMerge GetVerticalMerge()
         {
-            return GetTableCellProperties().GetOrCreate<VerticalMerge>();
+            OpenXmlElement after = null;
+
+            after = GetTableCellProperties().Find<HorizontalMerge>();
+
+            if (after == null)
+            {
+                after = GetTableCellProperties().Find<GridSpan>();
+
+                if (after == null)
+                {
+                    after = GetTableCellProperties().Find<TableCellWidth>();
+
+                    if (after == null)
+                    {
+                        return GetTableCellProperties().GetOrCreate<VerticalMerge>(true);
+                    }
+                }
+            }
+
+            return GetTableCellProperties().GetOrCreateAfter<VerticalMerge>(after);
         }
 
         internal void RemoveFromRow()
