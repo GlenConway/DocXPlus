@@ -10,6 +10,11 @@
         internal TableCellMarginDefault(DocumentFormat.OpenXml.Wordprocessing.TableCellMarginDefault tableCellMarginDefault)
         {
             this.tableCellMarginDefault = tableCellMarginDefault;
+            
+            TopMargin.Type = TableWidthUnitValue.Nil;
+            LeftMargin.Type = TableWidthValue.Nil;
+            BottomMargin.Type = TableWidthUnitValue.Nil;
+            RightMargin.Type = TableWidthValue.Nil;
         }
 
         /// <summary>

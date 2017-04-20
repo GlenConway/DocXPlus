@@ -129,13 +129,8 @@ namespace DocXPlus
 
         internal Table AddTable(int numberOfColumns, DocumentFormat.OpenXml.Wordprocessing.Table table)
         {
-            var result = new Table(table, numberOfColumns, this)
-            {
-                TableStyle = "TableGrid",
-                Width = "0",
-                WidthType = TableWidthUnitValues.Auto
-            };
-
+            var result = new Table(table, numberOfColumns, this);
+            
             SetTableLook(result);
 
             return result;
@@ -143,12 +138,7 @@ namespace DocXPlus
 
         internal Table AddTable(int numberOfColumns, DocumentFormat.OpenXml.Wordprocessing.Table table, params int[] percent)
         {
-            var result = new Table(table, numberOfColumns, this, percent)
-            {
-                TableStyle = "TableGrid",
-                Width = "0",
-                WidthType = TableWidthUnitValues.Auto
-            };
+            var result = new Table(table, numberOfColumns, this, percent);
 
             SetTableLook(result);
 
@@ -168,6 +158,8 @@ namespace DocXPlus
                     if (double.TryParse(width, out double value))
                     {
                         width = Units.CMToTwips(value).Value.ToString();
+
+                        widths[i] = width;
                     }
                 }
 
@@ -178,16 +170,13 @@ namespace DocXPlus
                     if (double.TryParse(width, out double value))
                     {
                         width = Units.InchToTwips(value).Value.ToString();
+
+                        widths[i] = width;
                     }
                 }
             }
 
-            var result = new Table(table, numberOfColumns, this, widths)
-            {
-                TableStyle = "TableGrid",
-                Width = "0",
-                WidthType = TableWidthUnitValues.Auto
-            };
+            var result = new Table(table, numberOfColumns, this, widths);
 
             SetTableLook(result);
 

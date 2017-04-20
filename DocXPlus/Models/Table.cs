@@ -22,6 +22,11 @@ namespace DocXPlus
             this.table = table;
 
             this.container = container;
+            TableStyle = "TableGrid";
+            Width = "0";
+            WidthType = TableWidthUnitValues.Auto;
+
+            GetTableProperties().GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.TableCellMarginDefault>();
 
             BuildColumnWidths();
             BuildRows();
