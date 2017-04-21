@@ -9,6 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DocXPlusTests", "DocXPlusTe
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F8912E9F-6788-48C5-A071-9C5DD1E98F46}"
 	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
 		nuget.config = nuget.config
 		README.md = README.md
 	EndProjectSection
