@@ -366,5 +366,77 @@ namespace DocXPlusTests
                 doc.Close();
             }
         }
+
+        [TestMethod]
+        public void AddHeaderPortraitThenLandscape()
+        {
+            using (var doc = new DocX())
+            {
+                doc.Create();
+
+                doc.AddHeaders();
+
+                var table = doc.DefaultHeader.AddTable(3);
+                table.WidthType = DocumentFormat.OpenXml.Wordprocessing.TableWidthUnitValues.Auto;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    var row = table.AddRow();
+                    row.SetBorders(Units.HalfPt, BorderValue.Single);
+
+                    if (i == 0)
+                    {
+                        row.SetShading(ShadingPattern.Clear, "E7E6E6");
+
+                        row.HeaderRow = true;
+                    }
+
+                    for (int j = 0; j < 3; j++)
+                    {
+                        row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
+                    }
+                }
+
+                doc.InsertSectionPageBreak();
+                doc.Orientation = PageOrientation.Landscape;
+
+                // default is to link previous header
+                // but if the orientation changes, the table will
+                // only be the width of the portrait page
+
+                // in order to have a new width you have to unlink
+                // the header to the previous
+                doc.AddHeaders();
+
+                // and recreate the header
+
+                table = doc.DefaultHeader.AddTable(3);
+                table.WidthType = DocumentFormat.OpenXml.Wordprocessing.TableWidthUnitValues.Auto;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    var row = table.AddRow();
+                    row.SetBorders(Units.HalfPt, BorderValue.Single);
+
+                    if (i == 0)
+                    {
+                        row.SetShading(ShadingPattern.Clear, "E7E6E6");
+
+                        row.HeaderRow = true;
+                    }
+
+                    for (int j = 0; j < 3; j++)
+                    {
+                        row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
+                    }
+                }
+
+                Validate(doc);
+
+                //doc.SaveAs(System.IO.Path.Combine(TempDirectory, "AddHeaderPortraitThenLandscape.docx"));
+
+                doc.Close();
+            }
+        }
     }
 }

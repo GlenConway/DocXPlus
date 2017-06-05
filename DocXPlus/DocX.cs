@@ -539,6 +539,17 @@ namespace DocXPlus
             document.Clone(stream);
         }
 
+        /// <summary>
+        /// Saves the document to the specified path
+        /// </summary>
+        /// <param name="path"></param>
+        public void SaveAs(string path)
+        {
+            Save();
+
+            document.SaveAs(path);
+        }
+
         internal static Drawing CreateDrawing(string id, Int64Value width, Int64Value height, string name)
         {
             if (string.IsNullOrWhiteSpace(name))
