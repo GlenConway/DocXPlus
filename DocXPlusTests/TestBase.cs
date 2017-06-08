@@ -85,14 +85,7 @@ namespace DocXPlusTests
                 }
             }
         }
-
-        [TestMethod]
-        public void ValidateExisting()
-        {
-            var path = @"C:\Users\Glen\Downloads\TrialBalance-3067500NovaScotiaLimited-20170606.docx";
-
-            Validate(path);
-        }
+        
         protected void Validate(string path)
         {
             using (WordprocessingDocument wordprocessingDocument = WordprocessingDocument.Open(path, false))
