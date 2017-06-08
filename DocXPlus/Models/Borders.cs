@@ -3,11 +3,18 @@ using DocumentFormat.OpenXml.Wordprocessing;
 
 namespace DocXPlus
 {
+    /// <summary>
+    ///
+    /// </summary>
     public class Borders
     {
         private OpenXmlCompositeElement parent;
 
-        internal Borders(OpenXmlCompositeElement parent)
+        internal Borders(OpenXmlCompositeElement parent) : this(parent, true)
+        {
+        }
+
+        internal Borders(OpenXmlCompositeElement parent, bool extended)
         {
             this.parent = parent;
 
@@ -17,6 +24,12 @@ namespace DocXPlus
             RightBorder.Value = BorderValue.Nil;
             InsideHorizontalBorder.Value = BorderValue.Nil;
             InsideVerticalBorder.Value = BorderValue.Nil;
+
+            if (!extended)
+            {
+                return;
+            }
+
             TopLeftToBottomRightCellBorder.Value = BorderValue.Nil;
             TopRightToBottomLeftCellBorder.Value = BorderValue.Nil;
         }

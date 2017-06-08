@@ -27,6 +27,16 @@
             return (DocumentFormat.OpenXml.Wordprocessing.JustificationValues)((int)value);
         }
 
+        internal static LineSpacingRuleValue ToLineSpacingRuleValue(DocumentFormat.OpenXml.Wordprocessing.LineSpacingRuleValues value)
+        {
+            return (LineSpacingRuleValue)((int)value);
+        }
+
+        internal static DocumentFormat.OpenXml.Wordprocessing.LineSpacingRuleValues ToLineSpacingRuleValues(LineSpacingRuleValue value)
+        {
+            return (DocumentFormat.OpenXml.Wordprocessing.LineSpacingRuleValues)((int)value);
+        }
+
         internal static PageOrientation ToPageOrientation(DocumentFormat.OpenXml.Wordprocessing.PageOrientationValues value)
         {
             return (PageOrientation)((int)value);

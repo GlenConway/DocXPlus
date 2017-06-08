@@ -15,6 +15,24 @@ namespace DocXPlus
         }
 
         /// <summary>
+        /// Parent style ID
+        /// </summary>
+        public string BasedOn
+        {
+            get
+            {
+                var basedOn = style.GetOrCreate<BasedOn>();
+
+                return basedOn.Val;
+            }
+            set
+            {
+                var basedOn = style.GetOrCreate<BasedOn>();
+                basedOn.Val = value;
+            }
+        }
+
+        /// <summary>
         /// Default Style.
         /// </summary>
         public bool Default
@@ -69,6 +87,24 @@ namespace DocXPlus
         }
 
         /// <summary>
+        ///
+        /// </summary>
+        public SpacingBetweenLines SpacingBetweenLines
+        {
+            get
+            {
+                var styleProperties = style.GetOrCreate<StyleParagraphProperties>();
+
+                if (styleProperties.SpacingBetweenLines == null)
+                {
+                    styleProperties.SpacingBetweenLines = new DocumentFormat.OpenXml.Wordprocessing.SpacingBetweenLines();
+                }
+
+                return new SpacingBetweenLines(styleProperties.SpacingBetweenLines);
+            }
+        }
+
+        /// <summary>
         /// Style ID.
         /// </summary>
         public string StyleId
@@ -86,6 +122,17 @@ namespace DocXPlus
         /// <summary>
         ///
         /// </summary>
+        public Borders TableBorders
+        {
+            get
+            {
+                return new Borders(GetTableProperties().GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.TableBorders>(), false);
+            }
+        }
+
+        /// <summary>
+        ///
+        /// </summary>
         public TableCellMarginDefault TableDefaultMargins
         {
             get
@@ -95,7 +142,7 @@ namespace DocXPlus
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public TableIndentation TableIndentation
         {
@@ -104,6 +151,7 @@ namespace DocXPlus
                 return new TableIndentation(GetTableProperties().GetOrCreate<DocumentFormat.OpenXml.Wordprocessing.TableIndentation>());
             }
         }
+
         /// <summary>
         /// Style Type.
         /// </summary>

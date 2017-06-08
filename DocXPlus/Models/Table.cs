@@ -81,12 +81,12 @@ namespace DocXPlus
         {
             get
             {
-                var tableStyle = TableProperties.GetOrCreate<TableStyle>();
+                var tableStyle = GetTableProperties().GetOrCreate<TableStyle>(true);
                 return tableStyle.Val;
             }
             set
             {
-                var tableStyle = TableProperties.GetOrCreate<TableStyle>();
+                var tableStyle = GetTableProperties().GetOrCreate<TableStyle>(true);
                 tableStyle.Val = value;
             }
         }

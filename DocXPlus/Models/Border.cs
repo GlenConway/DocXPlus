@@ -156,11 +156,13 @@ namespace DocXPlus
         /// <param name="size">The size of the border in Twips</param>
         /// <param name="value"></param>
         /// <param name="color"></param>
-        public void Set(UInt32Value size, BorderValue value, string color = "auto")
+        public Border Set(UInt32Value size, BorderValue value, string color = "auto")
         {
             Size = size;
             Value = value;
             Color = color;
+
+            return this;
         }
     }
 }
