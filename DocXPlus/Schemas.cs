@@ -42,5 +42,15 @@ namespace DocXPlus
             element.AddNamespaceDeclaration("wpi", wpi);
             element.AddNamespaceDeclaration("wps", wps);
         }
+
+        public static void AddStylesNamespaceDeclarations(OpenXmlPartRootElement element)
+        {
+            element.AddNamespaceDeclaration("mc", mc);
+            element.AddNamespaceDeclaration("r", r);
+            element.AddNamespaceDeclaration("w", w);
+            element.AddNamespaceDeclaration("w14", w14);
+            element.AddNamespaceDeclaration("w15", w15);
+            element.AddNamespaceDeclaration("w16se", w16se);
+        }
     }
 }

@@ -23,6 +23,75 @@ namespace DocXPlusTests
         }
 
         [TestMethod]
+        public void AddFooterLandscapeThenLandscape()
+        {
+            using (var doc = new DocX())
+            {
+                doc.Create();
+                doc.Orientation = PageOrientation.Landscape;
+
+                doc.AddFooters();
+
+                var table = doc.DefaultFooter.AddTable(3);
+                table.WidthType = DocumentFormat.OpenXml.Wordprocessing.TableWidthUnitValues.Auto;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    var row = table.AddRow();
+                    row.SetBorders(Units.HalfPt, BorderValue.Single);
+
+                    if (i == 0)
+                    {
+                        row.SetShading(ShadingPattern.Clear, "E7E6E6");
+                    }
+
+                    for (int j = 0; j < 3; j++)
+                    {
+                        row.Cells[j].Paragraphs[0].Append($"F1 C{(j + 1)}");
+                    }
+                }
+
+                doc.InsertSectionPageBreak();
+                doc.Orientation = PageOrientation.Landscape;
+
+                // default is to link previous footer
+                // but if the orientation changes, the table will
+                // only be the width of the portrait page
+
+                // in order to have a new width you have to unlink
+                // the header to the previous
+                doc.AddFooters();
+
+                // and recreate the header
+
+                table = doc.DefaultFooter.AddTable(3);
+                table.WidthType = DocumentFormat.OpenXml.Wordprocessing.TableWidthUnitValues.Auto;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    var row = table.AddRow();
+                    row.SetBorders(Units.HalfPt, BorderValue.Single);
+
+                    if (i == 0)
+                    {
+                        row.SetShading(ShadingPattern.Clear, "E7E6E6");
+                    }
+
+                    for (int j = 0; j < 3; j++)
+                    {
+                        row.Cells[j].Paragraphs[0].Append($"F2 C{(j + 1)}");
+                    }
+                }
+
+                Validate(doc);
+
+                //doc.SaveAs(System.IO.Path.Combine(TempDirectory, "AddFooterLandscapeThenLandscape.docx"));
+
+                doc.Close();
+            }
+        }
+
+        [TestMethod]
         public void AddFooters()
         {
             using (var doc = new DocX())
@@ -67,33 +136,6 @@ namespace DocXPlusTests
         }
 
         [TestMethod]
-        public void AddFooterWithNormalPageNumbers()
-        {
-            using (var doc = new DocX())
-            {
-                doc.Create();
-
-                doc.AddFooters();
-                doc.DefaultFooter
-                    .AddParagraph()
-                    .Append("Page ")
-                    .AppendPageNumber(PageNumberFormat.Normal)
-                    .Append(" of ")
-                    .AppendPageCount(PageNumberFormat.Normal)
-                    .Alignment = Align.Center;
-
-                for (int i = 0; i < 9; i++)
-                {
-                    doc.InsertPageBreak();
-                }
-
-                Validate(doc);
-
-                doc.Close();
-            }
-        }
-
-        [TestMethod]
         public void AddFooterWithNormalBoldPageNumbers()
         {
             using (var doc = new DocX())
@@ -108,6 +150,33 @@ namespace DocXPlusTests
                     .Append(" of ")
                     .AppendPageCount(PageNumberFormat.Normal)
                     .Bold()
+                    .Alignment = Align.Center;
+
+                for (int i = 0; i < 9; i++)
+                {
+                    doc.InsertPageBreak();
+                }
+
+                Validate(doc);
+
+                doc.Close();
+            }
+        }
+
+        [TestMethod]
+        public void AddFooterWithNormalPageNumbers()
+        {
+            using (var doc = new DocX())
+            {
+                doc.Create();
+
+                doc.AddFooters();
+                doc.DefaultFooter
+                    .AddParagraph()
+                    .Append("Page ")
+                    .AppendPageNumber(PageNumberFormat.Normal)
+                    .Append(" of ")
+                    .AppendPageCount(PageNumberFormat.Normal)
                     .Alignment = Align.Center;
 
                 for (int i = 0; i < 9; i++)
@@ -207,6 +276,151 @@ namespace DocXPlusTests
                     .Append(LoremIpsum);
 
                 Validate(doc);
+
+                doc.Close();
+            }
+        }
+
+        [TestMethod]
+        public void AddHeaderLandscapeThenLandscape()
+        {
+            using (var doc = new DocX())
+            {
+                doc.Create();
+                doc.Orientation = PageOrientation.Landscape;
+
+                doc.AddHeaders();
+
+                var table = doc.DefaultHeader.AddTable(3);
+                table.WidthType = DocumentFormat.OpenXml.Wordprocessing.TableWidthUnitValues.Auto;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    var row = table.AddRow();
+                    row.SetBorders(Units.HalfPt, BorderValue.Single);
+
+                    if (i == 0)
+                    {
+                        row.SetShading(ShadingPattern.Clear, "E7E6E6");
+
+                        row.HeaderRow = true;
+                    }
+
+                    for (int j = 0; j < 3; j++)
+                    {
+                        row.Cells[j].Paragraphs[0].Append($"H1 C{(j + 1)}");
+                    }
+                }
+
+                doc.InsertSectionPageBreak();
+                doc.Orientation = PageOrientation.Landscape;
+
+                // default is to link previous header
+                // but if the orientation changes, the table will
+                // only be the width of the portrait page
+
+                // in order to have a new width you have to unlink
+                // the header to the previous
+                doc.AddHeaders();
+
+                // and recreate the header
+
+                table = doc.DefaultHeader.AddTable(3);
+                table.WidthType = DocumentFormat.OpenXml.Wordprocessing.TableWidthUnitValues.Auto;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    var row = table.AddRow();
+                    row.SetBorders(Units.HalfPt, BorderValue.Single);
+
+                    if (i == 0)
+                    {
+                        row.SetShading(ShadingPattern.Clear, "E7E6E6");
+
+                        row.HeaderRow = true;
+                    }
+
+                    for (int j = 0; j < 3; j++)
+                    {
+                        row.Cells[j].Paragraphs[0].Append($"H2 C{(j + 1)}");
+                    }
+                }
+
+                Validate(doc);
+
+                //doc.SaveAs(System.IO.Path.Combine(TempDirectory, "AddHeaderLandscapeThenLandscape.docx"));
+
+                doc.Close();
+            }
+        }
+
+        [TestMethod]
+        public void AddHeaderPortraitThenLandscape()
+        {
+            using (var doc = new DocX())
+            {
+                doc.Create();
+
+                doc.AddHeaders();
+
+                var table = doc.DefaultHeader.AddTable(3);
+                table.WidthType = DocumentFormat.OpenXml.Wordprocessing.TableWidthUnitValues.Auto;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    var row = table.AddRow();
+                    row.SetBorders(Units.HalfPt, BorderValue.Single);
+
+                    if (i == 0)
+                    {
+                        row.SetShading(ShadingPattern.Clear, "E7E6E6");
+
+                        row.HeaderRow = true;
+                    }
+
+                    for (int j = 0; j < 3; j++)
+                    {
+                        row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
+                    }
+                }
+
+                doc.InsertSectionPageBreak();
+                doc.Orientation = PageOrientation.Landscape;
+
+                // default is to link previous header
+                // but if the orientation changes, the table will
+                // only be the width of the portrait page
+
+                // in order to have a new width you have to unlink
+                // the header to the previous
+                doc.AddHeaders();
+
+                // and recreate the header
+
+                table = doc.DefaultHeader.AddTable(3);
+                table.WidthType = DocumentFormat.OpenXml.Wordprocessing.TableWidthUnitValues.Auto;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    var row = table.AddRow();
+                    row.SetBorders(Units.HalfPt, BorderValue.Single);
+
+                    if (i == 0)
+                    {
+                        row.SetShading(ShadingPattern.Clear, "E7E6E6");
+
+                        row.HeaderRow = true;
+                    }
+
+                    for (int j = 0; j < 3; j++)
+                    {
+                        row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
+                    }
+                }
+
+                Validate(doc);
+
+                //doc.SaveAs(System.IO.Path.Combine(TempDirectory, "AddHeaderPortraitThenLandscape.docx"));
 
                 doc.Close();
             }
@@ -362,78 +576,6 @@ namespace DocXPlusTests
                 doc.InsertSectionPageBreak();
 
                 Validate(doc);
-
-                doc.Close();
-            }
-        }
-
-        [TestMethod]
-        public void AddHeaderPortraitThenLandscape()
-        {
-            using (var doc = new DocX())
-            {
-                doc.Create();
-
-                doc.AddHeaders();
-
-                var table = doc.DefaultHeader.AddTable(3);
-                table.WidthType = DocumentFormat.OpenXml.Wordprocessing.TableWidthUnitValues.Auto;
-
-                for (int i = 0; i < 3; i++)
-                {
-                    var row = table.AddRow();
-                    row.SetBorders(Units.HalfPt, BorderValue.Single);
-
-                    if (i == 0)
-                    {
-                        row.SetShading(ShadingPattern.Clear, "E7E6E6");
-
-                        row.HeaderRow = true;
-                    }
-
-                    for (int j = 0; j < 3; j++)
-                    {
-                        row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
-                    }
-                }
-
-                doc.InsertSectionPageBreak();
-                doc.Orientation = PageOrientation.Landscape;
-
-                // default is to link previous header
-                // but if the orientation changes, the table will
-                // only be the width of the portrait page
-
-                // in order to have a new width you have to unlink
-                // the header to the previous
-                doc.AddHeaders();
-
-                // and recreate the header
-
-                table = doc.DefaultHeader.AddTable(3);
-                table.WidthType = DocumentFormat.OpenXml.Wordprocessing.TableWidthUnitValues.Auto;
-
-                for (int i = 0; i < 3; i++)
-                {
-                    var row = table.AddRow();
-                    row.SetBorders(Units.HalfPt, BorderValue.Single);
-
-                    if (i == 0)
-                    {
-                        row.SetShading(ShadingPattern.Clear, "E7E6E6");
-
-                        row.HeaderRow = true;
-                    }
-
-                    for (int j = 0; j < 3; j++)
-                    {
-                        row.Cells[j].Paragraphs[0].Append($"Cell {(j + 1)}");
-                    }
-                }
-
-                Validate(doc);
-
-                //doc.SaveAs(System.IO.Path.Combine(TempDirectory, "AddHeaderPortraitThenLandscape.docx"));
 
                 doc.Close();
             }

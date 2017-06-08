@@ -86,6 +86,47 @@ namespace DocXPlusTests
             }
         }
 
+        [TestMethod]
+        public void ValidateExisting()
+        {
+            var path = @"C:\Users\Glen\Downloads\TrialBalance-3067500NovaScotiaLimited-20170606.docx";
+
+            Validate(path);
+        }
+        protected void Validate(string path)
+        {
+            using (WordprocessingDocument wordprocessingDocument = WordprocessingDocument.Open(path, false))
+            {
+                try
+                {
+                    OpenXmlValidator validator = new OpenXmlValidator(DocumentFormat.OpenXml.FileFormatVersions.Office2010);
+                    var validation = validator.Validate(wordprocessingDocument);
+
+                    var sb = new StringBuilder();
+
+                    foreach (ValidationErrorInfo error in validation)
+                    {
+                        sb.AppendLine("Description: " + error.Description);
+                        sb.AppendLine("ErrorType: " + error.ErrorType);
+                        sb.AppendLine("Node: " + error.Node);
+                        sb.AppendLine("Path: " + error.Path.XPath);
+                        sb.AppendLine("Part: " + error.Part.Uri);
+
+                        sb.AppendLine(string.Empty);
+                    }
+
+                    if (validation.Count() > 0)
+                    {
+                        Assert.Fail(sb.ToString());
+                    }
+                }
+                finally
+                {
+                    wordprocessingDocument.Close();
+                }
+            }
+        }
+
         private static void Setup(string path)
         {
             if (!Directory.Exists(path))

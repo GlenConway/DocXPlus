@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ImageTests.cs" />
+    <Compile Include="StyleTests.cs" />
     <Compile Include="TableTests.cs" />
     <Compile Include="SectionTests.cs" />
     <Compile Include="HeaderFooterTests.cs" />

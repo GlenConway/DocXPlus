@@ -126,6 +126,13 @@ namespace DocXPlus
             }
         }
 
+        internal static void SetStyle(this Run run, string styleId)
+        {
+            var runProperties = run.GetOrCreate<RunProperties>(true);
+            var style = runProperties.GetOrCreate<RunStyle>();
+            style.Val = styleId;
+        }
+
         internal static OnOffOnlyValues ToOnOffOnlyValues(this bool value)
         {
             return value ? OnOffOnlyValues.On : OnOffOnlyValues.Off;
@@ -133,8 +140,8 @@ namespace DocXPlus
 
         internal static void Underline(this Run run, UnderlineType value)
         {
-            RunProperties runProperties = run.GetOrCreate<RunProperties>(true);
-            Underline prop = runProperties.GetOrCreate<Underline>();
+            var runProperties = run.GetOrCreate<RunProperties>(true);
+            var prop = runProperties.GetOrCreate<Underline>();
             prop.Val = Convert.ToUnderlineValues(value);
         }
     }

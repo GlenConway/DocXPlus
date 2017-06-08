@@ -47,6 +47,16 @@
             return (DocumentFormat.OpenXml.Wordprocessing.ShadingPatternValues)((int)value);
         }
 
+        internal static StyleValue ToStyleValue(DocumentFormat.OpenXml.Wordprocessing.StyleValues value)
+        {
+            return (StyleValue)((int)value);
+        }
+
+        internal static DocumentFormat.OpenXml.Wordprocessing.StyleValues ToStyleValues(StyleValue value)
+        {
+            return (DocumentFormat.OpenXml.Wordprocessing.StyleValues)((int)value);
+        }
+
         internal static TableVerticalAlignment ToTableVerticalAlignment(DocumentFormat.OpenXml.Wordprocessing.TableVerticalAlignmentValues value)
         {
             return (TableVerticalAlignment)((int)value);

@@ -413,6 +413,31 @@ namespace DocXPlus
         }
 
         /// <summary>
+        /// Sets the style for a paragraph
+        /// </summary>
+        /// <param name="styleId"></param>
+        /// <returns></returns>
+        public Paragraph SetStyle(string styleId)
+        {
+            if (Runs.Count() == 0)
+            {
+                var paragraphProperties = paragraph.GetOrCreate<ParagraphProperties>();
+                var paragraphStyleId = paragraphProperties.GetOrCreate<ParagraphStyleId>();
+
+                paragraphStyleId.Val = styleId;
+            }
+            else
+            {
+                foreach (var run in Runs)
+                {
+                    run.SetStyle(styleId);
+                }
+            }
+
+            return this;
+        }
+
+        /// <summary>
         /// Makes a paragraph text underlined
         /// </summary>
         /// <param name="value"></param>

@@ -17,6 +17,7 @@ namespace DocXPlus
     public class DocX : Container, IContainer, IDisposable
     {
         internal static MarkupCompatibilityAttributes MarkupCompatibilityAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se wp14" };
+        internal static MarkupCompatibilityAttributes StylesMarkupCompatibilityAttributes = new MarkupCompatibilityAttributes() { Ignorable = "w14 w15 w16se" };
 
         private static int propId;
         private bool disposed = false;
@@ -30,6 +31,8 @@ namespace DocXPlus
         private PageMargins pageMargins;
 
         private Stream stream;
+
+        private Styles styles;
 
         /// <summary>
         /// Default destructor
@@ -217,6 +220,43 @@ namespace DocXPlus
                 }
 
                 return result;
+            }
+        }
+
+        /// <summary>
+        /// Gets the styles for the document
+        /// </summary>
+        public Styles Styles
+        {
+            get
+            {
+                if (styles == null)
+                {
+                    CheckDocumentCreated();
+
+                    var part = document.MainDocumentPart.StyleDefinitionsPart;
+
+                    if (part == null)
+                    {
+                        part = document.MainDocumentPart.AddNewPart<StyleDefinitionsPart>();
+
+                        GenerateStylesPartContent(part);
+
+                        part.Styles.Save();
+                    
+
+                        styles = new Styles(part.Styles);
+
+                        styles.CreateStandardStyles();
+                    }
+
+                    if (styles == null)
+                    {
+                        styles = new Styles(part.Styles);
+                    }
+                }
+
+                return styles;
             }
         }
 
@@ -519,6 +559,7 @@ namespace DocXPlus
         public void Save()
         {
             Settings.Save();
+            Styles.Save();
 
             MainDocumentPart.Document.Save();
 
@@ -846,6 +887,16 @@ namespace DocXPlus
             Schemas.AddNamespaceDeclarations(settings);
 
             documentSettingsPart.Settings = settings;
+        }
+
+        private static void GenerateStylesPartContent(StylesPart stylesPart)
+        {
+            var styles = new DocumentFormat.OpenXml.Wordprocessing.Styles() { MCAttributes = MarkupCompatibilityAttributes };
+            Schemas.AddNamespaceDeclarations(styles);
+
+            Styles.AddStylesDefault(styles);
+
+            stylesPart.Styles = styles;
         }
 
         private Footer AddFooter(HeaderFooterValues type)
