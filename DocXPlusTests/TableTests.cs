@@ -196,7 +196,7 @@ namespace DocXPlusTests
                 }
 
                 Validate(doc);
-
+                
                 doc.Close();
             }
         }

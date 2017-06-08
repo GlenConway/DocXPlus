@@ -133,9 +133,7 @@ namespace DocXPlusTests
                 }
 
                 Validate(doc);
-
-                doc.SaveAs(System.IO.Path.Combine(TempDirectory, "TableGridStyle.docx"));
-
+                
                 doc.Close();
             }
         }
