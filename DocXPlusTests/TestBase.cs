@@ -37,7 +37,9 @@ namespace DocXPlusTests
             var resourceNames = assembly.GetManifestResourceNames();
 
             if (!resourceNames.Contains(resourceName))
+            {
                 throw new InvalidOperationException("Assembly does not contain a resource named '" + resourceName + "'.");
+            }
 
             return assembly.GetManifestResourceStream(resourceName);
         }

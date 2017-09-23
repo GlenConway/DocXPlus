@@ -243,7 +243,6 @@ namespace DocXPlus
                         GenerateStylesPartContent(part);
 
                         part.Styles.Save();
-                    
 
                         styles = new Styles(part.Styles);
 
