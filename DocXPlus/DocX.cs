@@ -742,6 +742,8 @@ namespace DocXPlus
             PageMargins.Gutter = Units.UZero;
 
             var documentSettingsPart = MainDocumentPart.AddNewPart<DocumentSettingsPart>();
+
+            Styles.Save();
         }
 
         internal DocX SetOrientation(PageOrientation value)
