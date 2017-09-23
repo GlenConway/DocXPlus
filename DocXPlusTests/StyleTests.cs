@@ -95,7 +95,7 @@ namespace DocXPlusTests
 
                 Validate(doc);
 
-                doc.SaveAs(System.IO.Path.Combine(TempDirectory, "TableStyle.docx"));
+                //doc.SaveAs(System.IO.Path.Combine(TempDirectory, "TableStyle.docx"));
 
                 doc.Close();
             }
